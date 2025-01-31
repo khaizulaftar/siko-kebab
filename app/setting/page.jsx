@@ -8,39 +8,34 @@ export default function Setting() {
     const inputRefs = useRef({});
 
     useEffect(() => {
-        const fetchMenus = async () => {
-            try {
-                const response = await axios.get("/api/menu");
-                setMenus(response.data);
-            } catch (error) {
+        axios.get("/api/menuSet")
+            .then(response => setMenus(response.data))
+            .catch(error => {
                 console.error("Error fetching menu:", error);
                 alert('Failed to fetch menus. Please try again later.');
-            }
-        };
-
-        fetchMenus();
-    }, []);
+            });
+    }, []);    
 
     const handlePriceChange = async (id, newPrice) => {
         const priceInt = Math.floor(Number(newPrice));
-        
+
         if (isNaN(priceInt) || priceInt <= 0) {
             alert('Harga tidak valid');
             return;
         }
-    
+
         const isConfirmed = window.confirm("Apakah Anda yakin ingin mengubah harga?");
-    
+
         if (!isConfirmed) {
-            return; 
+            return;
         }
-    
+
         setMenus((prevMenus) =>
             prevMenus.map((menu) =>
                 menu.id === id ? { ...menu, loading: true } : menu
             )
         );
-    
+
         try {
             const response = await fetch('/api/menu', {
                 method: 'PUT',
@@ -52,9 +47,9 @@ export default function Setting() {
                     price: priceInt,
                 }),
             });
-    
+
             const result = await response.json();
-    
+
             if (response.ok) {
                 setMenus((prevMenus) =>
                     prevMenus.map((menu) =>
@@ -79,7 +74,7 @@ export default function Setting() {
             );
         }
     };
-    
+
 
     return (
         <>
@@ -99,9 +94,7 @@ export default function Setting() {
                                 <div key={menu.id} className="p-6 border rounded-xl">
                                     <div className="flex items-start justify-between">
                                         <div className="flex items-center gap-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                                <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                            </svg>
+                                            <img width="35" height="35" src={menu.icon} alt="hamburger" />
                                             <div className="flex flex-col">
                                                 <span className="text-md capitalize font-bold">{menu.category}</span>
                                                 <span className="text-sm capitalize">{menu.name}</span>
@@ -109,10 +102,10 @@ export default function Setting() {
                                         </div>
                                         <div className="flex flex-col items-end gap-3">
                                             <span className="text-md capitalize">harga</span>
-                                            <div className="flex gap-2">
-                                                <span className="font-bold text-md">{menu.price}</span>
+                                            <div className="flex gap-2 items-center">
+                                                <span className="text-md">Rp {menu.price}</span>
                                                 <span className="text-md">|</span>
-                                                <span className="text-md">KG</span>
+                                                <span className="text-sm uppercase">{menu.dose}</span>
                                             </div>
                                         </div>
                                     </div>

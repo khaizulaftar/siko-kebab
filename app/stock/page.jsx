@@ -1,4 +1,18 @@
+"use client"
+
+import { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
+
 export default function Stock() {
+    const [stock, setStock] = useState([]);
+    useEffect(() => {
+        axios.get("/api/stock")
+            .then(response => setStock(response.data))
+            .catch(error => {
+                console.error("Error fetching menu:", error);
+                alert('Failed to fetch menus. Please try again later.');
+            });
+    }, []);
     return (
         <>
             <div className="max-w-4xl mx-auto">
@@ -14,189 +28,53 @@ export default function Stock() {
                     <hr className="my-6" />
 
                     <div className="grid sm:grid-cols-2 gap-3">
-                        <div className="p-6 flex flex-col gap-2 border rounded-xl">
-                            <div className="flex items-center justify-between">
-                                <span className="font-bold text-xl">burger</span>
-                                <div className="p-2 border rounded-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 font-bold">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
+                        {stock.map((value) => (
+                            <div key={value.id} className="p-6 flex flex-col gap-2 border rounded-xl">
+                                <div className="flex items-center justify-between">
+                                    <span className="font-bold text-xl">{value.name}</span>
+                                    <div className="p-2 border rounded-xl">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 font-bold">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="flex flex-col text-center items-center">
-                                <span className="capitalize font-bold">jumlah Stock</span>
-                                <div className="flex gap-2">
-                                    <span className="font-bold text-xl">50000</span>
-                                    <span className="text-xl">|</span>
-                                    <span className="text-xl">KG</span>
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2 mt-12">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">stok awal</span>
+                                <div className="flex flex-col text-center items-center">
+                                    <span className="capitalize font-bold">jumlah Stock</span>
                                     <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
+                                        <span className="font-bold text-xl">{value.stock}</span>
+                                        <span className="text-xl">|</span>
+                                        <span className="text-xl capitalize">{value.dose}</span>
                                     </div>
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah masuk</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
+                                <div className="flex flex-col gap-2 mt-12">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">stok awal</span>
+                                        <div className="flex gap-2">
+                                            <span>{value.initial_stock}</span>
+                                            <span>|</span>
+                                            <span>{value.dose}</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah habis</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">jumlah masuk</span>
+                                        <div className="flex gap-2">
+                                            <span>{value.final_stock}</span>
+                                            <span>|</span>
+                                            <span>{value.dose}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="p-6 flex flex-col gap-2 border rounded-xl">
-                            <div className="flex items-center justify-between">
-                                <span className="font-bold text-xl">burger</span>
-                                <div className="p-2 border rounded-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 font-bold">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col text-center items-center">
-                                <span className="capitalize font-bold">jumlah Stock</span>
-                                <div className="flex gap-2">
-                                    <span className="font-bold text-xl">50000</span>
-                                    <span className="text-xl">|</span>
-                                    <span className="text-xl">KG</span>
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2 mt-12">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">stok awal</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah masuk</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah habis</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">jumlah habis</span>
+                                        <div className="flex gap-2">
+                                            <span>{value.out_stock}</span>
+                                            <span>|</span>
+                                            <span>{value.dose}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="p-6 flex flex-col gap-2 border rounded-xl">
-                            <div className="flex items-center justify-between">
-                                <span className="font-bold text-xl">burger</span>
-                                <div className="p-2 border rounded-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 font-bold">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col text-center items-center">
-                                <span className="capitalize font-bold">jumlah Stock</span>
-                                <div className="flex gap-2">
-                                    <span className="font-bold text-xl">50000</span>
-                                    <span className="text-xl">|</span>
-                                    <span className="text-xl">KG</span>
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2 mt-12">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">stok awal</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah masuk</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah habis</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="p-6 flex flex-col gap-2 border rounded-xl">
-                            <div className="flex items-center justify-between">
-                                <span className="font-bold text-xl">burger</span>
-                                <div className="p-2 border rounded-xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 font-bold">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col text-center items-center">
-                                <span className="capitalize font-bold">jumlah Stock</span>
-                                <div className="flex gap-2">
-                                    <span className="font-bold text-xl">50000</span>
-                                    <span className="text-xl">|</span>
-                                    <span className="text-xl">KG</span>
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2 mt-12">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">stok awal</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah masuk</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm capitalize">jumlah habis</span>
-                                    <div className="flex gap-2">
-                                        <span>50000</span>
-                                        <span>|</span>
-                                        <span>KG</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
 
                 </div>
