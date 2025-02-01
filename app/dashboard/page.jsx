@@ -1,19 +1,20 @@
 "use client"
 
-import { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
-import Link from 'next/link';
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import Link from 'next/link'
+import Swal from "sweetalert2"
 
 export default function Dashboard() {
     // menu
-    const [menuKebab, setMenuKebab] = useState([]);
-    const [menuBurger, setMenuBurger] = useState([]);
-    const [menuMinuman, setMenuMinuman] = useState([]);
+    const [menuKebab, setMenuKebab] = useState([])
+    const [menuBurger, setMenuBurger] = useState([])
+    const [menuMinuman, setMenuMinuman] = useState([])
 
     // set harga menu
-    const [menuKebabHrg, setMenuKebabHrg] = useState("...");
-    const [menuBurgerHrg, setMenuBurgerHrg] = useState("...");
-    const [menuMinumanHrg, setMenuMinumanHrg] = useState("...");
+    const [menuKebabHrg, setMenuKebabHrg] = useState("...")
+    const [menuBurgerHrg, setMenuBurgerHrg] = useState("...")
+    const [menuMinumanHrg, setMenuMinumanHrg] = useState("...")
 
     // untuk hitungan harga menu
     const [countKebab, setCountKebab] = useState(0)
@@ -26,32 +27,37 @@ export default function Dashboard() {
     useEffect(() => {
         axios.get("/api/menuDas/kebab")
             .then(response => setMenuKebab(response.data))
-            .catch(error => {
-                console.error("Error fetching menu:", error);
-                alert('Failed to fetch menus. Please try again later.');
-            });
+            .catch(() => Swal.fire({
+                title: "The Internet?",
+                text: "gagal mengambil data",
+                icon: "question"
+            }))
 
         axios.get("/api/menuDas/burger")
             .then(response => setMenuBurger(response.data))
-            .catch(error => {
-                console.error("Error fetching menu:", error);
-                alert('Failed to fetch menus. Please try again later.');
-            });
+            .catch(() => Swal.fire({
+                title: "The Internet?",
+                text: "gagal mengambil data",
+                icon: "question"
+            }))
+
         axios.get("/api/menuDas/minuman")
             .then(response => setMenuMinuman(response.data))
-            .catch(error => {
-                console.error("Error fetching menu:", error);
-                alert('Failed to fetch menus. Please try again later.');
-            });
+            .catch(() => Swal.fire({
+                title: "The Internet?",
+                text: "gagal mengambil data",
+                icon: "question"
+            }))
 
         // stock bahan
-        axios.get("/api/stock")
+        axios.get("/api/stockSet")
             .then(response => setStock(response.data))
-            .catch(error => {
-                console.error("Error fetching menu:", error);
-                alert('Failed to fetch menus. Please try again later.');
-            });
-    }, []);
+            .catch(() => Swal.fire({
+                title: "The Internet?",
+                text: "gagal mengambil data",
+                icon: "question"
+            }))
+    }, [])
 
 
     return (
