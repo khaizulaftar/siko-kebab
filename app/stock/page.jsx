@@ -61,10 +61,8 @@ export default function Stock() {
             if (!response.ok) throw new Error();
 
             setMenus(
-                menus.map((menu) =>
-                    menu.id === id ? { ...menu, stock: stockInt, loading: false } : menu
-                )
-            );
+                menus.map((menu) => menu.id === id ? { ...menu, stock: stockInt, loading: false } : menu)
+            )
             setEditingId(null);
         } catch {
             Swal.fire({
@@ -91,72 +89,49 @@ export default function Stock() {
                             height="48"
                             viewBox="0 0 48 48"
                         >
-                            <path
-                                fill="#f48fb1"
-                                d="M37.8,45.7l-8.7-6.3c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V13c0-1.1,0.9-2,2-2h21c1.1,0,2,0.9,2,2v31.1C41,45.7,39.2,46.7,37.8,45.7z"
-                            ></path>
+                            <path fill="#f48fb1" d="M37.8,45.7l-8.7-6.3c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V13c0-1.1,0.9-2,2-2h21c1.1,0,2,0.9,2,2v31.1C41,45.7,39.2,46.7,37.8,45.7z"></path>
                         </svg>
                         <span className="capitalize">stock barang</span>
                     </div>
                     <hr className="my-6" />
                     <div className="grid sm:grid-cols-2 gap-3">
-                        {menus.map(
-                            (
-                                {
-                                    id,
-                                    name,
-                                    stock,
-                                    dose,
-                                    initial_stock,
-                                    final_stock,
-                                    out_stock,
-                                    loading,
-                                },
-                            ) => (
-                                <div
-                                    key={id}
-                                    className="p-6 flex flex-col gap-2 border rounded-xl"
-                                >
-                                    <span className="font-bold text-xl">{name}</span>
-                                    <div className="flex flex-col text-center items-center">
-                                        <span className="capitalize font-bold">
-                                            jumlah Stock
-                                        </span>
-                                        <div className="flex gap-2">
-                                            <span className="font-bold text-xl">
-                                                {stock}
-                                            </span>
-                                            <span className="text-xl">|</span>
-                                            <span className="text-xl capitalize">
-                                                {dose}
-                                            </span>
+                        {menus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, loading },
+                        ) => (
+                            <div key={id} className="p-6 flex flex-col gap-2 border rounded-xl">
+                                <span className="font-bold text-xl">{name}</span>
+                                <div className="flex flex-col text-center items-center">
+                                    <span className="capitalize font-bold">jumlah Stock</span>
+                                    <div className="flex gap-2">
+                                        <span className="font-bold text-xl">{stock}</span>
+                                        <span className="text-xl">|</span>
+                                        <span className="text-xl capitalize">{dose}</span>
+                                    </div>
+                                    {editingId === id ? (
+                                        <div className="relative mt-6 w-full">
+                                            <input
+                                                type="number"
+                                                className="block w-full p-4 text-sm border rounded-lg"
+                                                placeholder="ubah harga barang"
+                                                ref={(el) => (inputRefs.current[id] = el)}
+                                            />
+                                            <button
+                                                onClick={() => handlePriceChange(id)}
+                                                disabled={loading}
+                                                className={`absolute end-2.5 bottom-2.5 bg-blue-700 text-white rounded-lg text-sm px-4 py-2 ${loading
+                                                    ? "opacity-50 cursor-not-allowed"
+                                                    : ""
+                                                    }`}
+                                            >
+                                                {loading
+                                                    ? "Memperbarui..."
+                                                    : "Ubah Harga"}
+                                            </button>
                                         </div>
-                                        {editingId === id ? (
-                                            <div className="relative mt-6 w-full">
-                                                <input
-                                                    type="number"
-                                                    className="block w-full p-4 text-sm border rounded-lg"
-                                                    placeholder="ubah harga barang"
-                                                    ref={(el) => (inputRefs.current[id] = el)}
-                                                />
-                                                <button
-                                                    onClick={() => handlePriceChange(id)}
-                                                    disabled={loading}
-                                                    className={`absolute end-2.5 bottom-2.5 bg-blue-700 text-white rounded-lg text-sm px-4 py-2 ${loading
-                                                        ? "opacity-50 cursor-not-allowed"
-                                                        : ""
-                                                        }`}
-                                                >
-                                                    {loading
-                                                        ? "Memperbarui..."
-                                                        : "Ubah Harga"}
-                                                </button>
-                                            </div>
-                                        ) : (
+                                    ) : (
+                                        <div className="flex w-full justify-end">
                                             <button
                                                 onClick={() => setEditingId(id)}
-                                                className="border p-2 rounded-full"
-                                            >
+                                                className="">
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     fill="none"
@@ -172,42 +147,37 @@ export default function Stock() {
                                                     />
                                                 </svg>
                                             </button>
-                                        )}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex flex-col gap-2 mt-12">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">stok awal</span>
+                                        <div className="flex gap-2">
+                                            <span>{initial_stock}</span>
+                                            <span>|</span>
+                                            <span>{dose}</span>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col gap-2 mt-12">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm capitalize">
-                                                stok awal
-                                            </span>
-                                            <div className="flex gap-2">
-                                                <span>{initial_stock}</span>
-                                                <span>|</span>
-                                                <span>{dose}</span>
-                                            </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">jumlah masuk</span>
+                                        <div className="flex gap-2">
+                                            <span>{final_stock}</span>
+                                            <span>|</span>
+                                            <span>{dose}</span>
                                         </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm capitalize">
-                                                jumlah masuk
-                                            </span>
-                                            <div className="flex gap-2">
-                                                <span>{final_stock}</span>
-                                                <span>|</span>
-                                                <span>{dose}</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm capitalize">
-                                                jumlah habis
-                                            </span>
-                                            <div className="flex gap-2">
-                                                <span>{out_stock}</span>
-                                                <span>|</span>
-                                                <span>{dose}</span>
-                                            </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">jumlah habis</span>
+                                        <div className="flex gap-2">
+                                            <span>{out_stock}</span>
+                                            <span>|</span>
+                                            <span>{dose}</span>
                                         </div>
                                     </div>
                                 </div>
-                            )
+                            </div>
+                        )
                         )}
                     </div>
                 </div>

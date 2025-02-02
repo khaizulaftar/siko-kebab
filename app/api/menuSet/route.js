@@ -19,7 +19,7 @@ export async function PUT(req) {
         const db = await dbConnect();
         const [result] = await db.execute('UPDATE menu SET price = ? WHERE id = ?', [Math.floor(price), id]);
 
-        return NextResponse.json({ message: result.affectedRows ? 'Harga berhasil diperbarui' : 'Menu tidak ditemukan' }, 
+        return NextResponse.json({ message: result.affectedRows ? 'Harga berhasil d iperbarui' : 'Menu tidak ditemukan' }, 
             { status: result.affectedRows ? 200 : 404 });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

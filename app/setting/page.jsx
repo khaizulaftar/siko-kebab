@@ -78,7 +78,7 @@ export default function Setting() {
         <>
             <div className="max-w-4xl mx-auto mt-32 mx-6">
                 <div className="grid sm:grid-cols-2 gap-3">
-                    {menus.map(({ id, icon, category, name, price, dose, loading }) => (
+                    {menus.map(({ id, icon, category, name, price, dose,bahan, loading }) => (
                         <div key={id} className="p-6 border rounded-xl">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
@@ -93,7 +93,7 @@ export default function Setting() {
                                     <div className="flex gap-2 items-center">
                                         <span className="text-md">Rp {price}</span>
                                         <span className="text-md">|</span>
-                                        <span className="text-sm uppercase">{dose}</span>
+                                        <span className="text-sm uppercase">{dose}</span>                                        
                                     </div>
                                 </div>
                             </div>
@@ -134,3 +134,4 @@ export default function Setting() {
         </>
     );
 }
+

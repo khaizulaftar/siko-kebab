@@ -17,12 +17,23 @@ export default function Dashboard() {
     const [menuMinumanHrg, setMenuMinumanHrg] = useState("...")
 
     // untuk hitungan harga menu
-    const [countKebab, setCountKebab] = useState(0)
-    const [countBurger, setCountBurger] = useState(0)
-    const [countMinuman, setCountMinuman] = useState(0)
+    const [countKebab, setCountKebab] = useState(1)
+    const [countBurger, setCountBurger] = useState(1)
+    const [countMinuman, setCountMinuman] = useState(1)
 
     // stock bahan
     const [stock, setStock] = useState([]);
+
+    // lihat dan tidak lihat
+    const [showPemasukan, setShowPemasukan] = useState(true);
+
+
+    // pemasukan
+    const totalHargaKebab = menuKebabHrg * countKebab || menuKebabHrg;
+    const totalHargaBurger = menuBurgerHrg * countBurger || menuBurgerHrg;
+    const totalHargaMinuman = menuMinumanHrg * countMinuman || menuMinuman;
+
+    const [dataPemasukan, setDataPemasukan] = useState([]);
 
     useEffect(() => {
         axios.get("/api/menuDas/kebab")
@@ -57,8 +68,80 @@ export default function Dashboard() {
                 text: "gagal mengambil data",
                 icon: "question"
             }))
+
+        // pemasukan
+        axios.get('/api/income')
+            .then(response => {
+                setDataPemasukan(response.data.data);
+            })
+            .catch(error => {
+                console.error("Error mengambil data pemasukan:", error);
+            });
     }, [])
 
+
+    const kirimKeIncomeKebab = async () => {
+        const data = {
+            totalHarga: totalHargaKebab,
+        }
+        try {
+            const response = await axios.post('/api/income', data)
+            Swal.fire({
+                title: 'Success',
+                text: 'Data berhasil disimpan!',
+                icon: 'success',
+            });
+            console.log('Data berhasil dikirim:', response.data);
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Gagal mengirim data!',
+                icon: 'error',
+            });
+        }
+    };
+
+    const kirimKeIncomeBurger = async () => {
+        const data = {
+            totalHarga: totalHargaBurger,
+        }
+        try {
+            const response = await axios.post('/api/income', data)
+            Swal.fire({
+                title: 'Success',
+                text: 'Data berhasil disimpan!',
+                icon: 'success',
+            });
+            console.log('Data berhasil dikirim:', response.data);
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Gagal mengirim data!',
+                icon: 'error',
+            });
+        }
+    };
+
+    const kirimKeIncomeMinuman = async () => {
+        const data = {
+            totalHarga: totalHargaMinuman,
+        }
+        try {
+            const response = await axios.post('/api/income', data)
+            Swal.fire({
+                title: 'Success',
+                text: 'Data berhasil disimpan!',
+                icon: 'success',
+            });
+            console.log('Data berhasil dikirim:', response.data);
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Gagal mengirim data!',
+                icon: 'error',
+            });
+        }
+    };
 
     return (
         <>
@@ -66,15 +149,30 @@ export default function Dashboard() {
                 {/* jumlah pemasukan */}
                 <div className="card bg-base-100  mx-6 border p-8 rounded-xl mt-12">
                     <div className="flex flex-col gap-8">
-                        <div className="flex items-center gap-3">
-                            <span className="capitalize">pemasukan</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-5">
+                                <span className="capitalize">pemasukan</span>
+                                <button onClick={() => setShowPemasukan(!showPemasukan)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            {dataPemasukan.map((value) => (
+                                <>
+                                    <span className='text-sm text-gray-600'>{value.tanggal}</span>
+                                </>
+                            ))}
                         </div>
-                        <span className="text-4xl font-bold"> Rp 40.000.000</span>
+                        {dataPemasukan.map((value, index) => (
+                            <>
+                            {showPemasukan ? <span className='text-gray-600 text-2xl font-bold'>Rp {value.total_pemasukan}</span> : <div className='text-gray-600 text-2xl font-bold'>Rp . . . . . .</div> }
+                            </>
+                            // <span key={index} className="text-4xl font-bold">
+                            //     {showPemasukan ? `Rp ${value.total_pemasukan}` : <span>...</span>}
+                            // </span>
+                        ))}
                         <div>
                             <button type="button" className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</button>
                         </div>
@@ -195,7 +293,9 @@ export default function Dashboard() {
                                 <span>{countKebab}</span>
                                 <button onClick={() => setCountKebab(countKebab + 1)}>+</button>
                             </div>
-                            <div type="button" class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</div>
+                            <button
+                                onClick={kirimKeIncomeKebab}
+                                class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</button>
                         </div>
                     </div>
 
@@ -222,14 +322,16 @@ export default function Dashboard() {
                                 <span>{countBurger}</span>
                                 <button onClick={() => setCountBurger(countBurger + 1)}>+</button>
                             </div>
-                            <div type="button" class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</div>
+                            <button
+                                onClick={kirimKeIncomeBurger}
+                                class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</button>
                         </div>
                     </div>
 
                     <div className="flex flex-col align-center gap-6 p-6 border rounded-xl mt-6">
                         <div className="flex items-center flex-col">
                             <span className="text-3xl capatalize text-bold">minuman</span>
-                            <span className="text-2xl capitalize text-bold">{menuMinumanHrg * countMinuman || menuMinumanHrg}</span>
+                            <span className="text-2xl capitalize text-bold">Rp {menuMinumanHrg * countMinuman || menuMinumanHrg}</span>
                         </div>
                         <div>
                             <p className="capitalize mb-6">daftar menu</p>
@@ -249,7 +351,9 @@ export default function Dashboard() {
                                 <span>{countMinuman}</span>
                                 <button onClick={() => setCountMinuman(countMinuman + 1)}>+</button>
                             </div>
-                            <div type="button" class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</div>
+                            <button
+                                onClick={kirimKeIncomeMinuman}
+                                class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</button>
                         </div>
                     </div>
                 </div>
