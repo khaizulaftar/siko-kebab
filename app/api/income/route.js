@@ -2,42 +2,32 @@ import { dbConnect } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
 
-// export async function GET() {
-//     try {
-//         const connection = await dbConnect()
-//         const [rows] = await connection.query(
-//             'SELECT tanggal, SUM(jumlah_pemasukan) AS total_pemasukan FROM income GROUP BY tanggal ORDER BY tanggal DESC'
-//         );
-//         await connection.end();
-//         return new Response(JSON.stringify({ data: rows }), { status: 200 })
-
-//     } catch (error) {
-//         return new Response(JSON.stringify({ error: 'Gagal mengambil data', details: error.message }), { status: 500 })
-//     }
-// }
-
-
 export async function GET() {
     try {
         const connection = await dbConnect();
         const [rows] = await connection.query(
-            'SELECT tanggal, SUM(jumlah_pemasukan) AS total_pemasukan FROM income GROUP BY tanggal ORDER BY tanggal DESC'
+            'SELECT SUM(jumlah_pemasukan) AS total_pemasukan FROM income WHERE tanggal = CURDATE()'
         );
 
-        const formattedRows = rows.map(({ tanggal, total_pemasukan }) => ({
-            tanggal: new Date(tanggal).toLocaleDateString('id-ID', {
-                weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
-            }).replace(/\//g, '-'),
-            total_pemasukan
-        }));
+        const today = new Date().toLocaleDateString('id-ID', {
+            weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
+        }).replace(/\//g, '-');
 
         await connection.end();
-        return Response.json({ success: true, data: formattedRows });
+        return NextResponse.json({
+            success: true,
+            data: {
+                tanggal: today,
+                total_pemasukan: rows[0]?.total_pemasukan || 0
+            }
+        });
 
     } catch (error) {
-        return Response.json({ success: false, error: 'Gagal mengambil data', details: error.message }, { status: 500 });
+        return NextResponse.json({ success: false, error: 'Gagal mengambil data', details: error.message }, { status: 500 });
     }
 }
+
+
 
 
 

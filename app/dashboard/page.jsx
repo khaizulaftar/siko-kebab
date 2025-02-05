@@ -159,20 +159,9 @@ export default function Dashboard() {
                                     </svg>
                                 </button>
                             </div>
-                            {dataPemasukan.map((value) => (
-                                <>
-                                    <span className='text-sm text-gray-600'>{value.tanggal}</span>
-                                </>
-                            ))}
+                            <span className='text-sm text-gray-600'>{dataPemasukan.tanggal}</span>
                         </div>
-                        {dataPemasukan.map((value, index) => (
-                            <>
-                            {showPemasukan ? <span className='text-gray-600 text-2xl font-bold'>Rp {value.total_pemasukan}</span> : <div className='text-gray-600 text-2xl font-bold'>Rp . . . . . .</div> }
-                            </>
-                            // <span key={index} className="text-4xl font-bold">
-                            //     {showPemasukan ? `Rp ${value.total_pemasukan}` : <span>...</span>}
-                            // </span>
-                        ))}
+                        {showPemasukan ?  <span className="text-4xl font-bold">{dataPemasukan.total_pemasukan}</span> : <span>...</span>}
                         <div>
                             <button type="button" className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</button>
                         </div>
