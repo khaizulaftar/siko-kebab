@@ -45,13 +45,13 @@ export async function GET() {
 
 export async function POST(req) {
     try {
-        const { totalHarga, item, category } = await req.json();
+        const { totalHarga, item, category, nama } = await req.json();
 
         const connection = await dbConnect();
 
         const [result] = await connection.execute(
-            'INSERT INTO income (jumlah_pemasukan, item, category) VALUES (?, ?, ?)',
-            [totalHarga, item, category]
+            'INSERT INTO income (jumlah_pemasukan, item, category, name) VALUES (?, ?, ?, ?)',
+            [totalHarga, item, category, nama]
         );
 
         return new Response(JSON.stringify({ message: 'Data berhasil disimpan', result }), { status: 200 });

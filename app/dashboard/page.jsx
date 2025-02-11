@@ -35,6 +35,12 @@ export default function Dashboard() {
 
     const [dataPemasukan, setDataPemasukan] = useState([]);
 
+
+    // untuk mengambil nama barang
+    const [namakebab, setNamakebab] = useState("")
+    const [namaburger, setNamaBurger] = useState("")
+    const [namaminuman, setNamaMinuman] = useState("")
+
     useEffect(() => {
         axios.get("/api/menuDas/kebab")
             .then(response => setMenuKebab(response.data))
@@ -80,77 +86,36 @@ export default function Dashboard() {
     }, [])
 
 
-    const kirimKeIncomeKebab = async () => {
+    const kirimKeIncome = async (totalHarga, count, category, nama) => {
         const data = {
-            totalHarga: totalHargaKebab,
-            item: countKebab,
-            category: "kebab",
-        };
+            totalHarga,
+            item: count,
+            category,
+            nama
+        }
     
         try {
-            const response = await axios.post('/api/income', data);
+            const responseIncome = await axios.post('/api/income', data);
+            const responseHistory = await axios.post('/api/history', data);
+    
             Swal.fire({
                 title: 'Success',
-                text: 'Data berhasil disimpan!',
+                text: `Data ${category} berhasil disimpan!`,
                 icon: 'success',
             });
-            console.log('Data berhasil dikirim:', response.data);
         } catch (error) {
             Swal.fire({
                 title: 'Error',
-                text: 'Gagal mengirim data!',
+                text: `Gagal mengirim data ${category}!`,
                 icon: 'error',
             });
         }
     };
-
-    const kirimKeIncomeBurger = async () => {
-        const data = {
-            totalHarga: totalHargaBurger,
-            item: countBurger,
-            category: "burger",
-        };
     
-        try {
-            const response = await axios.post('/api/income', data);
-            Swal.fire({
-                title: 'Success',
-                text: 'Data berhasil disimpan!',
-                icon: 'success',
-            });
-            console.log('Data berhasil dikirim:', response.data);
-        } catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Gagal mengirim data!',
-                icon: 'error',
-            });
-        }
-    };
-
-    const kirimKeIncomeMinuman = async () => {
-        const data = {
-            totalHarga: totalHargaMinuman,
-            item: countMinuman,
-            category: "minuman",
-        };
+    const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab);
+    const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger);
+    const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman);
     
-        try {
-            const response = await axios.post('/api/income', data);
-            Swal.fire({
-                title: 'Success',
-                text: 'Data berhasil disimpan!',
-                icon: 'success',
-            });
-            console.log('Data berhasil dikirim:', response.data);
-        } catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Gagal mengirim data!',
-                icon: 'error',
-            });
-        }
-    };
 
     return (
         <>
@@ -278,7 +243,10 @@ export default function Dashboard() {
                             <div className="flex flex-wrap">
                                 {menuKebab.map((value) => (
                                     <button
-                                        onClick={() => { setMenuKebabHrg(value.price) }}
+                                        onClick={() => { 
+                                            setMenuKebabHrg(value.price)
+                                            setNamakebab(value.name)
+                                        }}
                                         class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 ">
                                         {value.name}
                                     </button>
@@ -307,7 +275,10 @@ export default function Dashboard() {
                             <div className="flex flex-wrap">
                                 {menuBurger.map((value) => (
                                     <button
-                                        onClick={() => { setMenuBurgerHrg(value.price) }}
+                                        onClick={() => { 
+                                            setMenuBurgerHrg(value.price) 
+                                            setNamaBurger(value.name)
+                                        }}
                                         class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 ">
                                         {value.name}
                                     </button>
@@ -336,7 +307,10 @@ export default function Dashboard() {
                             <div className="flex flex-wrap">
                                 {menuMinuman.map((value) => (
                                     <button
-                                        onClick={() => { setMenuMinumanHrg(value.price) }}
+                                        onClick={() => { 
+                                            setMenuMinumanHrg(value.price) 
+                                            setNamaMinuman(value.name)
+                                        }}
                                         class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 ">
                                         {value.name}
                                     </button>

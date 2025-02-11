@@ -1,4 +1,22 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import axios from 'axios'
+import Swal from "sweetalert2"
+
 export default function History() {
+    const [history, setHistory] = useState([])
+
+    useEffect(() => {
+        axios.get("/api/history")
+            .then(response => setHistory(response.data))
+            .catch(() => Swal.fire({
+                title: "The Internet?",
+                text: "gagal mengambil data",
+                icon: "question"
+            }))
+    }, [])
+
     return (
         <>
             <div className="max-w-4xl mx-auto">
@@ -23,457 +41,27 @@ export default function History() {
                         <p className="capitalize mb-6">06, maret, 2002</p>
 
                         <div className="grid grid-1 sm:grid-cols-2 gap-3">
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
+                            {history.map((value) => (
+                                <>
+                                    <div key={value.id} className="p-6 border rounded-xl flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex flex-col">
+                                                <span className="text-md capitalize font-bold">{value.category}</span>
+                                                <span className="text-sm capitalize">{value.name}</span>
+                                            </div>
+                                        </div>
+                                        <div className="bg-orange-10">
+                                            <span className="text-md font-bold">{value.jumlah_pemasukan}</span>
+                                            <div className="flex items-center justify-end gap-1 mt-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold text-green-500">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                </svg>
+                                                <span className="text-md">{value.item}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div className="my-6">
-                        <p className="capitalize mb-6">06, maret, 2002</p>
-
-                        <div className="grid grid-1 sm:grid-cols-2 gap-3">
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                        <path fill="#ffe082" d="M37,17H27l-4.9-4.1c-0.7-0.6-1.7-0.9-2.6-0.9h-7.5C10.4,12,9,13.4,9,15.1v12v6.9v7c0,1.7,1.4,3.1,3.1,3.1h31.9	c1.7,0,3.1-1.4,3.1-3.1V20.1c0-1.7-1.4-3.1-3.1-3.1h-1.1H37z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M5.5,29.8v6.7c0,1.7,1.3,3,3,3h31c1.7,0,3-1.3,3-3v-20c0-1.7-1.3-3-3-3h-1.1"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M32.7,13.5h-9.2l-4.9-4.1c-0.7-0.6-1.6-0.9-2.6-0.9H8.5c-1.7,0-3,1.3-3,3v11.7"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M6,16.5h12.1c0.9,0,1.8-0.3,2.6-0.9l2.3-1.9"></path>
-                                    </svg>
-                                    <div className="flex flex-col">
-                                        <span className="text-md capitalize font-bold">burger</span>
-                                        <span className="text-sm capitalize">daging</span>
-                                    </div>
-                                </div>
-                                <div className="bg-orange-10">
-                                    <span className="text-xl font-bold">3000</span>
-                                    <div className="flex items-center justify-end gap-1 mt-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <span className="font-bold">2</span>
-                                    </div>
-                                </div>
-                            </div>
+                                </>
+                            ))}
                         </div>
                     </div>
                 </div>
