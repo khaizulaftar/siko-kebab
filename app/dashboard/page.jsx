@@ -83,9 +83,12 @@ export default function Dashboard() {
     const kirimKeIncomeKebab = async () => {
         const data = {
             totalHarga: totalHargaKebab,
-        }
+            item: countKebab,
+            category: "kebab",
+        };
+    
         try {
-            const response = await axios.post('/api/income', data)
+            const response = await axios.post('/api/income', data);
             Swal.fire({
                 title: 'Success',
                 text: 'Data berhasil disimpan!',
@@ -104,9 +107,12 @@ export default function Dashboard() {
     const kirimKeIncomeBurger = async () => {
         const data = {
             totalHarga: totalHargaBurger,
-        }
+            item: countBurger,
+            category: "burger",
+        };
+    
         try {
-            const response = await axios.post('/api/income', data)
+            const response = await axios.post('/api/income', data);
             Swal.fire({
                 title: 'Success',
                 text: 'Data berhasil disimpan!',
@@ -125,9 +131,12 @@ export default function Dashboard() {
     const kirimKeIncomeMinuman = async () => {
         const data = {
             totalHarga: totalHargaMinuman,
-        }
+            item: countMinuman,
+            category: "minuman",
+        };
+    
         try {
-            const response = await axios.post('/api/income', data)
+            const response = await axios.post('/api/income', data);
             Swal.fire({
                 title: 'Success',
                 text: 'Data berhasil disimpan!',
@@ -187,20 +196,20 @@ export default function Dashboard() {
                     <hr className="my-6" />
 
                     <div>
-                        <p className="capitalize mb-6">06, maret, 2002</p>
+                        <p className="capitalize mb-6">{dataPemasukan.tanggal}</p>
 
                         <div className="grid grid-cols-3 gap-3">
                             <div className="p-6 flex flex-col gap-2 text-center border rounded-xl">
-                                <span className="capitalize text-2xl">400</span>
+                                <span className="capitalize text-2xl">{dataPemasukan.total_kebab}</span>
                                 <span className="capitalize">kebab</span>
                             </div>
                             <div className="p-6 flex flex-col gap-2 text-center border rounded-xl">
-                                <span className="capitalize text-2xl">400</span>
-                                <span className="capitalize">kebab</span>
+                                <span className="capitalize text-2xl">{dataPemasukan.total_burger}</span>
+                                <span className="capitalize">burger</span>
                             </div>
                             <div className="p-6 flex flex-col gap-2 text-center border rounded-xl">
-                                <span className="capitalize text-2xl">400</span>
-                                <span className="capitalize">kebab</span>
+                                <span className="capitalize text-2xl">{dataPemasukan.total_minuman}</span>
+                                <span className="capitalize">minuman</span>
                             </div>
                         </div>
                     </div>
