@@ -97,7 +97,7 @@ export default function Stock() {
                     <div className="grid sm:grid-cols-2 gap-3">
                         {menus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, loading },
                         ) => (
-                            <div key={id} className="p-6 flex flex-col gap-2 border rounded-xl">
+                            <div key={id} className="p-6 flex flex-col gap-2 border rounded-xl bg-white shadow-sm">
                                 <span className="font-bold text-xl">{name}</span>
                                 <div className="flex flex-col text-center items-center">
                                     <span className="capitalize font-bold">jumlah Stock</span>

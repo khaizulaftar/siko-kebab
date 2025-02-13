@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex flex-col sm:flex-row">
+        <div className="flex flex-col sm:flex-row bg-[#F9F9FB]">
           {/* navigasion */}
 
           {/* navbar */}

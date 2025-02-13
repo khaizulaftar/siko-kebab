@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Link from 'next/link'
 import Swal from "sweetalert2"
+import ChartIncome from '../trafik/chart'
 
 export default function Dashboard() {
     // menu
@@ -92,11 +93,24 @@ export default function Dashboard() {
             item: count,
             category,
             nama
+        };
+    
+        const confirmResult = await Swal.fire({
+            title: 'Konfirmasi',
+            text: `Apakah Anda yakin ingin menyimpan data ${category}?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Simpan',
+            cancelButtonText: 'Batal'
+        });
+    
+        if (!confirmResult.isConfirmed) {
+            return;
         }
     
         try {
-            const responseIncome = await axios.post('/api/income', data);
-            const responseHistory = await axios.post('/api/history', data);
+            await axios.post('/api/income', data);
+            await axios.post('/api/history', data);
     
             Swal.fire({
                 title: 'Success',
@@ -112,6 +126,7 @@ export default function Dashboard() {
         }
     };
     
+    
     const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab);
     const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger);
     const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman);
@@ -121,7 +136,7 @@ export default function Dashboard() {
         <>
             <div className="max-w-4xl mx-auto">
                 {/* jumlah pemasukan */}
-                <div className="card bg-base-100  mx-6 border p-8 rounded-xl mt-12">
+                <div className="card bg-base-100  mx-6 border p-8 rounded-xl mt-12 bg-white shadow-sm">
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
@@ -160,25 +175,25 @@ export default function Dashboard() {
                     </div>
                     <hr className="my-6" />
 
-                    <div>
-                        <p className="capitalize mb-6">{dataPemasukan.tanggal}</p>
-
-                        <div className="grid grid-cols-3 gap-3">
-                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl">
-                                <span className="capitalize text-2xl">{dataPemasukan.total_kebab}</span>
-                                <span className="capitalize">kebab</span>
+                    <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
+                        <div className="grid grid-cols-3 sm:flex flex-col gap-3">
+                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl bg-white shadow-sm">
+                                <span className="capitalize text-xl">{dataPemasukan.total_kebab}</span>
+                                <span className="capitalize text-sm">kebab</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl">
-                                <span className="capitalize text-2xl">{dataPemasukan.total_burger}</span>
-                                <span className="capitalize">burger</span>
+                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl bg-white shadow-sm">
+                                <span className="capitalize text-xl">{dataPemasukan.total_burger}</span>
+                                <span className="capitalize text-sm">burger</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl">
-                                <span className="capitalize text-2xl">{dataPemasukan.total_minuman}</span>
-                                <span className="capitalize">minuman</span>
+                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl bg-white shadow-sm">
+                                <span className="capitalize text-xl">{dataPemasukan.total_minuman}</span>
+                                <span className="capitalize text-sm">minuman</span>
                             </div>
                         </div>
+                        <ChartIncome/>
                     </div>
                 </div>
+
 
                 {/* jumlah bahan */}
                 <div className="mt-32 mx-6">
@@ -198,10 +213,9 @@ export default function Dashboard() {
                     </div>
                     <hr className="my-6" />
 
-
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">
                         {stock.slice(0, 6).map((value) => (
-                            <div className="p-6 border rounded-xl flex items-center justify-between">
+                            <div className="p-6 border rounded-xl flex items-center justify-between bg-white shadow-sm">
                                 <span className="capitalize">{value.name}</span>
                                 <div className='flex items-center gap-1'>
                                     <span className="font-semibold">{value.stock}</span>
@@ -232,8 +246,10 @@ export default function Dashboard() {
                             </svg>
                         </div>
                     </div>
+
                     <hr className="my-6" />
-                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl">
+
+                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
                         <div className="flex items-center flex-col">
                             <span className="text-3xl capatalize text-bold">kebab</span>
                             <span className="text-2xl capitalize text-bold">Rp {menuKebabHrg * countKebab || menuKebabHrg}</span>
@@ -265,7 +281,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl mt-6">
+                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl mt-6 bg-white shadow-sm">
                         <div className="flex items-center flex-col">
                             <span className="text-3xl capatalize text-bold">Burger</span>
                             <span className="text-2xl capitalize text-bold">Rp {menuBurgerHrg * countBurger || menuBurgerHrg}</span>
@@ -297,7 +313,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl mt-6">
+                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl mt-6 bg-white shadow-sm">
                         <div className="flex items-center flex-col">
                             <span className="text-3xl capatalize text-bold">minuman</span>
                             <span className="text-2xl capitalize text-bold">Rp {menuMinumanHrg * countMinuman || menuMinumanHrg}</span>

@@ -8,7 +8,6 @@ export default function Setting() {
     const [menus, setMenus] = useState([])
     const inputRefs = useRef({})
     const [editingId, setEditingId] = useState(null)
-    const [selectedId, setSelectedId] = useState(null)
 
     useEffect(() => {
         axios.get("/api/menuSet")
@@ -24,17 +23,16 @@ export default function Setting() {
 
     const handlePriceChange = async (id) => {
         const price = Math.floor(Number(inputRefs.current[id].value));
+    
         if (isNaN(price) || price <= 0) {
             Swal.fire({
                 icon: "error",
                 title: "Terjadi kesalahan",
                 text: "Harga tidak valid. Pastikan harga lebih besar dari 0.",
             });
-            return
+            return;
         }
-
-        setSelectedId(id)
-
+    
         const result = await Swal.fire({
             title: "Apakah Anda yakin ingin mengubah harga?",
             text: "Harga akan diperbarui setelah Anda mengonfirmasi.",
@@ -43,22 +41,24 @@ export default function Setting() {
             confirmButtonText: "Ya, ubah harga!",
             cancelButtonText: "Batal",
         });
-
+    
         if (result.isConfirmed) {
-            handleAlertConfirm()
+            handleAlertConfirm(id, price);
         }
     };
-
-    const handleAlertConfirm = async () => {
-        const price = Math.floor(Number(inputRefs.current[selectedId].value));
-        setMenus((prev) => prev.map((m) => (m.id === selectedId ? { ...m, loading: true } : m)))
-
+    
+    const handleAlertConfirm = async (id, price) => {
+        setMenus((prev) => prev.map((m) => (m.id === id ? { ...m, loading: true } : m)));
+    
         try {
-            await axios.put("/api/menuSet", { id: selectedId, price })
+            await axios.put("/api/menuSet", { id, price });
+    
             setMenus((prev) =>
-                prev.map((m) => (m.id === selectedId ? { ...m, price, loading: false } : m))
+                prev.map((m) => (m.id === id ? { ...m, price, loading: false } : m))
             );
+    
             setEditingId(null);
+    
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
@@ -70,16 +70,18 @@ export default function Setting() {
                 title: "Gagal",
                 text: "Gagal memperbarui harga. Silakan coba lagi.",
             });
-            setMenus((prev) => prev.map((m) => (m.id === selectedId ? { ...m, loading: false } : m)));
+    
+            setMenus((prev) => prev.map((m) => (m.id === id ? { ...m, loading: false } : m)));
         }
     };
+    
 
     return (
         <>
-            <div className="max-w-4xl mx-auto mt-32 mx-6">
-                <div className="grid sm:grid-cols-2 gap-3">
-                    {menus.map(({ id, icon, category, name, price, dose,bahan, loading }) => (
-                        <div key={id} className="p-6 border rounded-xl">
+            <div className="max-w-4xl mx-auto mt-32">
+                <div className="grid sm:grid-cols-2 gap-3 mx-6">
+                    {menus.map(({ id, icon, category, name, price, dose, loading }) => (
+                        <div key={id} className="p-6 border rounded-xl bg-white shadow-sm">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
                                     <img width="35" height="35" src={icon} alt="hamburger" />
