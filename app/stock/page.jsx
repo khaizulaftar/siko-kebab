@@ -22,10 +22,10 @@ export default function Stock() {
             });
     }, []);
 
-    const handlePriceChange = async (id) => {
+    const handlePriceChange = async (id, name, final_stock) => {
         const newStock = inputRefs.current[id]?.value;
         const stockInt = Math.floor(Number(newStock));
-
+    
         if (isNaN(stockInt) || stockInt <= 0) {
             return Swal.fire({
                 icon: "error",
@@ -33,7 +33,7 @@ export default function Stock() {
                 text: "Harap masukkan harga yang valid.",
             });
         }
-
+    
         const result = await Swal.fire({
             title: "Apakah Anda yakin?",
             text: "Harga akan diubah!",
@@ -42,42 +42,48 @@ export default function Stock() {
             confirmButtonText: "Ya, ubah harga",
             cancelButtonText: "Batal",
         });
-
+    
         if (!result.isConfirmed) return;
-
-        setMenus(
-            menus.map((menu) =>
-                menu.id === id ? { ...menu, loading: true } : menu
-            )
-        );
-
+    
+        setMenus(menus.map((menu) =>
+            menu.id === id ? { ...menu, loading: true } : menu
+        ));
+    
         try {
-            const response = await fetch("/api/stockSet", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id, stock: stockInt }),
+            await axios.put("/api/stockSet", { id, stock: stockInt });
+    
+            await axios.post("/api/history", {
+                totalHarga: stockInt,
+                item: final_stock,
+                category: name,
+                nama: "",
             });
-
-            if (!response.ok) throw new Error();
-
-            setMenus(
-                menus.map((menu) => menu.id === id ? { ...menu, stock: stockInt, loading: false } : menu)
-            )
+    
+            setMenus(menus.map((menu) =>
+                menu.id === id ? { ...menu, stock: stockInt, loading: false } : menu
+            ));
             setEditingId(null);
-        } catch {
+    
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Harga telah diperbarui dan riwayat tersimpan.",
+            });
+    
+        } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal memperbarui harga",
                 text: "Silakan coba lagi.",
             });
-            setMenus(
-                menus.map((menu) =>
-                    menu.id === id ? { ...menu, loading: false } : menu
-                )
-            );
+    
+            setMenus(menus.map((menu) =>
+                menu.id === id ? { ...menu, loading: false } : menu
+            ));
         }
     };
-
+    
+    
     return (
         <>
             <div className="max-w-4xl mx-auto">
@@ -115,7 +121,7 @@ export default function Stock() {
                                                 ref={(el) => (inputRefs.current[id] = el)}
                                             />
                                             <button
-                                                onClick={() => handlePriceChange(id)}
+                                                onClick={() => handlePriceChange(id , name, final_stock)}
                                                 disabled={loading}
                                                 className={`absolute end-2.5 bottom-2.5 bg-blue-700 text-white rounded-lg text-sm px-4 py-2 ${loading
                                                     ? "opacity-50 cursor-not-allowed"

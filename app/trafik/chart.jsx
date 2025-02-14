@@ -18,7 +18,7 @@ export default function ChartIncome() {
                 icon: "question"
             }))
     }, [])
-    
+
     return (
         <>
             <div class="w-full p-6 bg-white shadow-sm rounded-xl border col-span-2">
@@ -28,12 +28,12 @@ export default function ChartIncome() {
                     <div class="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                     <div class="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
 
-                    <div class="flex justify-between items-end w-full">
+                    <div class="flex gap-3 items-end w-full">
                         {
                             dataPemasukan.total_pemasukan.map((value, index) => (
-                                <div class="flex flex-col items-center justify-center">
-                                    <span class="text-sm">{value}</span>
-                                    <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value / 1000}px` }}></span>
+                                <div class="flex flex-col items-center justify-center relative">
+                                    <span class="text-sm absolute -top-6">{value}</span>
+                                    <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value / 5000}px` }}></span>
                                     <span class="text-sm capitalize text-gray-500">{dataPemasukan.hari[dataPemasukan.tanggal[index]]}</span>
                                 </div>
                             ))

@@ -94,7 +94,7 @@ export default function Dashboard() {
             category,
             nama
         };
-    
+
         const confirmResult = await Swal.fire({
             title: 'Konfirmasi',
             text: `Apakah Anda yakin ingin menyimpan data ${category}?`,
@@ -103,15 +103,15 @@ export default function Dashboard() {
             confirmButtonText: 'Ya, Simpan',
             cancelButtonText: 'Batal'
         });
-    
+
         if (!confirmResult.isConfirmed) {
             return;
         }
-    
+
         try {
             await axios.post('/api/income', data);
             await axios.post('/api/history', data);
-    
+
             Swal.fire({
                 title: 'Success',
                 text: `Data ${category} berhasil disimpan!`,
@@ -125,22 +125,23 @@ export default function Dashboard() {
             });
         }
     };
-    
-    
+
+    // Pastikan variabel berikut sudah dideklarasikan sebelumnya
     const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab);
     const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger);
     const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman);
-    
+
+
 
     return (
         <>
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
                 {/* jumlah pemasukan */}
-                <div className="card bg-base-100  mx-6 border p-8 rounded-xl mt-12 bg-white shadow-sm">
+                <div className="card bg-base-100  mx-6 border p-6 rounded-xl mt-12 bg-white shadow-sm">
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
-                                <span className="capitalize">pemasukan</span>
+                                <span className="capitalize text-md">pemasukan</span>
                                 <button onClick={() => setShowPemasukan(!showPemasukan)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -150,69 +151,64 @@ export default function Dashboard() {
                             </div>
                             <span className='text-sm text-gray-600'>{dataPemasukan.tanggal}</span>
                         </div>
-                        {showPemasukan ?  <span className="text-4xl font-bold">{dataPemasukan.total_pemasukan}</span> : <span>...</span>}
+                        {showPemasukan ? <span className="text-4xl font-bold">Rp {dataPemasukan.total_pemasukan}</span> : <span className='text-3xl font-bold'>......</span>}
                         <div>
-                            <button type="button" className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</button>
+                            <Link href="history" className="py-2.5 px-5 text-md font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</Link>
                         </div>
                     </div>
                 </div>
 
                 {/* menu terjual  */}
                 <div className="mt-32 mx-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                <path fill="#f48fb1" d="M37.8,45.7l-8.7-6.3c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V13c0-1.1,0.9-2,2-2h21	c1.1,0,2,0.9,2,2v31.1C41,45.7,39.2,46.7,37.8,45.7z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M27.3,36.9l-2.7-2c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V22.3"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M11.5,16.4v-8c0-1.1,0.9-2,2-2h21c1.1,0,2,0.9,2,2v31.1c0,1.6-1.8,2.6-3.2,1.6l-2-1.4"></path>
-                            </svg>
-                            <span className="capitalize">menu terjual</span>
+                            <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="capitalize">lihat semua</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6">
+                        <Link
+                            href="/history"
+                            className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
+                            <span className="capitalize text-md font-semibold text-white">lihat semua</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
-                        </div>
+                        </Link>
                     </div>
-                    <hr className="my-6" />
 
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
                         <div className="grid grid-cols-3 sm:flex flex-col gap-3">
-                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl bg-white shadow-sm">
+                            <div className="p-6 flex flex-col gap-1 text-center border rounded-xl bg-white shadow-sm">
                                 <span className="capitalize text-xl">{dataPemasukan.total_kebab}</span>
                                 <span className="capitalize text-sm">kebab</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl bg-white shadow-sm">
+                            <div className="p-6 flex flex-col gap-1 text-center border rounded-xl bg-white shadow-sm">
                                 <span className="capitalize text-xl">{dataPemasukan.total_burger}</span>
                                 <span className="capitalize text-sm">burger</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-2 text-center border rounded-xl bg-white shadow-sm">
+                            <div className="p-6 flex flex-col gap-1 text-center border rounded-xl bg-white shadow-sm">
                                 <span className="capitalize text-xl">{dataPemasukan.total_minuman}</span>
                                 <span className="capitalize text-sm">minuman</span>
                             </div>
                         </div>
-                        <ChartIncome/>
+                        <ChartIncome />
                     </div>
                 </div>
 
 
                 {/* jumlah bahan */}
                 <div className="mt-32 mx-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                <path fill="#f48fb1" d="M37.8,45.7l-8.7-6.3c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V13c0-1.1,0.9-2,2-2h21	c1.1,0,2,0.9,2,2v31.1C41,45.7,39.2,46.7,37.8,45.7z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M27.3,36.9l-2.7-2c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V22.3"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M11.5,16.4v-8c0-1.1,0.9-2,2-2h21c1.1,0,2,0.9,2,2v31.1c0,1.6-1.8,2.6-3.2,1.6l-2-1.4"></path>
-                            </svg>
-                            <span className="capitalize">jumlah bahan</span>
+                            <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Link href="/stock">lihat semua</Link>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5">
+                        <Link
+                            href="/history"
+                            className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
+                            <span className="capitalize text-md font-semibold text-white">lihat semua</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
-                        </div>
+                        </Link>
                     </div>
-                    <hr className="my-6" />
-
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">
                         {stock.slice(0, 6).map((value) => (
                             <div className="p-6 border rounded-xl flex items-center justify-between bg-white shadow-sm">
@@ -232,118 +228,120 @@ export default function Dashboard() {
                 {/* menu terjual */}
                 <div className="mt-32 mx-6">
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48">
-                                <path fill="#f48fb1" d="M37.8,45.7l-8.7-6.3c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V13c0-1.1,0.9-2,2-2h21	c1.1,0,2,0.9,2,2v31.1C41,45.7,39.2,46.7,37.8,45.7z"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M27.3,36.9l-2.7-2c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V22.3"></path><path fill="none" stroke="#18193f" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3" d="M11.5,16.4v-8c0-1.1,0.9-2,2-2h21c1.1,0,2,0.9,2,2v31.1c0,1.6-1.8,2.6-3.2,1.6l-2-1.4"></path>
-                            </svg>
-                            <span className="capitalize">menu terjual</span>
+                            <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="capitalize">lihat semua</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6">
+                        <Link
+                            href="/history"
+                            className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
+                            <span className="capitalize text-md font-semibold text-white">lihat semua</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
+                        </Link>
+                    </div>
+
+                    <div className='grid xl:grid-cols-2 gap-6 mb-6'>
+
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
+                            <div className="flex items-center flex-col">
+                                <span className="text-2xl capitalize">kebab</span>
+                                <span className="text-xl capitalize">Rp {menuKebabHrg * countKebab || menuKebabHrg}</span>
+                            </div>
+                            <div>
+                                <p className="capitalize mb-6">daftar menu</p>
+                                <div className="flex flex-wrap">
+                                    {menuKebab.map((value) => (
+                                        <button
+                                            onClick={() => {
+                                                setMenuKebabHrg(value.price)
+                                                setNamakebab(value.name)
+                                            }}
+                                            className="px-6 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                            {value.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex justify-between items-center">
+                                <div className="flex gap-6 items-center">
+                                    <button onClick={() => countKebab > 0 && setCountKebab(countKebab - 1)}>-</button>
+                                    <span>{countKebab}</span>
+                                    <button onClick={() => setCountKebab(countKebab + 1)}>+</button>
+                                </div>
+                                <button
+                                    onClick={kirimKeIncomeKebab}
+                                    class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">tambah</button>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
+                            <div className="flex items-center flex-col">
+                                <span className="text-2xl capitalize">burger</span>
+                                <span className="text-xl capitalize">Rp {menuBurgerHrg * countBurger || menuBurgerHrg}</span>
+                            </div>
+                            <div>
+                                <p className="capitalize mb-6">daftar menu</p>
+                                <div className="flex flex-wrap">
+                                    {menuBurger.map((value) => (
+                                        <button
+                                            onClick={() => {
+                                                setMenuBurgerHrg(value.price)
+                                                setNamaBurger(value.name)
+                                            }}
+                                            class="px-6 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                            {value.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <div className="flex gap-6 items-center">
+                                    <button onClick={() => countBurger > 0 && setCountBurger(countBurger - 1)}>-</button>
+                                    <span>{countBurger}</span>
+                                    <button onClick={() => setCountBurger(countBurger + 1)}>+</button>
+                                </div>
+                                <button
+                                    onClick={kirimKeIncomeBurger}
+                                    class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">tambah</button>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
+                            <div className="flex items-center flex-col">
+                                <span className="text-2xl capitalize">minuman</span>
+                                <span className="text-xl capitalize">Rp {menuMinumanHrg * countMinuman || menuMinumanHrg}</span>
+                            </div>
+                            <div>
+                                <p className="capitalize mb-6">daftar menu</p>
+                                <div className="flex flex-wrap">
+                                    {menuMinuman.map((value) => (
+                                        <button
+                                            onClick={() => {
+                                                setMenuMinumanHrg(value.price)
+                                                setNamaMinuman(value.name)
+                                            }}
+                                            class="px-6 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                            {value.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <div className="flex gap-6 items-center">
+                                    <button onClick={() => countMinuman > 0 && setCountMinuman(countMinuman - 1)}>-</button>
+                                    <span>{countMinuman}</span>
+                                    <button onClick={() => setCountMinuman(countMinuman + 1)}>+</button>
+                                </div>
+                                <button
+                                    onClick={kirimKeIncomeMinuman}
+                                    class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">tambah</button>
+                            </div>
                         </div>
                     </div>
 
-                    <hr className="my-6" />
-
-                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
-                        <div className="flex items-center flex-col">
-                            <span className="text-3xl capatalize text-bold">kebab</span>
-                            <span className="text-2xl capitalize text-bold">Rp {menuKebabHrg * countKebab || menuKebabHrg}</span>
-                        </div>
-                        <div>
-                            <p className="capitalize mb-6">daftar menu</p>
-                            <div className="flex flex-wrap">
-                                {menuKebab.map((value) => (
-                                    <button
-                                        onClick={() => { 
-                                            setMenuKebabHrg(value.price)
-                                            setNamakebab(value.name)
-                                        }}
-                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 ">
-                                        {value.name}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <div className="flex gap-6 items-center">
-                                <button onClick={() => countKebab > 0 && setCountKebab(countKebab - 1)}>-</button>
-                                <span>{countKebab}</span>
-                                <button onClick={() => setCountKebab(countKebab + 1)}>+</button>
-                            </div>
-                            <button
-                                onClick={kirimKeIncomeKebab}
-                                class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</button>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl mt-6 bg-white shadow-sm">
-                        <div className="flex items-center flex-col">
-                            <span className="text-3xl capatalize text-bold">Burger</span>
-                            <span className="text-2xl capitalize text-bold">Rp {menuBurgerHrg * countBurger || menuBurgerHrg}</span>
-                        </div>
-                        <div>
-                            <p className="capitalize mb-6">daftar menu</p>
-                            <div className="flex flex-wrap">
-                                {menuBurger.map((value) => (
-                                    <button
-                                        onClick={() => { 
-                                            setMenuBurgerHrg(value.price) 
-                                            setNamaBurger(value.name)
-                                        }}
-                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 ">
-                                        {value.name}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <div className="flex gap-6 items-center">
-                                <button onClick={() => countBurger > 0 && setCountBurger(countBurger - 1)}>-</button>
-                                <span>{countBurger}</span>
-                                <button onClick={() => setCountBurger(countBurger + 1)}>+</button>
-                            </div>
-                            <button
-                                onClick={kirimKeIncomeBurger}
-                                class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</button>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col align-center gap-6 p-6 border rounded-xl mt-6 bg-white shadow-sm">
-                        <div className="flex items-center flex-col">
-                            <span className="text-3xl capatalize text-bold">minuman</span>
-                            <span className="text-2xl capitalize text-bold">Rp {menuMinumanHrg * countMinuman || menuMinumanHrg}</span>
-                        </div>
-                        <div>
-                            <p className="capitalize mb-6">daftar menu</p>
-                            <div className="flex flex-wrap">
-                                {menuMinuman.map((value) => (
-                                    <button
-                                        onClick={() => { 
-                                            setMenuMinumanHrg(value.price) 
-                                            setNamaMinuman(value.name)
-                                        }}
-                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 ">
-                                        {value.name}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <div className="flex gap-6 items-center">
-                                <button onClick={() => countMinuman > 0 && setCountMinuman(countMinuman - 1)}>-</button>
-                                <span>{countMinuman}</span>
-                                <button onClick={() => setCountMinuman(countMinuman + 1)}>+</button>
-                            </div>
-                            <button
-                                onClick={kirimKeIncomeMinuman}
-                                class="py-2.5 px-5 me-2 bg-orange-100 mb-2 text-sm font-medium text-gray-900 rounded-full border border-gray-200 capitalize">tambah</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>

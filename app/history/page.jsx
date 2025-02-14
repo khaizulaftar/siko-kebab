@@ -43,16 +43,16 @@ export default function History() {
                         <div className="grid grid-1 sm:grid-cols-2 gap-3">
                             {history.map((value) => (
                                 <>
-                                    <div key={value.id} className="p-6 border rounded-xl flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
+                                    <div key={value.id} className="p-4 border rounded-xl flex items-center justify-between">
+                                        <div className="flex items-center gap-1">
                                             <div className="flex flex-col">
                                                 <span className="text-md capitalize font-bold">{value.category}</span>
                                                 <span className="text-sm capitalize">{value.name}</span>
                                             </div>
                                         </div>
-                                        <div className="bg-orange-10">
+                                        <div className="flex flex-col gap-1">
                                             <span className="text-md font-bold">{value.jumlah_pemasukan}</span>
-                                            <div className="flex items-center justify-end gap-1 mt-3">
+                                            <div className="flex items-center justify-end gap-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 font-bold text-green-500">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                                 </svg>
