@@ -1,29 +1,44 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react"
-import axios from "axios"
-import Swal from "sweetalert2"
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function Setting() {
-    const [menus, setMenus] = useState([])
-    const inputRefs = useRef({})
-    const [editingId, setEditingId] = useState(null)
+    const [menus, setMenus] = useState([]);
+    const [editingId, setEditingId] = useState(null);
+    const [formattedPrices, setFormattedPrices] = useState({}); // Menyimpan harga yang diformat
 
     useEffect(() => {
         axios.get("/api/menuSet")
-            .then(({ data }) => setMenus(data))
+            .then(({ data }) => {
+                setMenus(data);
+                const initialPrices = data.reduce((acc, { id, price }) => {
+                    acc[id] = new Intl.NumberFormat("id-ID").format(price);
+                    return acc;
+                }, {});
+                setFormattedPrices(initialPrices);
+            })
             .catch(() => {
                 Swal.fire({
                     title: "The Internet?",
                     text: "Gagal mengambil data",
                     icon: "question"
-                })
-            })
-    }, [])
+                });
+            });
+    }, []);
 
-    const handlePriceChange = async (id) => {
-        const price = Math.floor(Number(inputRefs.current[id].value));
-    
+    const handleInputChange = (id, e) => {
+        let value = e.target.value.replace(/\D/g, ""); // Hanya angka
+        setFormattedPrices((prev) => ({
+            ...prev,
+            [id]: new Intl.NumberFormat("id-ID").format(value),
+        }));
+    };
+
+    const handlePriceChange = async (id, category, name) => {
+        const price = parseInt(formattedPrices[id].replace(/\./g, ""), 10);
+
         if (isNaN(price) || price <= 0) {
             Swal.fire({
                 icon: "error",
@@ -32,7 +47,7 @@ export default function Setting() {
             });
             return;
         }
-    
+
         const result = await Swal.fire({
             title: "Apakah Anda yakin ingin mengubah harga?",
             text: "Harga akan diperbarui setelah Anda mengonfirmasi.",
@@ -41,24 +56,26 @@ export default function Setting() {
             confirmButtonText: "Ya, ubah harga!",
             cancelButtonText: "Batal",
         });
-    
+
         if (result.isConfirmed) {
-            handleAlertConfirm(id, price);
+            handleAlertConfirm(id, price, category, name);
         }
     };
-    
-    const handleAlertConfirm = async (id, price) => {
+
+    const handleAlertConfirm = async (id, price, category, name) => {
         setMenus((prev) => prev.map((m) => (m.id === id ? { ...m, loading: true } : m)));
-    
+
         try {
             await axios.put("/api/menuSet", { id, price });
-    
+
             setMenus((prev) =>
                 prev.map((m) => (m.id === id ? { ...m, price, loading: false } : m))
             );
-    
+
+            await saveHistory(price, category, name);
+
             setEditingId(null);
-    
+
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
@@ -70,11 +87,24 @@ export default function Setting() {
                 title: "Gagal",
                 text: "Gagal memperbarui harga. Silakan coba lagi.",
             });
-    
+
             setMenus((prev) => prev.map((m) => (m.id === id ? { ...m, loading: false } : m)));
         }
     };
-    
+
+    const saveHistory = async (totalHarga, category, name) => {
+        try {
+            await axios.post("/api/history", {
+                totalHarga,
+                item: "change",
+                category,
+                nama: name,
+                icon: "https://img.icons8.com/ios/50/settings--v1.png"
+            });
+        } catch (error) {
+            console.error("Gagal menyimpan ke history:", error);
+        }
+    };
 
     return (
         <>
@@ -93,9 +123,9 @@ export default function Setting() {
                                 <div className="text-end">
                                     <span className="text-md capitalize">harga</span>
                                     <div className="flex gap-2 items-center">
-                                        <span className="text-md">Rp {price}</span>
+                                        <span className="text-md">Rp{new Intl.NumberFormat('id-ID').format(Number(price) || 0)}</span>
                                         <span className="text-md">|</span>
-                                        <span className="text-sm uppercase">{dose}</span>                                        
+                                        <span className="text-sm uppercase">{dose}</span>
                                     </div>
                                 </div>
                             </div>
@@ -103,16 +133,16 @@ export default function Setting() {
                             {editingId === id ? (
                                 <div className="relative mt-6">
                                     <input
-                                        type="number"
+                                        type="text"
                                         className="block w-full p-4 text-sm border rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                        placeholder="ubah harga barang"
-                                        defaultValue={price}
-                                        ref={(el) => (inputRefs.current[id] = el)}
+                                        placeholder="Ubah harga barang"
+                                        value={formattedPrices[id] || ""}
+                                        onChange={(e) => handleInputChange(id, e)}
                                     />
                                     <button
-                                        onClick={() => handlePriceChange(id)}
+                                        onClick={() => handlePriceChange(id, category, name)}
                                         disabled={loading}
-                                        className={`absolute end-2.5 bottom-2.5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-xl text-sm px-4 py-2 capitalize ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        className={`absolute end-2.5 bottom-2.5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none rounded-full text-sm px-4 py-2 capitalize ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
                                         {loading ? "Memperbarui..." : "Ubah Harga"}
                                     </button>
@@ -123,9 +153,7 @@ export default function Setting() {
                                         className="justify-end"
                                         onClick={() => setEditingId(id)}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
+                                        <span className="capitalize text-blue-600">ubah</span>
                                     </button>
                                 </div>
                             )}
@@ -136,4 +164,3 @@ export default function Setting() {
         </>
     );
 }
-

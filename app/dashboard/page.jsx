@@ -94,6 +94,15 @@ export default function Dashboard() {
             category,
             nama
         };
+        const data2 = {
+            totalHarga,
+            item: `+ ${count}`,
+            category,
+            nama,
+            icon: "https://img.icons8.com/ios-filled/50/income.png"
+        };
+
+
 
         const confirmResult = await Swal.fire({
             title: 'Konfirmasi',
@@ -110,7 +119,7 @@ export default function Dashboard() {
 
         try {
             await axios.post('/api/income', data);
-            await axios.post('/api/history', data);
+            await axios.post('/api/history', data2);
 
             Swal.fire({
                 title: 'Success',
@@ -137,23 +146,23 @@ export default function Dashboard() {
         <>
             <div className="max-w-5xl mx-auto">
                 {/* jumlah pemasukan */}
-                <div className="card bg-base-100  mx-6 border p-6 rounded-xl mt-12 bg-white shadow-sm">
+                <div className="card mx-6 border p-6 rounded-2xl mt-12 shadow-sm bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
-                                <span className="capitalize text-md">pemasukan</span>
+                                <span className="capitalize text-md text-white">pemasukan</span>
                                 <button onClick={() => setShowPemasukan(!showPemasukan)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 text-white">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                     </svg>
                                 </button>
                             </div>
-                            <span className='text-sm text-gray-600'>{dataPemasukan.tanggal}</span>
+                            <span className='text-sm text-gray-100'>{dataPemasukan.tanggal}</span>
                         </div>
-                        {showPemasukan ? <span className="text-4xl font-bold">Rp {dataPemasukan.total_pemasukan}</span> : <span className='text-3xl font-bold'>......</span>}
+                        {showPemasukan ? <span className="text-4xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
                         <div>
-                            <Link href="history" className="py-2.5 px-5 text-md font-semibold text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</Link>
+                            <Link href="history" className="py-2 px-6 text-md font-semibold text-gray-200 focus:outline-none rounded-full border-2 border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</Link>
                         </div>
                     </div>
                 </div>
@@ -176,17 +185,17 @@ export default function Dashboard() {
 
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
                         <div className="grid grid-cols-3 sm:flex flex-col gap-3">
-                            <div className="p-6 flex flex-col gap-1 text-center border rounded-xl bg-white shadow-sm">
-                                <span className="capitalize text-xl">{dataPemasukan.total_kebab}</span>
-                                <span className="capitalize text-sm">kebab</span>
+                            <div className="p-6 flex flex-col gap-1 text-center border rounded-2xl shadow-sm bg-[url('/images/blurry-gradient-haikei.svg')] bg-cover bg-center">
+                                <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_kebab}</span>
+                                <span className="capitalize text-sm text-white font-semibold">kebab</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-1 text-center border rounded-xl bg-white shadow-sm">
-                                <span className="capitalize text-xl">{dataPemasukan.total_burger}</span>
-                                <span className="capitalize text-sm">burger</span>
+                            <div className="p-6 flex flex-col gap-1 text-center border rounded-2xl shadow-sm bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
+                                <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_burger}</span>
+                                <span className="capitalize text-sm text-white font-semibold">burger</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-1 text-center border rounded-xl bg-white shadow-sm">
-                                <span className="capitalize text-xl">{dataPemasukan.total_minuman}</span>
-                                <span className="capitalize text-sm">minuman</span>
+                            <div className="p-6 flex flex-col gap-1 text-center border rounded-2xl shadow-sm bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
+                                <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_minuman}</span>
+                                <span className="capitalize text-sm text-white font-semibold">minuman</span>
                             </div>
                         </div>
                         <ChartIncome />
@@ -244,10 +253,16 @@ export default function Dashboard() {
 
                     <div className='grid xl:grid-cols-2 gap-6 mb-6'>
 
-                        <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-2xl shadow-sm bg-white">
                             <div className="flex items-center flex-col">
-                                <span className="text-2xl capitalize">kebab</span>
-                                <span className="text-xl capitalize">Rp {menuKebabHrg * countKebab || menuKebabHrg}</span>
+                                <div className='w-full flex items-center justify-between mb-6'>
+                                    <span className="text-2xl capitalize">kebab</span>
+                                    <span className='text-md font-bold capitalize'>{namakebab}</span>
+                                </div>
+                                <div className='flex items-center gap-3'>
+                                    <span className="text-xl capitalize">Rp{new Intl.NumberFormat('id-ID').format(Number(menuKebabHrg) * Number(countKebab) || Number(menuKebabHrg) || 0)}</span>
+                                    <span className='text-green-500'>+ {countKebab}</span>
+                                </div>
                             </div>
                             <div>
                                 <p className="capitalize mb-6">daftar menu</p>
@@ -277,10 +292,16 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-2xl shadow-sm bg-white">
                             <div className="flex items-center flex-col">
-                                <span className="text-2xl capitalize">burger</span>
-                                <span className="text-xl capitalize">Rp {menuBurgerHrg * countBurger || menuBurgerHrg}</span>
+                                <div className='w-full flex items-center justify-between mb-6'>
+                                    <span className="text-2xl capitalize">burger</span>
+                                    <span className='text-md font-bold capitalize'>{namaburger}</span>
+                                </div>
+                                <div className='flex items-center gap-3'>
+                                    <span className="text-xl capitalize">Rp{new Intl.NumberFormat('id-ID').format(Number(menuBurgerHrg) * Number(countBurger) || Number(menuBurgerHrg) || 0)}</span>
+                                    <span className='text-green-500'>+ {countBurger}</span>
+                                </div>
                             </div>
                             <div>
                                 <p className="capitalize mb-6">daftar menu</p>
@@ -309,10 +330,16 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col align-center gap-6 p-6 border rounded-xl bg-white shadow-sm">
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-2xl shadow-sm bg-white">
                             <div className="flex items-center flex-col">
-                                <span className="text-2xl capitalize">minuman</span>
-                                <span className="text-xl capitalize">Rp {menuMinumanHrg * countMinuman || menuMinumanHrg}</span>
+                                <div className='w-full flex items-center justify-between mb-6'>
+                                    <span className="text-2xl capitalize">minuman</span>
+                                    <span className='text-md font-bold capitalize'>{namaminuman}</span>
+                                </div>
+                                <div className='flex items-center gap-3'>
+                                    <span className="text-xl capitalize">Rp{new Intl.NumberFormat('id-ID').format(Number(menuMinumanHrg) * Number(countMinuman) || Number(menuMinumanHrg) || 0)}</span>
+                                    <span className='text-green-500'>+ {countMinuman}</span>
+                                </div>
                             </div>
                             <div>
                                 <p className="capitalize mb-6">daftar menu</p>

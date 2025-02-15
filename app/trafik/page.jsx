@@ -36,7 +36,7 @@ export default function Trafik() {
                                 <div class="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                                 <div class="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
 
-                                <div class="flex gap-3 items-end w-full">
+                                <div class="flex gap-6 items-end w-full">
                                     {
                                         dataPemasukan.total_kebab.map((value, index) => (
                                             <div class="flex flex-col items-center justify-center relative">
@@ -57,7 +57,7 @@ export default function Trafik() {
                                 <div class="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                                 <div class="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
 
-                                <div class="flex gap-3 items-end w-full">
+                                <div class="flex gap-6 items-end w-full">
                                     {
                                         dataPemasukan.total_burger.map((value, index) => (
                                             <div class="flex flex-col items-center justify-center relative">
@@ -78,7 +78,7 @@ export default function Trafik() {
                                 <div class="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                                 <div class="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
 
-                                <div class="flex gap-3 items-end w-full">
+                                <div class="flex gap-6 items-end w-full">
                                     {
                                         dataPemasukan.total_minuman.map((value, index) => (
                                             <div class="flex flex-col items-center justify-center relative">

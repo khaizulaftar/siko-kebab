@@ -23,7 +23,7 @@ export async function GET() {
         }).replace(/\//g, '-');
 
         await connection.end();
-
+        
         return NextResponse.json({
             success: true,
             data: {
