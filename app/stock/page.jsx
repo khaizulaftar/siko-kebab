@@ -6,19 +6,24 @@ import Swal from "sweetalert2";
 
 export default function Stock() {
     const [menus, setMenus] = useState([]);
+    const [filteredMenus, setFilteredMenus] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const inputRefs = useRef({});
     const [editingId, setEditingId] = useState(null);
 
     useEffect(() => {
         axios
             .get("/api/stockSet")
-            .then(({ data }) => setMenus(data))
+            .then(({ data }) => {
+                setMenus(data);
+                setFilteredMenus(data); // Initially, show all items
+            })
             .catch(() => {
                 Swal.fire({
                     title: "The Internet?",
                     text: "Gagal mengambil data",
                     icon: "question"
-                })
+                });
             });
     }, []);
 
@@ -89,18 +94,31 @@ export default function Stock() {
         }
     };
 
+    // Handle the search query change
+    const handleSearchChange = (e) => {
+        const query = e.target.value.toLowerCase();
+        setSearchQuery(query);
+
+        // Filter menus based on the search query
+        const filtered = menus.filter(menu => menu.name.toLowerCase().includes(query));
+        setFilteredMenus(filtered);
+    };
+
     return (
         <div className="max-w-4xl mx-auto">
-            <div className="mt-32 mx-6">
-                <div className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-                        <path fill="#f48fb1" d="M37.8,45.7l-8.7-6.3c-0.3-0.3-0.8-0.3-1.2,0l-8.7,6.3c-1.3,1-3.2,0-3.2-1.6V13c0-1.1,0.9-2,2-2h21c1.1,0,2,0.9,2,2v31.1C41,45.7,39.2,46.7,37.8,45.7z"></path>
-                    </svg>
-                    <span className="capitalize">stock barang</span>
+            <div className="m-6">
+                {/* Search Input */}
+                <div className="my-6">
+                    <input
+                        type="text"
+                        className="w-full px-6 py-3 border rounded-full"
+                        placeholder="Cari berdasarkan nama"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
                 </div>
-                <hr className="my-6" />
-                <div className="grid sm:grid-cols-2 gap-3">
-                    {menus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, loading }) => (
+                <div className="grid sm:grid-cols-2 gap-3 mb-24">
+                    {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, loading }) => (
                         <div key={id} className="p-6 flex flex-col gap-2 border rounded-xl bg-white shadow-sm">
                             <span className="font-bold text-xl">{name}</span>
                             <div className="flex flex-col text-center items-center">

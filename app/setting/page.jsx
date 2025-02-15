@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 export default function Setting() {
     const [menus, setMenus] = useState([]);
     const [editingId, setEditingId] = useState(null);
-    const [formattedPrices, setFormattedPrices] = useState({}); // Menyimpan harga yang diformat
+    const [formattedPrices, setFormattedPrices] = useState({});
+    const [searchQuery, setSearchQuery] = useState(""); // State pencarian
 
     useEffect(() => {
         axios.get("/api/menuSet")
@@ -23,7 +24,7 @@ export default function Setting() {
                 Swal.fire({
                     title: "The Internet?",
                     text: "Gagal mengambil data",
-                    icon: "question"
+                    icon: "question",
                 });
             });
     }, []);
@@ -63,7 +64,9 @@ export default function Setting() {
     };
 
     const handleAlertConfirm = async (id, price, category, name) => {
-        setMenus((prev) => prev.map((m) => (m.id === id ? { ...m, loading: true } : m)));
+        setMenus((prev) =>
+            prev.map((m) => (m.id === id ? { ...m, loading: true } : m))
+        );
 
         try {
             await axios.put("/api/menuSet", { id, price });
@@ -88,7 +91,9 @@ export default function Setting() {
                 text: "Gagal memperbarui harga. Silakan coba lagi.",
             });
 
-            setMenus((prev) => prev.map((m) => (m.id === id ? { ...m, loading: false } : m)));
+            setMenus((prev) =>
+                prev.map((m) => (m.id === id ? { ...m, loading: false } : m))
+            );
         }
     };
 
@@ -99,18 +104,35 @@ export default function Setting() {
                 item: "change",
                 category,
                 nama: name,
-                icon: "https://img.icons8.com/ios/50/settings--v1.png"
+                icon: "https://img.icons8.com/ios/50/settings--v1.png",
             });
         } catch (error) {
             console.error("Gagal menyimpan ke history:", error);
         }
     };
 
+    // Filter berdasarkan pencarian
+    const filteredMenus = menus.filter(
+        ({ name, category }) =>
+            name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <>
-            <div className="max-w-4xl mx-auto mt-32">
-                <div className="grid sm:grid-cols-2 gap-3 mx-6">
-                    {menus.map(({ id, icon, category, name, price, dose, loading }) => (
+            <div className="max-w-4xl mx-auto">
+                {/* Input pencarian */}
+                <div className="m-6">
+                    <input
+                        type="text"
+                        className="w-full px-6 py-3 text-sm border rounded-full"
+                        placeholder="Cari berdasarkan nama atau kategori"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3 mx-6 mb-24">
+                    {filteredMenus.map(({ id, icon, category, name, price, dose, loading }) => (
                         <div key={id} className="p-6 border rounded-xl bg-white shadow-sm">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
@@ -123,7 +145,9 @@ export default function Setting() {
                                 <div className="text-end">
                                     <span className="text-md capitalize">harga</span>
                                     <div className="flex gap-2 items-center">
-                                        <span className="text-md">Rp{new Intl.NumberFormat('id-ID').format(Number(price) || 0)}</span>
+                                        <span className="text-md">
+                                            Rp{new Intl.NumberFormat("id-ID").format(Number(price) || 0)}
+                                        </span>
                                         <span className="text-md">|</span>
                                         <span className="text-sm uppercase">{dose}</span>
                                     </div>

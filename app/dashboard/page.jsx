@@ -141,12 +141,54 @@ export default function Dashboard() {
     const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman);
 
 
+    // download pdf
+    const handleDownloadPdf = async () => {
+        try {
+            Swal.fire({
+                title: 'Sedang mempersiapkan PDF...',
+                text: 'Harap tunggu sebentar.',
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const response = await axios.get("/api/pdf", { responseType: "blob" });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "menu.pdf";
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Download Sukses!',
+                text: 'PDF menu berhasil didownload.',
+                confirmButtonText: 'Tutup',
+            });
+        } catch (error) {
+            console.error("Gagal mendownload PDF", error);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Terjadi kesalahan saat mendownload PDF.',
+                confirmButtonText: 'Coba Lagi',
+            });
+        }
+    };
+
+
+
 
     return (
         <>
             <div className="max-w-5xl mx-auto">
                 {/* jumlah pemasukan */}
-                <div className="card mx-6 border p-6 rounded-2xl mt-12 shadow-sm bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
+                <div className="card mx-6 border p-6 rounded-2xl my-6 shadow-sm bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
@@ -161,14 +203,19 @@ export default function Dashboard() {
                             <span className='text-sm text-gray-100'>{dataPemasukan.tanggal}</span>
                         </div>
                         {showPemasukan ? <span className="text-4xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
-                        <div>
+                        <div className='flex items-center justify-between'>
                             <Link href="history" className="py-2 px-6 text-md font-semibold text-gray-200 focus:outline-none rounded-full border-2 border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</Link>
+                            <button onClick={handleDownloadPdf} >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 text-white">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 {/* menu terjual  */}
-                <div className="mt-32 mx-6">
+                <div className="mx-6 my-24">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
                             <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
@@ -204,7 +251,7 @@ export default function Dashboard() {
 
 
                 {/* jumlah bahan */}
-                <div className="mt-32 mx-6">
+                <div className="mx-6 my-24">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
                             <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
@@ -235,7 +282,7 @@ export default function Dashboard() {
 
 
                 {/* menu terjual */}
-                <div className="mt-32 mx-6">
+                <div className="mx-6 my-24">
 
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
@@ -368,7 +415,6 @@ export default function Dashboard() {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </>
