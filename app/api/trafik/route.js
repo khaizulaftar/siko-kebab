@@ -29,7 +29,7 @@ export async function GET() {
                 day: '2-digit', month: '2-digit', year: 'numeric'
             }).replace(/\//g, '-');
 
-            const firstLetterOfDay = dateObj.toLocaleDateString('id-ID', { weekday: 'long' }).charAt(0);
+            const firstLetterOfDay = dateObj.toLocaleDateString('id-ID', { weekday: 'long' }).slice(0, 3);
 
             if (!result.tanggal.includes(formattedDate)) {
                 result.tanggal.push(formattedDate);

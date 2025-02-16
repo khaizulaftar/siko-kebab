@@ -22,14 +22,20 @@ export default function Trafik() {
             }))
     }, [])
 
+    const getHariColor = (hari) => {
+        if (hari === "Jum") return "text-yellow-500 font-bold";
+        if (hari === "Min") return "text-red-500 font-bold";
+        if (hari === "Sen") return "text-green-500 font-bold";
+        return "text-gray-600"; // Warna default
+    };
 
     return (
         <>
             <div className="max-w-4xl mx-auto">
-                <div className="mx-6 my-12">
+                <div className="mx-4 mt-6 sm:mb-6 mb-24">
                     <ChartIncome />
                     <div className="my-6 grid sm:grid-cols-2 gap-6">
-                        <div class="p-6 bg-white shadow-sm rounded-xl border">
+                        <div class="p-6 bg-white shadow-sm rounded-3xl border">
                             <h2 class="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik kebab</h2>
                             <div class="relative h-48 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div class="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
@@ -40,9 +46,11 @@ export default function Trafik() {
                                     {
                                         dataPemasukan.total_kebab.map((value, index) => (
                                             <div class="flex flex-col items-center justify-center relative">
-                                                <span class="text-sm absolute -top-6">{value}</span>
+                                                <span class="text-sm absolute -top-6 font-semibold text-gray-600">{value}</span>
                                                 <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value}px` }}></span>
-                                                <span class="text-sm capitalize text-gray-500">{dataPemasukan.hari[dataPemasukan.tanggal[index]]}</span>
+                                                <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal[index]])}`}>
+                                                    {dataPemasukan.hari[dataPemasukan.tanggal[index]]}
+                                                </span>
                                             </div>
                                         ))
                                     }
@@ -50,7 +58,7 @@ export default function Trafik() {
                             </div>
                         </div>
 
-                        <div class="p-6 bg-white shadow-sm rounded-xl border">
+                        <div class="p-6 bg-white shadow-sm rounded-3xl border">
                             <h2 class="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik burger</h2>
                             <div class="relative h-48 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div class="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
@@ -61,9 +69,11 @@ export default function Trafik() {
                                     {
                                         dataPemasukan.total_burger.map((value, index) => (
                                             <div class="flex flex-col items-center justify-center relative">
-                                                <span class="text-sm absolute -top-6">{value}</span>
+                                                <span class="text-sm absolute -top-6 font-semibold text-gray-600">{value}</span>
                                                 <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value}px` }}></span>
-                                                <span class="text-sm capitalize text-gray-500">{dataPemasukan.hari[dataPemasukan.tanggal[index]]}</span>
+                                                <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal[index]])}`}>
+                                                    {dataPemasukan.hari[dataPemasukan.tanggal[index]]}
+                                                </span>
                                             </div>
                                         ))
                                     }
@@ -71,7 +81,7 @@ export default function Trafik() {
                             </div>
                         </div>
 
-                        <div class="p-6 bg-white shadow-sm rounded-xl border">
+                        <div class="p-6 bg-white shadow-sm rounded-3xl border">
                             <h2 class="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik minuman</h2>
                             <div class="relative h-48 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div class="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
@@ -82,9 +92,11 @@ export default function Trafik() {
                                     {
                                         dataPemasukan.total_minuman.map((value, index) => (
                                             <div class="flex flex-col items-center justify-center relative">
-                                                <span class="text-sm absolute -top-6">{value}</span>
+                                                <span class="text-sm absolute -top-6 text-gray-600 font-semibold">{value}</span>
                                                 <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value}px` }}></span>
-                                                <span class="text-sm capitalize text-gray-500">{dataPemasukan.hari[dataPemasukan.tanggal[index]]}</span>
+                                                <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal[index]])}`}>
+                                                    {dataPemasukan.hari[dataPemasukan.tanggal[index]]}
+                                                </span>
                                             </div>
                                         ))
                                     }

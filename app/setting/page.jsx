@@ -97,14 +97,14 @@ export default function Setting() {
         }
     };
 
-    const saveHistory = async (totalHarga, category, name) => {
+    const saveHistory = async (totalHarga, category, name,) => {
         try {
             await axios.post("/api/history", {
                 totalHarga,
                 item: "change",
                 category,
                 nama: name,
-                icon: "https://img.icons8.com/ios/50/settings--v1.png",
+                icon: "https://img.icons8.com/ultraviolet/50/settings.png",
             });
         } catch (error) {
             console.error("Gagal menyimpan ke history:", error);
@@ -122,18 +122,18 @@ export default function Setting() {
         <>
             <div className="max-w-4xl mx-auto">
                 {/* Input pencarian */}
-                <div className="m-6">
+                <div className="w-full pb-3 pt-6 bg-[#F9F9FB] sticky top-0 flex items-center">
                     <input
                         type="text"
-                        className="w-full px-6 py-3 text-sm border rounded-full"
-                        placeholder="Cari berdasarkan nama atau kategori"
+                        placeholder="Cari berdasarkan kategori, nama"
+                        className="mx-4 placeholder-gray-400/70 rounded-full border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 w-full"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <div className="grid sm:grid-cols-2 gap-3 mx-6 mb-24">
+                <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
                     {filteredMenus.map(({ id, icon, category, name, price, dose, loading }) => (
-                        <div key={id} className="p-6 border rounded-xl bg-white shadow-sm">
+                        <div key={id} className="p-6 border rounded-3xl bg-white shadow-sm">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
                                     <img width="35" height="35" src={icon} alt="hamburger" />
@@ -158,7 +158,7 @@ export default function Setting() {
                                 <div className="relative mt-6">
                                     <input
                                         type="text"
-                                        className="block w-full p-4 text-sm border rounded-xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                                        className="block w-full px-6 py-3 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
                                         placeholder="Ubah harga barang"
                                         value={formattedPrices[id] || ""}
                                         onChange={(e) => handleInputChange(id, e)}
@@ -166,18 +166,18 @@ export default function Setting() {
                                     <button
                                         onClick={() => handlePriceChange(id, category, name)}
                                         disabled={loading}
-                                        className={`absolute end-2.5 bottom-2.5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none rounded-full text-sm px-4 py-2 capitalize ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        className={`absolute end-1.5 bottom-1.5 bg-blue-700 text-white rounded-full text-sm px-3 py-2 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
                                         {loading ? "Memperbarui..." : "Ubah Harga"}
                                     </button>
                                 </div>
                             ) : (
-                                <div className="flex mt-3 justify-end">
+                                <div className="flex mt-6 justify-end">
                                     <button
-                                        className="justify-end"
+                                        className="capitalize text-blue-600 text-md"
                                         onClick={() => setEditingId(id)}
                                     >
-                                        <span className="capitalize text-blue-600">ubah</span>
+                                        ubah
                                     </button>
                                 </div>
                             )}

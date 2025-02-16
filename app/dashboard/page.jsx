@@ -87,7 +87,7 @@ export default function Dashboard() {
     }, [])
 
 
-    const kirimKeIncome = async (totalHarga, count, category, nama) => {
+    const kirimKeIncome = async (totalHarga, count, category, nama, icon) => {
         const data = {
             totalHarga,
             item: count,
@@ -99,7 +99,7 @@ export default function Dashboard() {
             item: `+ ${count}`,
             category,
             nama,
-            icon: "https://img.icons8.com/ios-filled/50/income.png"
+            icon: icon
         };
 
 
@@ -136,9 +136,9 @@ export default function Dashboard() {
     };
 
     // Pastikan variabel berikut sudah dideklarasikan sebelumnya
-    const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab);
-    const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger);
-    const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman);
+    const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab, "https://img.icons8.com/emoji/50/burrito-emoji.png");
+    const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger, "https://img.icons8.com/emoji/50/hamburger-emoji.png");
+    const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman, "https://img.icons8.com/emoji/50/cup-with-straw-emoji.png");
 
 
     // download pdf
@@ -186,18 +186,24 @@ export default function Dashboard() {
 
     return (
         <>
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-5xl mx-auto px-4">
                 {/* jumlah pemasukan */}
-                <div className="card mx-6 border p-6 rounded-2xl my-6 shadow-sm bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
+                <div className="card border p-6 rounded-3xl my-6 shadow-sm bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
                                 <span className="capitalize text-md text-white">pemasukan</span>
                                 <button onClick={() => setShowPemasukan(!showPemasukan)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 text-white">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg>
+                                    {showPemasukan ?
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 text-white">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
+                                        :
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 text-white">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                        </svg>
+                                    }
                                 </button>
                             </div>
                             <span className='text-sm text-gray-100'>{dataPemasukan.tanggal}</span>
@@ -215,49 +221,50 @@ export default function Dashboard() {
                 </div>
 
                 {/* menu terjual  */}
-                <div className="mx-6 my-24">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-2">
-                            <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
-                        </div>
-                        <Link
-                            href="/history"
-                            className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
-                            <span className="capitalize text-md font-semibold text-white">lihat semua</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                        </Link>
-                    </div>
-
+                <div className="my-12">
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
                         <div className="grid grid-cols-3 sm:flex flex-col gap-3">
-                            <div className="p-6 flex flex-col gap-1 text-center border rounded-2xl shadow-sm bg-[url('/images/blurry-gradient-haikei.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center border rounded-3xl shadow-sm bg-[url('/images/blurry-gradient-haikei.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_kebab}</span>
                                 <span className="capitalize text-sm text-white font-semibold">kebab</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-1 text-center border rounded-2xl shadow-sm bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center border rounded-3xl shadow-sm bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_burger}</span>
                                 <span className="capitalize text-sm text-white font-semibold">burger</span>
                             </div>
-                            <div className="p-6 flex flex-col gap-1 text-center border rounded-2xl shadow-sm bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center border rounded-3xl shadow-sm bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_minuman}</span>
                                 <span className="capitalize text-sm text-white font-semibold">minuman</span>
                             </div>
                         </div>
-                        <ChartIncome />
+                        <div className='col-span-2'>
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-2">
+                                    <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
+                                </div>
+                                <Link
+                                    href="/trafik"
+                                    className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
+                                    <span className="capitalize text-md font-semibold text-white">lihat semua</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                    </svg>
+                                </Link>
+                            </div>
+                            <ChartIncome />
+                        </div>
                     </div>
                 </div>
 
 
                 {/* jumlah bahan */}
-                <div className="mx-6 my-24">
+                <div className="my-12">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
-                            <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
+                            <span className="capitalize font-semibold text-lg text-gray-600">jumlah bahan</span>
                         </div>
                         <Link
-                            href="/history"
+                            href="/stock"
                             className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
                             <span className="capitalize text-md font-semibold text-white">lihat semua</span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
@@ -266,13 +273,13 @@ export default function Dashboard() {
                         </Link>
                     </div>
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">
-                        {stock.slice(0, 6).map((value) => (
-                            <div className="p-6 border rounded-xl flex items-center justify-between bg-white shadow-sm">
-                                <span className="capitalize">{value.name}</span>
+                        {stock.slice(0, 4).map((value) => (
+                            <div className="p-6 border rounded-3xl flex items-center justify-between bg-white shadow-sm">
+                                <span className="capitalize font-semibold text-gray-600 text-md">{value.name}</span>
                                 <div className='flex items-center gap-1'>
-                                    <span className="font-semibold">{value.stock}</span>
-                                    <span>|</span>
-                                    <span className="uppercase">{value.dose}</span>
+                                    <span className="font-semibold text-md text-gray-600">{value.stock}</span>
+                                    <span className='text-md font-semibold text-gray-600'>|</span>
+                                    <span className="capitalize text-md text-gray-600">{value.dose}</span>
                                 </div>
                             </div>
                         ))}
@@ -282,8 +289,7 @@ export default function Dashboard() {
 
 
                 {/* menu terjual */}
-                <div className="mx-6 my-24">
-
+                <div className="mt-12 mb-24 sm:mb-6">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
                             <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
@@ -298,16 +304,16 @@ export default function Dashboard() {
                         </Link>
                     </div>
 
-                    <div className='grid xl:grid-cols-2 gap-6 mb-6'>
+                    <div className='grid xl:grid-cols-2 gap-6'>
 
-                        <div className="flex flex-col align-center gap-6 p-6 border rounded-2xl shadow-sm bg-white">
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-3xl shadow-sm bg-white">
                             <div className="flex items-center flex-col">
                                 <div className='w-full flex items-center justify-between mb-6'>
-                                    <span className="text-2xl capitalize">kebab</span>
-                                    <span className='text-md font-bold capitalize'>{namakebab}</span>
+                                    <img src="https://img.icons8.com/emoji/48/burrito-emoji.png" alt="icon kebab" />
+                                    <span className='text-md font-semibold capitalize text-gray-600'>{namakebab}</span>
                                 </div>
                                 <div className='flex items-center gap-3'>
-                                    <span className="text-xl capitalize">Rp{new Intl.NumberFormat('id-ID').format(Number(menuKebabHrg) * Number(countKebab) || Number(menuKebabHrg) || 0)}</span>
+                                    <span className="text-xl capitalize font-semibold">Rp{new Intl.NumberFormat('id-ID').format(Number(menuKebabHrg) * Number(countKebab) || Number(menuKebabHrg) || 0)}</span>
                                     <span className='text-green-500'>+ {countKebab}</span>
                                 </div>
                             </div>
@@ -339,14 +345,14 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col align-center gap-6 p-6 border rounded-2xl shadow-sm bg-white">
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-3xl shadow-sm bg-white">
                             <div className="flex items-center flex-col">
                                 <div className='w-full flex items-center justify-between mb-6'>
-                                    <span className="text-2xl capitalize">burger</span>
-                                    <span className='text-md font-bold capitalize'>{namaburger}</span>
+                                    <img src="https://img.icons8.com/emoji/48/hamburger-emoji.png" alt="icon burger" />
+                                    <span className='text-md font-semibold capitalize text-gray-600'>{namaburger}</span>
                                 </div>
                                 <div className='flex items-center gap-3'>
-                                    <span className="text-xl capitalize">Rp{new Intl.NumberFormat('id-ID').format(Number(menuBurgerHrg) * Number(countBurger) || Number(menuBurgerHrg) || 0)}</span>
+                                    <span className="text-xl capitalize font-semibold">Rp{new Intl.NumberFormat('id-ID').format(Number(menuBurgerHrg) * Number(countBurger) || Number(menuBurgerHrg) || 0)}</span>
                                     <span className='text-green-500'>+ {countBurger}</span>
                                 </div>
                             </div>
@@ -377,14 +383,14 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col align-center gap-6 p-6 border rounded-2xl shadow-sm bg-white">
+                        <div className="flex flex-col align-center gap-6 p-6 border rounded-3xl shadow-sm bg-white">
                             <div className="flex items-center flex-col">
                                 <div className='w-full flex items-center justify-between mb-6'>
-                                    <span className="text-2xl capitalize">minuman</span>
-                                    <span className='text-md font-bold capitalize'>{namaminuman}</span>
+                                    <img src="https://img.icons8.com/emoji/48/cup-with-straw-emoji.png" alt="icon minuman" />
+                                    <span className='text-md font-semibold capitalize text-gray-600'>{namaminuman}</span>
                                 </div>
                                 <div className='flex items-center gap-3'>
-                                    <span className="text-xl capitalize">Rp{new Intl.NumberFormat('id-ID').format(Number(menuMinumanHrg) * Number(countMinuman) || Number(menuMinumanHrg) || 0)}</span>
+                                    <span className="text-xl capitalize font-semibold">Rp{new Intl.NumberFormat('id-ID').format(Number(menuMinumanHrg) * Number(countMinuman) || Number(menuMinumanHrg) || 0)}</span>
                                     <span className='text-green-500'>+ {countMinuman}</span>
                                 </div>
                             </div>
