@@ -74,7 +74,7 @@ export default function Sidebar() {
                     </Link>
 
                     <Link
-                        href="#"
+                        href="/profile"
                         className="group relative flex justify-center rounded-xl border border-transparent hover:scale-110 p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
