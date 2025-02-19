@@ -16,15 +16,8 @@ export default function Stock() {
             .get("/api/stockSet")
             .then(({ data }) => {
                 setMenus(data);
-                setFilteredMenus(data); // Initially, show all items
+                setFilteredMenus(data)
             })
-            .catch(() => {
-                Swal.fire({
-                    title: "The Internet?",
-                    text: "Gagal mengambil data",
-                    icon: "question"
-                });
-            });
     }, []);
 
     // Fungsi untuk memformat angka dengan titik sebagai pemisah ribuan

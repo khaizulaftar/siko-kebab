@@ -47,8 +47,6 @@ export default function Menu() {
             icon: icon
         };
 
-
-
         const confirmResult = await Swal.fire({
             title: 'Konfirmasi',
             text: `Apakah Anda yakin ingin menyimpan data ${category}?`,
@@ -80,7 +78,6 @@ export default function Menu() {
         }
     };
 
-    // Pastikan variabel berikut sudah dideklarasikan sebelumnya
     const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab, "https://img.icons8.com/emoji/50/burrito-emoji.png");
     const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger, "https://img.icons8.com/emoji/50/hamburger-emoji.png");
     const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman, "https://img.icons8.com/emoji/50/cup-with-straw-emoji.png");
@@ -89,27 +86,12 @@ export default function Menu() {
     useEffect(() => {
         axios.get("/api/menuDas/kebab")
             .then(response => setMenuKebab(response.data))
-            .catch(() => Swal.fire({
-                title: "The Internet?",
-                text: "gagal mengambil data",
-                icon: "question"
-            }))
 
         axios.get("/api/menuDas/burger")
             .then(response => setMenuBurger(response.data))
-            .catch(() => Swal.fire({
-                title: "The Internet?",
-                text: "gagal mengambil data",
-                icon: "question"
-            }))
 
         axios.get("/api/menuDas/minuman")
             .then(response => setMenuMinuman(response.data))
-            .catch(() => Swal.fire({
-                title: "The Internet?",
-                text: "gagal mengambil data",
-                icon: "question"
-            }))
     }, [])
 
 

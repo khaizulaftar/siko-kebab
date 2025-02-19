@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import Swal from "sweetalert2"
 
 export default function ChartIncome() {
     const [dataPemasukan, setDataPemasukan] = useState({
@@ -12,18 +11,13 @@ export default function ChartIncome() {
     useEffect(() => {
         axios.get("/api/trafik")
             .then(response => (setDataPemasukan(response.data.data)))
-            .catch(() => Swal.fire({
-                title: "The Internet?",
-                text: "Gagal mengambil data",
-                icon: "question"
-            }))
     }, [])
 
     const getHariColor = (hari) => {
         if (hari === "Jum") return "text-yellow-500 font-bold";
         if (hari === "Min") return "text-red-500 font-bold";
         if (hari === "Sen") return "text-green-500 font-bold";
-        return "text-gray-600"; // Warna default
+        return "text-gray-600";
     };
 
     return (
@@ -34,6 +28,7 @@ export default function ChartIncome() {
                     <div class="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                     <div class="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                     <div class="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
+
 
                     <div class="flex gap-6 items-end w-full">
                         {

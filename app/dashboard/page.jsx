@@ -18,20 +18,10 @@ export default function Dashboard() {
 
         axios.get("/api/stockSet")
             .then(response => setStock(response.data))
-            .catch(() => Swal.fire({
-                title: "The Internet?",
-                text: "gagal mengambil data",
-                icon: "question"
-            }))
 
         // pemasukan
         axios.get('/api/income')
-            .then(response => {
-                setDataPemasukan(response.data.data);
-            })
-            .catch(error => {
-                console.error("Error mengambil data pemasukan:", error);
-            });
+            .then(response => setDataPemasukan(response.data.data))
     }, [])
 
 
@@ -179,7 +169,7 @@ export default function Dashboard() {
 
                 </div>
                 {/* menu */}
-                <Menu/>
+                <Menu />
             </div>
         </>
     )

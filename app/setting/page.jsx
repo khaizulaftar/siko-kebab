@@ -20,13 +20,6 @@ export default function Setting() {
                 }, {});
                 setFormattedPrices(initialPrices);
             })
-            .catch(() => {
-                Swal.fire({
-                    title: "The Internet?",
-                    text: "Gagal mengambil data",
-                    icon: "question",
-                });
-            });
     }, []);
 
     const handleInputChange = (id, e) => {

@@ -11,11 +11,6 @@ export default function History() {
     useEffect(() => {
         axios.get("/api/history")
             .then(response => setHistory(response.data))
-            .catch(() => Swal.fire({
-                title: "The Internet?",
-                text: "gagal mengambil data",
-                icon: "question"
-            }))
     }, [])
 
     const filteredHistory = Object.entries(history).map(([date, items]) => {
@@ -51,7 +46,7 @@ export default function History() {
                 </div>
                 <div className="mt-3 mb-20 sm:mb-6 mx-4">
                     {filteredHistory.length === 0 ? (
-                        <p className="text-center text-md text-gray-500">Tidak ada hasil yang cocok.</p>
+                        <p className="text-center text-md text-gray-500">gagal mengambil data</p>
                     ) : (
                         filteredHistory.map(([date, items]) => (
                             <div key={date} className="mb-12">
