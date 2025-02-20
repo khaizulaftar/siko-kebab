@@ -8,9 +8,15 @@ import Loading from "../dashboard/loading";
 
 export default function Profile() {
     const [user, setUser] = useState(null);
+    const [daftar, setDaftar] =useState([])
     const router = useRouter();
 
+
     useEffect(() => {
+        axios.get("/api/auth/login")
+            .then(response => setDaftar(response.data))
+
+
         const fetchProfile = async () => {
             try {
                 const token = Cookies.get("token");
@@ -30,13 +36,13 @@ export default function Profile() {
     }, [router]);
 
     if (!user) {
-        return <Loading/>
+        return <Loading />
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200">
-            <div className="bg-white p-8 rounded-2xl shadow-xl w-96 text-center">
-                <div className="flex flex-col items-center">
+        <div className="p-6 max-w-3xl mx-auto">
+            <div className="mt-4">
+                <div className="border p-6 rounded-3xl shadow-sm flex flex-col items-center">
                     {/* Avatar */}
                     <div className="w-20 h-20 bg-gray-200 rounded-full flex justify-center items-center shadow-md">
                         <span className="text-3xl font-semibold text-gray-600">
@@ -48,7 +54,7 @@ export default function Profile() {
 
                     {/* Logout Button */}
                     <button
-                        className="mt-6 w-full bg-red-500 text-white py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:bg-red-600"
+                        className="mt-6 bg-red-500 text-white py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:bg-red-600"
                         onClick={() => {
                             Cookies.remove("token");
                             router.push("/login");
@@ -57,6 +63,15 @@ export default function Profile() {
                         Logout
                     </button>
                 </div>
+                {daftar.map((value)=> (
+                    <>
+                    <div className="my-6 flex gap-6">
+                        <span>{value.username}</span>
+                        <span>{value.password}</span>
+                        <span>{value.role}</span>
+                    </div>
+                    </>
+                ))}
             </div>
         </div>
     );
