@@ -20,3 +20,52 @@ export async function GET(req) {
         return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 }
+
+export async function DELETE(req) {
+    try {
+        const { id } = await req.json();
+
+        if (!id) {
+            return NextResponse.json({ message: "ID tidak boleh kosong" }, { status: 400 });
+        }
+
+        // Pastikan mendapatkan koneksi database
+        const db = await dbConnect();
+        const [result] = await db.query("DELETE FROM users WHERE id = ?", [id]);
+
+        if (result.affectedRows === 0) {
+            return NextResponse.json({ message: "User tidak ditemukan" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "User berhasil dihapus" }, { status: 200 });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        return NextResponse.json({ message: "Terjadi kesalahan pada server", error }, { status: 500 });
+    }
+}
+
+export async function POST(req) {
+    try {
+        const { username, password, role } = await req.json();
+
+        if (!username || !password || !role) {
+            return NextResponse.json({ message: "Semua kolom harus diisi" }, { status: 400 });
+        }
+
+        const db = await dbConnect();
+        
+
+        const [result] = await db.query(
+            "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
+            [username, password, role]
+        )
+
+        return NextResponse.json(
+            { message: "User berhasil ditambahkan", id: result.insertId },
+            { status: 201 }
+        );
+    } catch (error) {
+        console.error("Error saat menambahkan user:", error);
+        return NextResponse.json({ message: "Terjadi kesalahan pada server", error }, { status: 500 });
+    }
+}
