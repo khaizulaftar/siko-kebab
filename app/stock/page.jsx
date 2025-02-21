@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Loading from "../dashboard/loading";
 
 export default function Stock() {
     const [menus, setMenus] = useState([]);
@@ -96,6 +97,10 @@ export default function Stock() {
         const filtered = menus.filter(menu => menu.name.toLowerCase().includes(query));
         setFilteredMenus(filtered);
     };
+
+    if(filteredMenus.length === 0){
+        return<Loading/>
+    }
 
     return (
         <div className="max-w-4xl mx-auto">

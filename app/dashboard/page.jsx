@@ -133,7 +133,7 @@ export default function Dashboard() {
                                     </svg>
                                 </Link>
                             </div>
-                            <ChartIncome />
+                            <ChartIncome jumlahHari={7}/>
                         </div>
                     </div>
                 </div>

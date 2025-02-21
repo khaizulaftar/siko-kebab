@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-export default function ChartIncome() {
+export default function ChartIncome({jumlahHari}) {
     const [dataPemasukan, setDataPemasukan] = useState({
         total_pemasukan: []
     });
@@ -22,22 +22,17 @@ export default function ChartIncome() {
 
     return (
         <>
-            <div class="w-full p-6 bg-white shadow-sm rounded-3xl border">
+            <div class="w-full p-6 bg-white shadow-sm rounded-3xl border wrap overflow-hidden">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 text-center capitalize">Traffic penghasilan</h2>
-                <div class="relative h-48 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
-                    <div class="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
-                    <div class="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
-                    <div class="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
-
-
-                    <div class="flex gap-6 items-end w-full">
+                <div class="relative min-h-40 border-l border-b border-gray-300 flex items-end  px-4">
+                    <div class="flex flex-wrap gap-4 sm:gap-6 items-end w-full">
                         {
-                            dataPemasukan.total_pemasukan.map((value, index) => (
-                                <div class="flex flex-col items-center justify-center relative">
+                            dataPemasukan.total_pemasukan.slice(-jumlahHari).map((value, index) => (
+                                <div class="flex flex-col items-center justify-center relative mt-6">
                                     <span class="text-xs absolute -top-6 text-gray-600 font-semibold">{new Intl.NumberFormat('id-ID').format(Number(value) || 0)}</span>
                                     <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value / 5000}px` }}></span>
-                                    <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal[index]])}`}>
-                                        {dataPemasukan.hari[dataPemasukan.tanggal[index]]}
+                                    <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-jumlahHari)[index]])}`}>
+                                        {dataPemasukan.hari[dataPemasukan.tanggal.slice(-jumlahHari)[index]]}
                                     </span>
                                 </div>
                             ))

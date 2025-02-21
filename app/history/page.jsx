@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
 import Swal from "sweetalert2"
+import Loading from "../dashboard/loading"
 
 export default function History() {
     const [history, setHistory] = useState([])
@@ -26,11 +27,16 @@ export default function History() {
                 return (
                     item.category.toLowerCase().includes(searchLower) ||
                     item.name.toLowerCase().includes(searchLower) ||
-                    formattedDate.includes(searchLower) // Filter berdasarkan tanggal
+                    formattedDate.includes(searchLower)
                 )
             })
         ]
     }).filter(([date, items]) => items.length > 0)
+
+    if (filteredHistory.length === 0) {
+        return <Loading />
+    }
+
 
     return (
         <>
@@ -45,9 +51,7 @@ export default function History() {
                     />
                 </div>
                 <div className="mt-3 mb-20 sm:mb-6 mx-4">
-                    {filteredHistory.length === 0 ? (
-                        <p className="text-center text-md text-gray-500">gagal mengambil data</p>
-                    ) : (
+                    {
                         filteredHistory.map(([date, items]) => (
                             <div key={date} className="mb-12">
                                 <p className="capitalize font-semibold text-md mb-4">{date}</p>
@@ -77,7 +81,7 @@ export default function History() {
                                 </div>
                             </div>
                         ))
-                    )}
+                    }
                 </div>
             </div>
         </>

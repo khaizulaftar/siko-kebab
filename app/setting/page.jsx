@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Loading from "../dashboard/loading";
 
 export default function Setting() {
     const [menus, setMenus] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [formattedPrices, setFormattedPrices] = useState({});
-    const [searchQuery, setSearchQuery] = useState(""); // State pencarian
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         axios.get("/api/menuSet")
@@ -23,7 +24,7 @@ export default function Setting() {
     }, []);
 
     const handleInputChange = (id, e) => {
-        let value = e.target.value.replace(/\D/g, ""); // Hanya angka
+        let value = e.target.value.replace(/\D/g, "");
         setFormattedPrices((prev) => ({
             ...prev,
             [id]: new Intl.NumberFormat("id-ID").format(value),
@@ -111,6 +112,10 @@ export default function Setting() {
             category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    if(filteredMenus.length ===0 ){
+        return<Loading/>
+    }
+    
     return (
         <>
             <div className="max-w-4xl mx-auto">
