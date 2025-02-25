@@ -6,15 +6,27 @@ import Link from 'next/link'
 import Swal from "sweetalert2"
 import ChartIncome from '../trafik/chart'
 import Menu from './menu'
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import Loading from './loading'
+import DownloadPdf from '../pdf/downloadPdf'
 
 export default function Dashboard() {
 
     const [stock, setStock] = useState([]);
     const [showPemasukan, setShowPemasukan] = useState(true);
     const [dataPemasukan, setDataPemasukan] = useState([]);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const router = useRouter();
 
 
     useEffect(() => {
+        const token = Cookies.get("token");
+        if (!token) {
+            router.push("/login");
+        } else {
+            setIsAuthenticated(true);
+        }
 
         axios.get("/api/stockSet")
             .then(response => setStock(response.data))
@@ -22,54 +34,19 @@ export default function Dashboard() {
         // pemasukan
         axios.get('/api/income')
             .then(response => setDataPemasukan(response.data.data))
-    }, [])
+    }, [router])
 
 
-    // download pdf
-    const handleDownloadPdf = async () => {
-        try {
-            Swal.fire({
-                title: 'Sedang mempersiapkan PDF...',
-                text: 'Harap tunggu sebentar.',
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            const response = await axios.get("/api/pdf", { responseType: "blob" });
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "menu.pdf";
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Download Sukses!',
-                text: 'PDF menu berhasil didownload.',
-                confirmButtonText: 'Tutup',
-            });
-        } catch (error) {
-            console.error("Gagal mendownload PDF", error);
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Terjadi kesalahan saat mendownload PDF.',
-                confirmButtonText: 'Coba Lagi',
-            });
-        }
-    };
+    if (!isAuthenticated) {
+        return <Loading />
+    }
 
 
     return (
         <>
             <div className="max-w-5xl mx-auto px-4">
                 {/* jumlah pemasukan */}
+
                 <div className="card border p-6 rounded-3xl my-6 shadow-sm bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
@@ -93,17 +70,13 @@ export default function Dashboard() {
                         {showPemasukan ? <span className="text-4xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
                         <div className='flex items-center justify-between'>
                             <Link href="history" className="py-2 px-6 text-md font-semibold text-gray-200 focus:outline-none rounded-full border-2 border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</Link>
-                            <button onClick={handleDownloadPdf} >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 text-white">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                </svg>
-                            </button>
+                            <DownloadPdf/>
                         </div>
                     </div>
                 </div>
 
                 {/* menu terjual  */}
-                <div className="my-12">
+                <div div className="my-12">
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
                         <div className="grid grid-cols-3 sm:flex flex-col gap-3">
                             <div className="p-4 sm:p-6 flex flex-col gap-1 text-center border rounded-3xl shadow-sm bg-[url('/images/blurry-gradient-haikei.svg')] bg-cover bg-center">
@@ -133,7 +106,7 @@ export default function Dashboard() {
                                     </svg>
                                 </Link>
                             </div>
-                            <ChartIncome jumlahHari={7}/>
+                            <ChartIncome jumlahHari={7} />
                         </div>
                     </div>
                 </div>

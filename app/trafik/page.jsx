@@ -4,8 +4,12 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Swal from "sweetalert2"
 import ChartIncome from "./chart";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Trafik() {
+    const router = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [dataPemasukan, setDataPemasukan] = useState({
         total_kebab: [],
         total_burger: [],
@@ -13,6 +17,14 @@ export default function Trafik() {
     });
 
     useEffect(() => {
+        const token = Cookies.get("token");
+        if (!token) {
+            router.push("/login");
+        } else {
+            setIsAuthenticated(true);
+        }
+
+
         axios.get("/api/trafik")
             .then(response => (setDataPemasukan(response.data.data)))
             .catch(() => Swal.fire({
@@ -20,7 +32,7 @@ export default function Trafik() {
                 text: "Gagal mengambil data",
                 icon: "question"
             }))
-    }, [])
+    }, [router])
 
     const getHariColor = (hari) => {
         if (hari === "Jum") return "text-yellow-500 font-bold";
@@ -29,11 +41,15 @@ export default function Trafik() {
         return "text-gray-600"; // Warna default
     };
 
+    if (!isAuthenticated) {
+        return <Loading />
+    }
+
     return (
         <>
             <div className="max-w-4xl mx-auto">
                 <div className="mx-4 mt-6 sm:mb-6 mb-24">
-                    <ChartIncome jumlahHari={14}/>
+                    <ChartIncome jumlahHari={14} />
                     <div className="my-6 grid sm:grid-cols-2 gap-6">
                         <div class="p-6 bg-white shadow-sm rounded-3xl border">
                             <h2 class="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik kebab</h2>

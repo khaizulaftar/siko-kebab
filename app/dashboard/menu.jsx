@@ -32,6 +32,14 @@ export default function Menu() {
     const [namaburger, setNamaBurger] = useState("")
     const [namaminuman, setNamaMinuman] = useState("")
 
+    const updateStock = async (nama, count) => {
+        try {
+            await axios.post("/api/updateStock", { menu_name: nama, count });
+        } catch (error) {
+            console.error("Gagal mengupdate stok!", error);
+        }
+    }
+
     const kirimKeIncome = async (totalHarga, count, category, nama, icon) => {
         const data = {
             totalHarga,
@@ -63,6 +71,7 @@ export default function Menu() {
         try {
             await axios.post('/api/income', data);
             await axios.post('/api/history', data2);
+            await updateStock(nama, count);
 
             Swal.fire({
                 title: 'Success',
@@ -142,10 +151,18 @@ export default function Menu() {
                         </div>
 
                         <div className="flex justify-between items-center">
-                            <div className="flex gap-6 items-center">
-                                <button onClick={() => countKebab > 0 && setCountKebab(countKebab - 1)}>-</button>
-                                <span>{countKebab}</span>
-                                <button onClick={() => setCountKebab(countKebab + 1)}>+</button>
+                            <div className="flex gap-1 items-center">
+                                <button onClick={() => countKebab > 0 && setCountKebab(countKebab - 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-red-100'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    </svg>
+                                </button>
+                                <span className='flex border w-14 h-10 items-center justify-center rounded-xl shadow-sm bg-gray-100'>{countKebab}</span>
+                                <button onClick={() => setCountKebab(countKebab + 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-green-100'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
                             </div>
                             <button
                                 onClick={kirimKeIncomeKebab}
@@ -180,10 +197,18 @@ export default function Menu() {
                             </div>
                         </div>
                         <div className="flex justify-between items-center">
-                            <div className="flex gap-6 items-center">
-                                <button onClick={() => countBurger > 0 && setCountBurger(countBurger - 1)}>-</button>
-                                <span>{countBurger}</span>
-                                <button onClick={() => setCountBurger(countBurger + 1)}>+</button>
+                            <div className="flex gap-1 items-center">
+                                <button onClick={() => countBurger > 0 && setCountBurger(countBurger - 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-red-100'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    </svg>
+                                </button>
+                                <span className='flex border w-14 h-10 items-center justify-center rounded-xl shadow-sm bg-gray-100'>{countBurger}</span>
+                                <button onClick={() => setCountBurger(countBurger + 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-green-100'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
                             </div>
                             <button
                                 onClick={kirimKeIncomeBurger}
@@ -218,10 +243,18 @@ export default function Menu() {
                             </div>
                         </div>
                         <div className="flex justify-between items-center">
-                            <div className="flex gap-6 items-center">
-                                <button onClick={() => countMinuman > 0 && setCountMinuman(countMinuman - 1)}>-</button>
-                                <span>{countMinuman}</span>
-                                <button onClick={() => setCountMinuman(countMinuman + 1)}>+</button>
+                            <div className="flex gap-1 items-center">
+                                <button onClick={() => countMinuman > 0 && setCountMinuman(countMinuman - 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-red-100'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    </svg>
+                                </button>
+                                <span className='flex border w-14 h-10 items-center justify-center rounded-xl shadow-sm bg-gray-100'>{countMinuman}</span>
+                                <button onClick={() => setCountMinuman(countMinuman + 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-green-100'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
                             </div>
                             <button
                                 onClick={kirimKeIncomeMinuman}

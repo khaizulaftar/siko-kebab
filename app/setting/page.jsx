@@ -4,14 +4,30 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Loading from "../dashboard/loading";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Setting() {
     const [menus, setMenus] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [formattedPrices, setFormattedPrices] = useState({});
     const [searchQuery, setSearchQuery] = useState("");
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
+    const router = useRouter();
 
     useEffect(() => {
+        const token = Cookies.get("token");
+        if (!token) {
+            router.push("/login");
+        } else {
+            setIsAuthenticated(true);
+        }
+
+        axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => setUser(response.data.user || {}))
+
+
         axios.get("/api/menuSet")
             .then(({ data }) => {
                 setMenus(data);
@@ -21,7 +37,7 @@ export default function Setting() {
                 }, {});
                 setFormattedPrices(initialPrices);
             })
-    }, []);
+    }, [router]);
 
     const handleInputChange = (id, e) => {
         let value = e.target.value.replace(/\D/g, "");
@@ -112,10 +128,10 @@ export default function Setting() {
             category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    if(filteredMenus.length ===0 ){
-        return<Loading/>
+    if (!isAuthenticated) {
+        return <Loading />
     }
-    
+
     return (
         <>
             <div className="max-w-4xl mx-auto">
@@ -130,7 +146,7 @@ export default function Setting() {
                     />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
-                    {filteredMenus.map(({ id, icon, category, name, price, dose, loading }) => (
+                    {filteredMenus.map(({ id, icon, category, name, price, dose, loading, composition }) => (
                         <div key={id} className="p-6 border rounded-3xl bg-white shadow-sm">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
@@ -143,7 +159,7 @@ export default function Setting() {
                                 <div className="text-end">
                                     <span className="text-md capitalize">harga</span>
                                     <div className="flex gap-2 items-center">
-                                        <span className="text-md">
+                                        <span className="text-md font-semibold">
                                             Rp{new Intl.NumberFormat("id-ID").format(Number(price) || 0)}
                                         </span>
                                         <span className="text-md">|</span>
@@ -170,15 +186,36 @@ export default function Setting() {
                                     </button>
                                 </div>
                             ) : (
-                                <div className="flex mt-6 justify-end">
-                                    <button
-                                        className="capitalize text-blue-600 text-md"
-                                        onClick={() => setEditingId(id)}
-                                    >
-                                        ubah
-                                    </button>
-                                </div>
+                                <>
+                                    {user?.role === "admin" &&
+                                        <div className="flex mt-6 justify-end">
+                                            <button
+                                                className="capitalize text-blue-600 text-md"
+                                                onClick={() => setEditingId(id)}
+                                            >
+                                                ubah
+                                            </button>
+                                        </div>
+                                    }
+                                </>
                             )}
+                            <div className="mt-6 border p-3 rounded-2xl flex flex-col gap-2">
+                                <p className="capitalize font-semibold">setting perbahan</p>
+                                {composition &&
+                                    Object.entries(composition).map(([ingredient, qty]) => (
+                                        <div key={ingredient} className="flex items-center justify-between border-b pb-2">
+                                            <span className="text-gray-600">{ingredient}</span>
+                                            <div className="flex gap-2">
+                                                <div>
+                                                    <span className="text-green-600">{qty} </span>
+                                                    <span className="text-gray-600">/ {dose}</span>
+                                                </div>
+                                                <span className="text-blue-600">ubah</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     ))}
                 </div>

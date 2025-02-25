@@ -19,7 +19,7 @@ export default function Home() {
   }, [router]);
 
   if (!isAuthenticated) {
-    return <Loading/>
+    return <Loading />
   }
 
   return <Dashboard />;

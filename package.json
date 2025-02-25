@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-pdf/renderer": "^4.2.1",
+    "@react-pdf/renderer": "^4.2.2",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.1",
     "cookie": "^1.0.2",

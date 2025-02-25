@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Loading from "../dashboard/loading";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Stock() {
     const [menus, setMenus] = useState([]);
@@ -11,15 +13,29 @@ export default function Stock() {
     const [searchQuery, setSearchQuery] = useState("");
     const inputRefs = useRef({});
     const [editingId, setEditingId] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
+    const router = useRouter();
 
     useEffect(() => {
+        const token = Cookies.get("token");
+        if (!token) {
+            router.push("/login");
+        } else {
+            setIsAuthenticated(true);
+        }
+
+        axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
+            .then(response => setUser(response.data.user || {}))
+
         axios
             .get("/api/stockSet")
             .then(({ data }) => {
                 setMenus(data);
                 setFilteredMenus(data)
             })
-    }, []);
+
+    }, [router]);
 
     // Fungsi untuk memformat angka dengan titik sebagai pemisah ribuan
     const formatNumber = (number) => {
@@ -59,8 +75,8 @@ export default function Stock() {
             await axios.post("/api/history", {
                 totalHarga: stockInt,
                 item: "change",
-                category: name,
-                nama: "",
+                category: "",
+                nama: name,
                 icon: "https://img.icons8.com/ultraviolet/50/available-updates.png"
             });
 
@@ -98,8 +114,8 @@ export default function Stock() {
         setFilteredMenus(filtered);
     };
 
-    if(filteredMenus.length === 0){
-        return<Loading/>
+    if (!isAuthenticated) {
+        return <Loading />
     }
 
     return (
@@ -145,11 +161,15 @@ export default function Stock() {
                                     </button>
                                 </div>
                             ) : (
-                                <div className="flex w-full justify-end my-4">
-                                    <button onClick={() => setEditingId(id)}>
-                                        <span className="text-blue-600 text-md capitalize">ubah</span>
-                                    </button>
-                                </div>
+                                <>
+                                    {user?.role === "admin" &&
+                                        <div className="flex w-full justify-end my-4">
+                                            <button onClick={() => setEditingId(id)}>
+                                                <span className="text-blue-600 text-md capitalize">ubah</span>
+                                            </button>
+                                        </div>
+                                    }
+                                </>
                             )}
                         </div>
                         <div className="flex flex-col gap-2">

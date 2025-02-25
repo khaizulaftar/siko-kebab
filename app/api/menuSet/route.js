@@ -5,7 +5,18 @@ export async function GET() {
     try {
         const db = await dbConnect();
         const [rows] = await db.execute('SELECT * FROM menu');
-        return NextResponse.json(rows.length ? rows : { message: 'Menu kosong' }, { status: rows.length ? 200 : 404 });
+
+        if (!rows.length) {
+            return NextResponse.json({ message: 'Menu kosong' }, { status: 404 });
+        }
+
+        // Konversi kolom composition dari JSON string ke objek
+        const formattedRows = rows.map(row => ({
+            ...row,
+            composition: row.composition ? JSON.parse(row.composition) : null
+        }));
+
+        return NextResponse.json(formattedRows, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

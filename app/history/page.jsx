@@ -4,22 +4,33 @@ import { useEffect, useState } from "react"
 import axios from 'axios'
 import Swal from "sweetalert2"
 import Loading from "../dashboard/loading"
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function History() {
     const [history, setHistory] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
+        const token = Cookies.get("token");
+        if (!token) {
+            router.push("/login");
+        } else {
+            setIsAuthenticated(true);
+        }
+
+
         axios.get("/api/history")
             .then(response => setHistory(response.data))
-    }, [])
+    }, [router])
 
     const filteredHistory = Object.entries(history).map(([date, items]) => {
         return [
             date,
             items.filter((item) => {
                 const searchLower = searchQuery.toLowerCase()
-                // Format tanggal untuk pencarian
                 const formattedDate = new Date(item.tanggal).toLocaleDateString('id-ID', {
                     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
                 }).toLowerCase()
@@ -33,10 +44,9 @@ export default function History() {
         ]
     }).filter(([date, items]) => items.length > 0)
 
-    if (filteredHistory.length === 0) {
+    if (!isAuthenticated) {
         return <Loading />
     }
-
 
     return (
         <>
