@@ -131,17 +131,17 @@ export default function Stock() {
             </div>
             <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
                 {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, loading }) => (
-                    <div key={id} className="p-6 flex flex-col gap-2 border rounded-3xl bg-white shadow-sm">
-                        <span className="font-bold text-xl">{name}</span>
+                    <div key={id} className="p-6 flex flex-col border rounded-3xl bg-white shadow-sm">
+                        <span className="font-semibold text-xl mb-3">{name}</span>
                         <div className="flex flex-col text-center items-center">
-                            <span className="capitalize font-bold">jumlah Stock</span>
-                            <div className="flex gap-2">
-                                <span className="font-bold text-xl">{formatNumber(stock)}</span>
-                                <span className="text-xl">|</span>
-                                <span className="text-xl capitalize">{dose}</span>
+                            <span className="capitalize font-semibold">jumlah Stock</span>
+                            <div className="flex gap-1">
+                                <span className="font-semibold text-xl text-gray-700">{formatNumber(stock)}</span>
+                                <span className="text-md text-gray-700 font-semibold">|</span>
+                                <span className="text-lg font-semibold capitalize text-gray-700">{dose}</span>
                             </div>
                             {editingId === id ? (
-                                <div className="relative my-4 w-full">
+                                <div className="relative mt-3 w-full">
                                     <input
                                         type="text"
                                         className="block w-full px-6 py-3 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
@@ -155,24 +155,24 @@ export default function Stock() {
                                     <button
                                         onClick={() => handlePriceChange(id, name)}
                                         disabled={loading}
-                                        className={`absolute end-1.5 bottom-1.5 bg-blue-700 text-white rounded-full text-sm px-3 py-2 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        className={`absolute end-1.5 bottom-1.5 rounded-full bg-green-100 p-2.5 text-xs border border-green-600 font-medium transition focus:ring-3 focus:outline-hidden ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
-                                        {loading ? "Memperbarui..." : "Ubah Harga"}
+                                        {loading ? "Memperbarui..." : "Ubah bahan"}
                                     </button>
                                 </div>
                             ) : (
                                 <>
                                     {user?.role === "admin" &&
-                                        <div className="flex w-full justify-end my-4">
+                                        <div className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2.5 text-sm border border-green-600 font-medium transition duration-300 hover:scale-105  focus:ring-3 focus:outline-hidden w-full">
                                             <button onClick={() => setEditingId(id)}>
-                                                <span className="text-blue-600 text-md capitalize">ubah</span>
+                                                <span className="text-gray-900 fony-semibold capitalize">ubah jumlah bahan</span>
                                             </button>
                                         </div>
                                     }
                                 </>
                             )}
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 mt-6">
                             <div className="flex items-center justify-between">
                                 <span className="text-sm capitalize">stok awal</span>
                                 <div className="flex gap-2">

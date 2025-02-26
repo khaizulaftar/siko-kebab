@@ -41,7 +41,7 @@ export default function DownloadPdf() {
     return (
         <PDFDownloadLink
             document={<MyDocument data1={data1} data2={data2} data3={data3} />}
-            fileName="siko-kebab.pdf"
+            fileName="siko kebab.pdf"
         >
             {({ loading, error }) => (
                 <span

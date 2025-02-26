@@ -22,16 +22,42 @@ export async function GET() {
     }
 }
 
+// export async function PUT(req) {
+//     try {
+//         const { id, price } = await req.json();
+//         if (!id || !price) return NextResponse.json({ message: 'ID dan harga baru diperlukan' }, { status: 400 });
+
+//         const db = await dbConnect();
+//         const [result] = await db.execute('UPDATE menu SET price = ? WHERE id = ?', [Math.floor(price), id]);
+
+//         return NextResponse.json({ message: result.affectedRows ? 'Harga berhasil d iperbarui' : 'Menu tidak ditemukan' }, 
+//             { status: result.affectedRows ? 200 : 404 });
+//     } catch (error) {
+//         return NextResponse.json({ error: error.message }, { status: 500 });
+//     }
+// }
+
 export async function PUT(req) {
     try {
-        const { id, price } = await req.json();
-        if (!id || !price) return NextResponse.json({ message: 'ID dan harga baru diperlukan' }, { status: 400 });
+        const { id, price, composition } = await req.json();
+        if (!id) return NextResponse.json({ message: "ID diperlukan" }, { status: 400 });
 
         const db = await dbConnect();
-        const [result] = await db.execute('UPDATE menu SET price = ? WHERE id = ?', [Math.floor(price), id]);
 
-        return NextResponse.json({ message: result.affectedRows ? 'Harga berhasil d iperbarui' : 'Menu tidak ditemukan' }, 
-            { status: result.affectedRows ? 200 : 404 });
+        if (composition) {
+            await db.execute("UPDATE menu SET composition = ? WHERE id = ?", [
+                JSON.stringify(composition),
+                id,
+            ]);
+            return NextResponse.json({ message: "Komposisi berhasil diperbarui" }, { status: 200 });
+        }
+
+        if (price !== undefined) {
+            await db.execute("UPDATE menu SET price = ? WHERE id = ?", [Math.floor(price), id]);
+            return NextResponse.json({ message: "Harga berhasil diperbarui" }, { status: 200 });
+        }
+
+        return NextResponse.json({ message: "Tidak ada data yang diperbarui" }, { status: 400 });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

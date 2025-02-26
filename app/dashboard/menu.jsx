@@ -111,13 +111,14 @@ export default function Menu() {
                     <div className="flex items-center gap-2">
                         <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
                     </div>
-                    <Link
-                        href="/history"
-                        className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
-                        <span className="capitalize text-md font-semibold text-white">lihat semua</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                        </svg>
+                    <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-6 py-2.5 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
+                        href="/trafik">
+                        <span className="absolute -end-full transition-all group-hover:end-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </span>
+                        <span className="text-sm font-medium transition-all group-hover:me-4 capitalize"> lihat semua </span>
                     </Link>
                 </div>
 
@@ -143,7 +144,7 @@ export default function Menu() {
                                             setMenuKebabHrg(value.price)
                                             setNamakebab(value.name)
                                         }}
-                                        className="px-6 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                        className="px-5 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80">
                                         {value.name}
                                     </button>
                                 ))}
@@ -166,7 +167,7 @@ export default function Menu() {
                             </div>
                             <button
                                 onClick={kirimKeIncomeKebab}
-                                class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">tambah</button>
+                                class="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
                         </div>
                     </div>
 
@@ -190,7 +191,7 @@ export default function Menu() {
                                             setMenuBurgerHrg(value.price)
                                             setNamaBurger(value.name)
                                         }}
-                                        class="px-6 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                        class="px-5 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80">
                                         {value.name}
                                     </button>
                                 ))}
@@ -212,7 +213,7 @@ export default function Menu() {
                             </div>
                             <button
                                 onClick={kirimKeIncomeBurger}
-                                class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">tambah</button>
+                                class="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
                         </div>
                     </div>
 
@@ -236,7 +237,7 @@ export default function Menu() {
                                             setMenuMinumanHrg(value.price)
                                             setNamaMinuman(value.name)
                                         }}
-                                        class="px-6 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                        class="px-5 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80">
                                         {value.name}
                                     </button>
                                 ))}
@@ -258,7 +259,7 @@ export default function Menu() {
                             </div>
                             <button
                                 onClick={kirimKeIncomeMinuman}
-                                class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">tambah</button>
+                                class="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
                         </div>
                     </div>
                 </div>

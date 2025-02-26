@@ -39,9 +39,9 @@ const MyDocument = ({ data1, data2, data3 }) => (
             {/* Tabel Data1 */}
             <View style={styles.table}>
                 <View style={styles.tableRow}>
-                    <Text style={styles.tableCellHeader}>Nama</Text>
+                    <Text style={styles.tableCellHeader}>Nama </Text>
                     <Text style={styles.tableCellHeader}>Kategori</Text>
-                    <Text style={styles.tableCellHeader}>Item</Text>
+                    <Text style={styles.tableCellHeader}>Keterangan</Text>
                     <Text style={styles.tableCellHeader}>Jumlah</Text>
                 </View>
                 {data1.map((item, index) => (

@@ -11,7 +11,7 @@ export async function GET(req) {
         const decoded = jwt.verify(token, "SECRET");
 
         const db = await dbConnect();
-        const [users] = await db.query("SELECT username, role FROM users WHERE username = ?", [decoded.username]);
+        const [users] = await db.query("SELECT username, password, role FROM users WHERE username = ?", [decoded.username]);
 
         if (users.length === 0) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
@@ -66,6 +66,51 @@ export async function POST(req) {
         );
     } catch (error) {
         console.error("Error saat menambahkan user:", error);
+        return NextResponse.json({ message: "Terjadi kesalahan pada server", error }, { status: 500 });
+    }
+}
+
+export async function PUT(req) {
+    try {
+        const { username, password } = await req.json();
+        const token = req.headers.get("Authorization");
+        if (!token) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+
+        const decoded = jwt.verify(token.split(" ")[1], "SECRET");
+        const oldUsername = decoded.username;
+
+        console.log("Username lama:", oldUsername);
+        console.log("Username baru:", username);
+
+        const db = await dbConnect();
+
+        // Debug: Cek apakah user lama ada
+        const [userExists] = await db.query("SELECT * FROM users WHERE username = ?", [oldUsername]);
+        if (userExists.length === 0) {
+            console.log("User tidak ditemukan!");
+            return NextResponse.json({ message: "User tidak ditemukan" }, { status: 404 });
+        }
+
+        // Update username dan password
+        const [result] = await db.query(
+            "UPDATE users SET username = ?, password = ? WHERE username = ?",
+            [username, password, oldUsername]
+        );
+
+        console.log("Rows affected:", result.affectedRows);
+
+        if (result.affectedRows === 0) {
+            return NextResponse.json({ message: "Gagal memperbarui profil" }, { status: 400 });
+        }
+
+        // Buat token baru dengan username baru
+        const newToken = jwt.sign({ username }, "SECRET", { expiresIn: "1h" });
+
+        return NextResponse.json({ message: "Profil berhasil diperbarui", token: newToken }, { status: 200 });
+    } catch (error) {
+        console.error("Error updating profile:", error);
         return NextResponse.json({ message: "Terjadi kesalahan pada server", error }, { status: 500 });
     }
 }

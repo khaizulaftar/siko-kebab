@@ -37,6 +37,7 @@ export default function Setting() {
                 }, {});
                 setFormattedPrices(initialPrices);
             })
+
     }, [router]);
 
     const handleInputChange = (id, e) => {
@@ -128,6 +129,46 @@ export default function Setting() {
             category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+
+
+    const handleQtyChange = async (menuId, ingredient, oldQty, composition) => {
+        const { value: newQty } = await Swal.fire({
+            title: `Ubah jumlah ${ingredient}`,
+            input: "number",
+            inputValue: oldQty,
+            inputAttributes: { min: "0" },
+            showCancelButton: true,
+            confirmButtonText: "Simpan",
+            cancelButtonText: "Batal",
+            inputValidator: (value) => {
+                if (!value || value < 0) {
+                    return "Jumlah harus lebih dari 0!";
+                }
+            },
+        });
+
+        if (newQty !== undefined && newQty !== oldQty) {
+            try {
+                // Update hanya `composition` tanpa mengubah format lainnya
+                const updatedComposition = { ...composition, [ingredient]: Number(newQty) };
+
+                await axios.put("/api/menuSet", { id: menuId, composition: updatedComposition });
+
+                Swal.fire("Berhasil!", `Jumlah ${ingredient} diperbarui ke ${newQty}`, "success");
+
+                // Perbarui state lokal setelah berhasil mengubah
+                setMenus((prevMenus) =>
+                    prevMenus.map((menu) =>
+                        menu.id === menuId ? { ...menu, composition: updatedComposition } : menu
+                    )
+                );
+            } catch (error) {
+                Swal.fire("Gagal!", "Terjadi kesalahan saat memperbarui jumlah.", "error");
+            }
+        }
+    };
+
+
     if (!isAuthenticated) {
         return <Loading />
     }
@@ -157,19 +198,18 @@ export default function Setting() {
                                     </div>
                                 </div>
                                 <div className="text-end">
-                                    <span className="text-md capitalize">harga</span>
-                                    <div className="flex gap-2 items-center">
-                                        <span className="text-md font-semibold">
+                                    <div className="flex gap-1 items-center">
+                                        <span className="text-xl font-semibold text-green-600">
                                             Rp{new Intl.NumberFormat("id-ID").format(Number(price) || 0)}
                                         </span>
-                                        <span className="text-md">|</span>
-                                        <span className="text-sm uppercase">{dose}</span>
+                                        <span className="text-md font-semibold text-gray-600">|</span>
+                                        <span className="text-lg font-semibold capitalize text-gray-600">{dose}</span>
                                     </div>
                                 </div>
                             </div>
 
                             {editingId === id ? (
-                                <div className="relative mt-6">
+                                <div className="relative mt-3">
                                     <input
                                         type="text"
                                         className="block w-full px-6 py-3 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
@@ -180,7 +220,7 @@ export default function Setting() {
                                     <button
                                         onClick={() => handlePriceChange(id, category, name)}
                                         disabled={loading}
-                                        className={`absolute end-1.5 bottom-1.5 bg-blue-700 text-white rounded-full text-sm px-3 py-2 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        className={`absolute end-1.5 bottom-1.5 rounded-full bg-green-100 p-2.5 text-xs border border-green-600 font-medium transition focus:ring-3 focus:outline-hidden" ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
                                         {loading ? "Memperbarui..." : "Ubah Harga"}
                                     </button>
@@ -188,29 +228,32 @@ export default function Setting() {
                             ) : (
                                 <>
                                     {user?.role === "admin" &&
-                                        <div className="flex mt-6 justify-end">
+                                        <div className="flex mt-3 items-center justify-center rounded-full bg-green-100 p-2.5 text-sm border border-green-600 font-medium transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden">
                                             <button
-                                                className="capitalize text-blue-600 text-md"
+                                                className="capitalize text-gray-800 font-semibold"
                                                 onClick={() => setEditingId(id)}
                                             >
-                                                ubah
+                                                ubah harga
                                             </button>
                                         </div>
                                     }
                                 </>
                             )}
-                            <div className="mt-6 border p-3 rounded-2xl flex flex-col gap-2">
-                                <p className="capitalize font-semibold">setting perbahan</p>
+                            <div className="mt-6">
+                                <p className="capitalize font-semibold">pengurangan bahan</p>
                                 {composition &&
                                     Object.entries(composition).map(([ingredient, qty]) => (
-                                        <div key={ingredient} className="flex items-center justify-between border-b pb-2">
-                                            <span className="text-gray-600">{ingredient}</span>
-                                            <div className="flex gap-2">
-                                                <div>
-                                                    <span className="text-green-600">{qty} </span>
-                                                    <span className="text-gray-600">/ {dose}</span>
-                                                </div>
-                                                <span className="text-blue-600">ubah</span>
+                                        <div key={ingredient} className="flex items-center justify-between border-b py-2">
+                                            <span className="text-gray-600 text-sm font-semibold">{ingredient}</span>
+                                            <div className="flex gap-4 items-center">
+                                                <span className="text-red-500 text-md font-semibold">- {qty} </span>
+                                                {
+                                                    user?.role === "admin" && <button className="" onClick={() => handleQtyChange(id, ingredient, qty, composition)}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 text-blue-500">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                                                        </svg>
+                                                    </button>
+                                                }
                                             </div>
                                         </div>
                                     ))

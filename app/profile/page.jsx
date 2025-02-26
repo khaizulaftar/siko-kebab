@@ -13,7 +13,6 @@ export default function Profile() {
     const router = useRouter();
 
     useEffect(() => {
-        // Ambil data daftar pengguna
         axios.get("/api/auth/login")
             .then(response => setDaftar(response.data));
 
@@ -99,15 +98,68 @@ export default function Profile() {
         }
     };
 
+
+    const handleUpdateProfile = async () => {
+        const { value: formValues } = await Swal.fire({
+            title: "Edit Profil",
+            html: `
+                <input id="swal-username" class="swal2-input" placeholder="Username" value="${user.username}">
+                <input id="swal-password" type="password" class="swal2-input" placeholder="Password">
+            `,
+            focusConfirm: false,
+            preConfirm: () => {
+                const username = document.getElementById("swal-username").value.trim();
+                const password = document.getElementById("swal-password").value.trim();
+    
+                if (!username) {
+                    Swal.showValidationMessage("Username tidak boleh kosong!");
+                    return false;
+                }
+    
+                if (!password) {
+                    Swal.showValidationMessage("Password tidak boleh kosong!");
+                    return false;
+                }
+    
+                return { username, password };
+            },
+        });
+    
+        if (!formValues) return;
+    
+        try {
+            const token = Cookies.get("token");
+            const response = await axios.put("/api/auth/profile", formValues, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+    
+            if (response.status === 200) {
+                Swal.fire("Berhasil!", response.data.message, "success");
+    
+                // Perbarui token jika username berubah
+                if (response.data.token) {
+                    Cookies.set("token", response.data.token, { expires: 1 }); // Simpan token baru
+                }
+    
+                setUser((prev) => ({ ...prev, ...formValues }));
+            } else {
+                Swal.fire("Gagal!", response.data.message, "error");
+            }
+        } catch (error) {
+            Swal.fire("Gagal!", "Terjadi kesalahan pada server", "error");
+        }
+    };
+    
+    
     if (!user) {
         return <Loading />
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
+        <div className="p-4 max-w-4xl mx-auto">
             <div className="mt-4 sm:grid grid-cols-2 gap-6">
                 <div>
-                    <div className="border p-6 rounded-3xl shadow-sm flex flex-col items-center">
+                    <div className="border p-6 bg-white rounded-3xl shadow-sm flex flex-col items-center">
                         {/* Avatar */}
                         <img
                             src={user.role === "admin"
@@ -115,22 +167,21 @@ export default function Profile() {
                                 : "https://img.icons8.com/ios/80/commercial-development-management.png"}
                             alt={user.role}
                         />
-                        <h2 className="text-2xl font-semibold mt-4 text-gray-800">Hello, {user.username}!</h2>
-                        <p className="mt-2 text-gray-500 text-sm">Role: <span className="font-medium">{user.role}</span></p>
-
-                        {/* Logout Button */}
-                        <button
-                            className="mt-6 bg-red-500 text-white py-2 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:bg-red-600"
-                            onClick={() => {
-                                Cookies.remove("token");
-                                router.push("/login");
-                            }}
-                        >
-                            Logout
-                        </button>
+                        <h2 className="text-xl font-semibold text-gray-600 capitalize text">{user.username}</h2>
+                        <div className="w-full mt-6 flex flex-col gap-2">
+                            <div className="flex items-center justify-between">
+                                <span className="text-gray-600 text-sm">Role:</span>
+                                <span className="text-gray-600 text-sm">{user.role}</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-gray-600 text-sm">password:</span>
+                                <span className="text-gray-600 text-sm">{user.password}</span>
+                            </div>
+                        </div>
+                        <button onClick={handleUpdateProfile} className="mt-6 capitalize text-green-600">ubah profile</button>
                     </div>
                 </div>
-                <div className="">
+                <div className="mt-12 sm:mt-0">
                     <div className="flex items-center justify-between">
                         <span className="capitalize font-semibold text-gray-600 text-lg">nama nama staf</span>
                         {user?.role === "admin" &&
@@ -140,37 +191,47 @@ export default function Profile() {
                                 </svg>
                             </button>}
                     </div>
-                    {daftar.map((value) => (
-                        <>
-                            <div className="flex gap-3 items-center mt-6 border rounded-3xl p-6 shadow-sm">
-                                <div className="border p-2 rounded-full bg-gray-200">
-                                    <img
-                                        src={value.role === "admin"
-                                            ? "https://img.icons8.com/ios/30/administrator-male--v1.png"
-                                            : "https://img.icons8.com/ios/30/commercial-development-management.png"}
-                                        alt={value.role}
-                                    />
+                    {daftar.map((value,index) => (
+                        <div key={index} className="flex gap-3 items-center mt-3 border rounded-3xl p-6 shadow-sm bg-white">
+                            <div className="border p-2 rounded-full bg-gray-200">
+                                <img
+                                    src={value.role === "admin"
+                                        ? "https://img.icons8.com/ios/30/administrator-male--v1.png"
+                                        : "https://img.icons8.com/ios/30/commercial-development-management.png"}
+                                    alt={value.role}
+                                />
+                            </div>
+                            <div className="flex justify-between w-full">
+                                <div className="flex flex-col items-star gap-1">
+                                    <span className="font-semibold text-gray-600">{value.username}</span>
+                                    <span className="text-sm text-gray-600">{value.password}</span>
                                 </div>
-                                <div className="flex justify-between w-full">
-                                    <div className="flex flex-col items-star gap-1">
-                                        <span className="font-semibold text-gray-600">{value.username}</span>
-                                        <span className="text-sm text-gray-600">{value.password}</span>
-                                    </div>
-                                    <div className="flex flex-col items-end gap-1">
-                                        <span className="font-semibold text-gray-600">{value.role}</span>
-                                        {user?.role === "admin" &&
-                                            <button onClick={() => handleDelete(value.id)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 text-red-600">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
-                                            </button>
-                                        }
-                                    </div>
+                                <div className="flex flex-col items-end gap-1">
+                                    <span className="font-semibold text-gray-600">{value.role}</span>
+                                    {user?.role === "admin" &&
+                                        <button onClick={() => handleDelete(value.id)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 text-red-600">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                            </svg>
+                                        </button>
+                                    }
                                 </div>
                             </div>
-                        </>
+                        </div>
                     ))}
                 </div>
+
+            </div>
+            <div className="mt-16 sm:mb-0 mb-20 flex justify-center max-w-md mx-auto">
+                <button
+                    className="w-full bg-red-100 border-2 border-red-600 text-lg font-semibold text-red-600 hover:text-white py-2.5 px-6 rounded-full shadow-md transition hover:bg-red-600"
+                    onClick={() => {
+                        Cookies.remove("token");
+                        router.push("/login");
+                    }}
+                >
+                    Keluar
+                </button>
             </div>
         </div >
     );

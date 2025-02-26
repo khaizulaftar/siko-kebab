@@ -6,6 +6,7 @@ import Swal from "sweetalert2"
 import ChartIncome from "./chart";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import Loading from '../dashboard/loading';
 
 export default function Trafik() {
     const router = useRouter();

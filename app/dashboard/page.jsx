@@ -69,8 +69,8 @@ export default function Dashboard() {
                         </div>
                         {showPemasukan ? <span className="text-4xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
                         <div className='flex items-center justify-between'>
-                            <Link href="history" className="py-2 px-6 text-md font-semibold text-gray-200 focus:outline-none rounded-full border-2 border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</Link>
-                            <DownloadPdf/>
+                            <Link href="history" className="py-2 px-6 text-md font-semibold transition-colors duration-300 text-gray-200 focus:outline-none rounded-full border-2 border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 capitalize">riwayat</Link>
+                            <DownloadPdf />
                         </div>
                     </div>
                 </div>
@@ -97,20 +97,20 @@ export default function Dashboard() {
                                 <div className="flex items-center gap-2">
                                     <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
                                 </div>
-                                <Link
-                                    href="/trafik"
-                                    className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
-                                    <span className="capitalize text-md font-semibold text-white">lihat semua</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                    </svg>
+                                <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-6 py-2.5 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
+                                    href="/trafik">
+                                    <span className="absolute -end-full transition-all group-hover:end-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                        </svg>
+                                    </span>
+                                    <span className="text-sm font-medium transition-all group-hover:me-4 capitalize"> lihat semua </span>
                                 </Link>
                             </div>
-                            <ChartIncome jumlahHari={7} />
+                            <ChartIncome jumlahHari={14} />
                         </div>
                     </div>
                 </div>
-
 
                 {/* jumlah bahan */}
                 <div className="my-12">
@@ -118,13 +118,14 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2">
                             <span className="capitalize font-semibold text-lg text-gray-600">jumlah bahan</span>
                         </div>
-                        <Link
-                            href="/stock"
-                            className="flex items-center justify-center gap-2 px-6 py-2 transition-colors duration-300 bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-802">
-                            <span className="capitalize text-md font-semibold text-white">lihat semua</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 text-white">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
+                        <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-6 py-2.5 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
+                            href="/stock">
+                            <span className="absolute -end-full transition-all group-hover:end-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </span>
+                            <span className="text-sm font-medium transition-all group-hover:me-4 capitalize"> lihat semua </span>
                         </Link>
                     </div>
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">

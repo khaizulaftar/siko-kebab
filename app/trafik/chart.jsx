@@ -25,7 +25,7 @@ export default function ChartIncome({jumlahHari}) {
             <div class="w-full p-6 bg-white shadow-sm rounded-3xl border wrap overflow-hidden">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 text-center capitalize">Traffic penghasilan</h2>
                 <div class="relative min-h-40 border-l border-b border-gray-300 flex items-end  px-4">
-                    <div class="flex flex-wrap gap-4 sm:gap-6 items-end w-full">
+                    <div class="flex flex-wrap gap-4  items-end w-full">
                         {
                             dataPemasukan.total_pemasukan.slice(-jumlahHari).map((value, index) => (
                                 <div class="flex flex-col items-center justify-center relative mt-6">
