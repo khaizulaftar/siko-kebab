@@ -1,27 +1,27 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
-import Loading from "../dashboard/loading";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { useEffect, useState } from "react"
+import axios from "axios"
+import Swal from "sweetalert2"
+import Loading from "../dashboard/loading"
+import { useRouter } from "next/navigation"
+import Cookies from "js-cookie"
 
 export default function Setting() {
-    const [menus, setMenus] = useState([]);
-    const [editingId, setEditingId] = useState(null);
-    const [formattedPrices, setFormattedPrices] = useState({});
-    const [searchQuery, setSearchQuery] = useState("");
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState(null);
-    const router = useRouter();
+    const [menus, setMenus] = useState([])
+    const [editingId, setEditingId] = useState(null)
+    const [formattedPrices, setFormattedPrices] = useState({})
+    const [searchQuery, setSearchQuery] = useState("")
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [user, setUser] = useState(null)
+    const router = useRouter()
 
     useEffect(() => {
-        const token = Cookies.get("token");
+        const token = Cookies.get("token")
         if (!token) {
-            router.push("/login");
+            router.push("/login")
         } else {
-            setIsAuthenticated(true);
+            setIsAuthenticated(true)
         }
 
         axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
@@ -30,34 +30,34 @@ export default function Setting() {
 
         axios.get("/api/menuSet")
             .then(({ data }) => {
-                setMenus(data);
+                setMenus(data)
                 const initialPrices = data.reduce((acc, { id, price }) => {
-                    acc[id] = new Intl.NumberFormat("id-ID").format(price);
-                    return acc;
-                }, {});
-                setFormattedPrices(initialPrices);
+                    acc[id] = new Intl.NumberFormat("id-ID").format(price)
+                    return acc
+                }, {})
+                setFormattedPrices(initialPrices)
             })
 
-    }, [router]);
+    }, [router])
 
     const handleInputChange = (id, e) => {
-        let value = e.target.value.replace(/\D/g, "");
+        let value = e.target.value.replace(/\D/g, "")
         setFormattedPrices((prev) => ({
             ...prev,
             [id]: new Intl.NumberFormat("id-ID").format(value),
-        }));
-    };
+        }))
+    }
 
     const handlePriceChange = async (id, category, name) => {
-        const price = parseInt(formattedPrices[id].replace(/\./g, ""), 10);
+        const price = parseInt(formattedPrices[id].replace(/\./g, ""), 10)
 
         if (isNaN(price) || price <= 0) {
             Swal.fire({
                 icon: "error",
                 title: "Terjadi kesalahan",
                 text: "Harga tidak valid. Pastikan harga lebih besar dari 0.",
-            });
-            return;
+            })
+            return
         }
 
         const result = await Swal.fire({
@@ -67,46 +67,46 @@ export default function Setting() {
             showCancelButton: true,
             confirmButtonText: "Ya, ubah harga!",
             cancelButtonText: "Batal",
-        });
+        })
 
         if (result.isConfirmed) {
-            handleAlertConfirm(id, price, category, name);
+            handleAlertConfirm(id, price, category, name)
         }
-    };
+    }
 
     const handleAlertConfirm = async (id, price, category, name) => {
         setMenus((prev) =>
             prev.map((m) => (m.id === id ? { ...m, loading: true } : m))
-        );
+        )
 
         try {
-            await axios.put("/api/menuSet", { id, price });
+            await axios.put("/api/menuSet", { id, price })
 
             setMenus((prev) =>
                 prev.map((m) => (m.id === id ? { ...m, price, loading: false } : m))
-            );
+            )
 
-            await saveHistory(price, category, name);
+            await saveHistory(price, category, name)
 
-            setEditingId(null);
+            setEditingId(null)
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
                 text: "Harga telah diperbarui.",
-            });
+            })
         } catch {
             Swal.fire({
                 icon: "error",
                 title: "Gagal",
                 text: "Gagal memperbarui harga. Silakan coba lagi.",
-            });
+            })
 
             setMenus((prev) =>
                 prev.map((m) => (m.id === id ? { ...m, loading: false } : m))
-            );
+            )
         }
-    };
+    }
 
     const saveHistory = async (totalHarga, category, name,) => {
         try {
@@ -116,20 +116,17 @@ export default function Setting() {
                 category,
                 nama: name,
                 icon: "https://img.icons8.com/ultraviolet/50/settings.png",
-            });
+            })
         } catch (error) {
-            console.error("Gagal menyimpan ke history:", error);
+            
         }
-    };
+    }
 
-    // Filter berdasarkan pencarian
     const filteredMenus = menus.filter(
         ({ name, category }) =>
             name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             category.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-
+    )
 
     const handleQtyChange = async (menuId, ingredient, oldQty, composition) => {
         const { value: newQty } = await Swal.fire({
@@ -142,32 +139,31 @@ export default function Setting() {
             cancelButtonText: "Batal",
             inputValidator: (value) => {
                 if (!value || value < 0) {
-                    return "Jumlah harus lebih dari 0!";
+                    return "Jumlah harus lebih dari 0!"
                 }
             },
-        });
+        })
 
         if (newQty !== undefined && newQty !== oldQty) {
             try {
                 // Update hanya `composition` tanpa mengubah format lainnya
-                const updatedComposition = { ...composition, [ingredient]: Number(newQty) };
+                const updatedComposition = { ...composition, [ingredient]: Number(newQty) }
 
-                await axios.put("/api/menuSet", { id: menuId, composition: updatedComposition });
+                await axios.put("/api/menuSet", { id: menuId, composition: updatedComposition })
 
-                Swal.fire("Berhasil!", `Jumlah ${ingredient} diperbarui ke ${newQty}`, "success");
+                Swal.fire("Berhasil!", `Jumlah ${ingredient} diperbarui ke ${newQty}`, "success")
 
                 // Perbarui state lokal setelah berhasil mengubah
                 setMenus((prevMenus) =>
                     prevMenus.map((menu) =>
                         menu.id === menuId ? { ...menu, composition: updatedComposition } : menu
                     )
-                );
+                )
             } catch (error) {
-                Swal.fire("Gagal!", "Terjadi kesalahan saat memperbarui jumlah.", "error");
+                Swal.fire("Gagal!", "Terjadi kesalahan saat memperbarui jumlah.", "error")
             }
         }
-    };
-
+    }
 
     if (!isAuthenticated) {
         return <Loading />
@@ -176,7 +172,6 @@ export default function Setting() {
     return (
         <>
             <div className="max-w-4xl mx-auto">
-                {/* Input pencarian */}
                 <div className="w-full pb-3 pt-6 bg-[#F9F9FB] sticky top-0 flex items-center">
                     <input
                         type="text"
@@ -249,8 +244,8 @@ export default function Setting() {
                                                 <span className="text-red-500 text-md font-semibold">- {qty} </span>
                                                 {
                                                     user?.role === "admin" && <button className="" onClick={() => handleQtyChange(id, ingredient, qty, composition)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 text-blue-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 text-blue-500">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
                                                         </svg>
                                                     </button>
                                                 }
@@ -264,5 +259,5 @@ export default function Setting() {
                 </div>
             </div>
         </>
-    );
+    )
 }

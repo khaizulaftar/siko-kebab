@@ -2,25 +2,23 @@
 
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import Swal from "sweetalert2"
 import Loading from "../dashboard/loading"
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { useRouter } from "next/navigation"
+import Cookies from "js-cookie"
 
 export default function History() {
     const [history, setHistory] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const router = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const router = useRouter()
 
     useEffect(() => {
-        const token = Cookies.get("token");
+        const token = Cookies.get("token")
         if (!token) {
-            router.push("/login");
+            router.push("/login")
         } else {
-            setIsAuthenticated(true);
+            setIsAuthenticated(true)
         }
-
 
         axios.get("/api/history")
             .then(response => setHistory(response.data))

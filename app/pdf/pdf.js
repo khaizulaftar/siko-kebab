@@ -1,80 +1,98 @@
-"use client";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+"use client"
 
-// Styling untuk PDF
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
+
 const styles = StyleSheet.create({
-    page: { flexDirection: "column", padding: 20 },
-    title: { fontSize: 22, fontWeight: "bold", marginBottom: 30, textAlign: "center" },
-    text: { fontSize: 16, fontWeight: "bold", },
-    amount: { fontSize: 16, fontWeight: "bold", color: "green" },
-    date: { fontSize: 10, color: "gray", textAlign: "right" },
-    summaryRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 10 },
-    table: { display: "table", width: "100%", borderStyle: "solid", borderWidth: 0.5, marginBottom: 10, alignSelf: "center" },
-    tableRow: { flexDirection: "row" },
-    tableCellHeader: { 
-        flex: 1, 
-        fontSize: 10, 
-        fontWeight: "bold", 
-        padding: 2.5, 
-        borderStyle: "solid", 
-        borderWidth: 0.5,
-        backgroundColor: "#f0f0f0",
-        textAlign: "center"
-    },
-    tableCell: { flex: 1, fontSize: 10, padding: 2.5, borderStyle: "solid", borderWidth: 0.5, textAlign: "center" }
-});
+    page: { padding: 30, fontSize: 12, fontFamily: "Helvetica", color: "#333" },
+    header: { textAlign: "center", fontSize: 20, fontWeight: "bold", marginBottom: 20 },
+    summary: { marginBottom: 20, padding: 12, backgroundColor: "#f5f5f5", borderRadius: 6 },
+    summaryRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 6 },
+    summaryText: { fontSize: 12, fontWeight: "bold" },
+    summaryValue: { fontSize: 16, fontWeight: "bold", color: "#006400" },
+    dateText: { fontSize: 10, color: "gray", textAlign: "right" }, // Tanggal lebih kecil & abu-abu
+    sectionTitle: { fontSize: 14, fontWeight: "bold", marginTop: 10, marginBottom: 5, borderBottom: "1px solid #ddd", paddingBottom: 2 },
+    table: { display: "table", width: "100%", borderStyle: "solid", borderWidth: 1, borderColor: "#ddd", borderRadius: 4, overflow: "hidden" },
+    row: { flexDirection: "row", borderBottom: "1px solid #ddd", backgroundColor: "#fff" },
+    headerRow: { backgroundColor: "#f0f0f0", fontSize: 12, fontWeight: "bold" }, // Header tabel lebih besar dari isi tabel
+    cellHeader: { flex: 1, padding: 6, textAlign: "center", fontWeight: "bold" },
+    cell: { flex: 1, padding: 4, textAlign: "center", fontSize: 10 }, // Isi tabel tetap kecil
+})
 
 const MyDocument = ({ data1, data2, data3 }) => (
     <Document>
         <Page size="A4" style={styles.page}>
-            <View>
-                <Text style={styles.title}>Laporan Keuangan Hari Ini</Text>
-            </View>
+            <Text style={styles.header}>Laporan Harian</Text>
 
-            <View style={styles.summaryRow}>
-            <Text style={styles.text}>Jumlah Pemasukan: <Text style={styles.amount}>{data2.total_pemasukan.toLocaleString()}</Text></Text>
-                <Text style={styles.date}>Tanggal: {data2.tanggal}</Text>
-            </View>
-
-            {/* Tabel Data1 */}
-            <View style={styles.table}>
-                <View style={styles.tableRow}>
-                    <Text style={styles.tableCellHeader}>Nama </Text>
-                    <Text style={styles.tableCellHeader}>Kategori</Text>
-                    <Text style={styles.tableCellHeader}>Keterangan</Text>
-                    <Text style={styles.tableCellHeader}>Jumlah</Text>
+            {/* Ringkasan Pemasukan */}
+            <View style={styles.summary}>
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryText}>Tanggal:</Text>
+                    <Text style={styles.dateText}>{data2?.tanggal || "-"}</Text>
                 </View>
-                {data1.map((item, index) => (
-                    <View key={index} style={styles.tableRow}>
-                        <Text style={styles.tableCell}>{item.name}</Text>
-                        <Text style={styles.tableCell}>{item.category}</Text>
-                        <Text style={styles.tableCell}>{item.item}</Text>
-                        <Text style={styles.tableCell}>Rp {item.jumlah_pemasukan.toLocaleString()}</Text>
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryText}>Jumlah Pemasukan:</Text>
+                    <Text style={styles.summaryValue}>Rp{(Number(data2?.total_pemasukan) || 0).toLocaleString()}</Text>
+                </View>
+            </View>
+
+            {/* total */}
+            <Text style={styles.sectionTitle}>Jumalah Habis</Text>
+            <View style={styles.table}>
+                <View style={[styles.row, styles.headerRow]}>
+                    <Text style={styles.cellHeader}>Kebab</Text>
+                    <Text style={styles.cellHeader}>Burger</Text>
+                    <Text style={styles.cellHeader}>Minuman</Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.cell}>{data2.total_kebab}</Text>
+                    <Text style={styles.cell}>{data2.total_burger}</Text>
+                    <Text style={styles.cell}>{data2.total_minuman}</Text>
+                </View>
+            </View>
+
+            {/* Tabel Pemasukan */}
+            <Text style={styles.sectionTitle}>Detail History</Text>
+            <View style={styles.table}>
+                <View style={[styles.row, styles.headerRow]}>
+                    <Text style={styles.cellHeader}>Nama</Text>
+                    <Text style={styles.cellHeader}>Kategori</Text>
+                    <Text style={styles.cellHeader}>Keterangan</Text>
+                    <Text style={styles.cellHeader}>Jumlah</Text>
+                </View>
+                {data1?.map((item, index) => (
+                    <View key={index} style={styles.row}>
+                        <Text style={styles.cell}>{item.name}</Text>
+                        <Text style={styles.cell}>{item.category}</Text>
+                        <Text style={styles.cell}>{item.item}</Text>
+                        <Text style={styles.cell}>Rp {item.jumlah_pemasukan?.toLocaleString() || "0"}</Text>
                     </View>
                 ))}
             </View>
 
-            {/* Tabel Data3 */}
+            <View style={{ marginTop: 10 }} />
+
+            {/* Tabel Stok Bahan */}
+            <Text style={styles.sectionTitle}>Detail Stok Bahan</Text>
             <View style={styles.table}>
-                <View style={styles.tableRow}>
-                    <Text style={styles.tableCellHeader}>Nama</Text>
-                    <Text style={styles.tableCellHeader}>Stok Saat Ini</Text>
-                    <Text style={styles.tableCellHeader}>Stok Awal</Text>
-                    <Text style={styles.tableCellHeader}>Jumlah Masuk</Text>
-                    <Text style={styles.tableCellHeader}>Jumlah Habis</Text>
+                <View style={[styles.row, styles.headerRow]}>
+                    <Text style={styles.cellHeader}>Nama</Text>
+                    <Text style={styles.cellHeader}>Stok Sekarang</Text>
+                    <Text style={styles.cellHeader}>Stok Awal</Text>
+                    <Text style={styles.cellHeader}>Masuk</Text>
+                    <Text style={styles.cellHeader}>Habis</Text>
                 </View>
-                {data3.map((item, index) => (
-                    <View key={index} style={styles.tableRow}>
-                        <Text style={styles.tableCell}>{item.name}</Text>
-                        <Text style={styles.tableCell}>{item.stock} / {item.dose}</Text>
-                        <Text style={styles.tableCell}>{item.initial_stock} / {item.dose}</Text>
-                        <Text style={styles.tableCell}>{item.final_stock} / {item.dose}</Text>
-                        <Text style={styles.tableCell}>{item.out_stock} / {item.dose}</Text>
+                {data3?.map((item, index) => (
+                    <View key={index} style={styles.row}>
+                        <Text style={styles.cell}>{item.name}</Text>
+                        <Text style={styles.cell}>{item.stock} / {item.dose}</Text>
+                        <Text style={styles.cell}>{item.initial_stock} / {item.dose}</Text>
+                        <Text style={styles.cell}>{item.final_stock} / {item.dose}</Text>
+                        <Text style={styles.cell}>{item.out_stock} / {item.dose}</Text>
                     </View>
                 ))}
             </View>
         </Page>
     </Document>
-);
+)
 
-export default MyDocument;
+export default MyDocument

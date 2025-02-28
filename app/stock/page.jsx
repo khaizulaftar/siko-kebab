@@ -1,57 +1,48 @@
-"use client";
+"use client"
 
-import { useEffect, useState, useRef } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
-import Loading from "../dashboard/loading";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { useState, useRef } from "react"
+import useSWR from "swr"
+import axios from "axios"
+import Swal from "sweetalert2"
+import Loading from "../dashboard/loading"
+import { useRouter } from "next/navigation"
+import Cookies from "js-cookie"
 
 export default function Stock() {
-    const [menus, setMenus] = useState([]);
-    const [filteredMenus, setFilteredMenus] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const inputRefs = useRef({});
-    const [editingId, setEditingId] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState(null);
-    const router = useRouter();
+    const router = useRouter()
+    const token = Cookies.get("token")
 
-    useEffect(() => {
-        const token = Cookies.get("token");
-        if (!token) {
-            router.push("/login");
-        } else {
-            setIsAuthenticated(true);
-        }
+    const { data: menus = [], mutate: refreshMenus } = useSWR("/api/stockSet", 
+        () => axios.get("/api/stockSet").then(res => res.data), 
+        { refreshInterval: 5000 }
+    )
 
+    const { data: user } = useSWR("/api/auth/profile", () => 
         axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => setUser(response.data.user || {}))
+        .then(res => res.data.user)
+    )
 
-        axios
-            .get("/api/stockSet")
-            .then(({ data }) => {
-                setMenus(data);
-                setFilteredMenus(data)
-            })
+    const [searchQuery, setSearchQuery] = useState("")
+    const inputRefs = useRef({})
+    const [editingId, setEditingId] = useState(null)
 
-    }, [router]);
+    if (!token) {
+        router.push("/login")
+        return <Loading />
+    }
 
-    // Fungsi untuk memformat angka dengan titik sebagai pemisah ribuan
-    const formatNumber = (number) => {
-        return new Intl.NumberFormat("id-ID").format(number);
-    };
+    const formatNumber = (number) => new Intl.NumberFormat("id-ID").format(number)
 
     const handlePriceChange = async (id, name) => {
-        const newStock = inputRefs.current[id]?.value.replace(/\./g, ""); // Hapus titik sebelum konversi ke angka
-        const stockInt = Math.floor(Number(newStock));
+        const newStock = inputRefs.current[id]?.value.replace(/\./g, "")
+        const stockInt = Math.floor(Number(newStock))
 
         if (isNaN(stockInt) || stockInt <= 0) {
             return Swal.fire({
                 icon: "error",
                 title: "Harga tidak valid",
                 text: "Harap masukkan harga yang valid.",
-            });
+            })
         }
 
         const result = await Swal.fire({
@@ -61,16 +52,12 @@ export default function Stock() {
             showCancelButton: true,
             confirmButtonText: "Ya, ubah harga",
             cancelButtonText: "Batal",
-        });
+        })
 
-        if (!result.isConfirmed) return;
-
-        setMenus(menus.map((menu) =>
-            menu.id === id ? { ...menu, loading: true } : menu
-        ));
+        if (!result.isConfirmed) return
 
         try {
-            await axios.put("/api/stockSet", { id, stock: stockInt });
+            await axios.put("/api/stockSet", { id, stock: stockInt })
 
             await axios.post("/api/history", {
                 totalHarga: stockInt,
@@ -78,45 +65,33 @@ export default function Stock() {
                 category: "",
                 nama: name,
                 icon: "https://img.icons8.com/ultraviolet/50/available-updates.png"
-            });
+            })
 
-            setMenus(menus.map((menu) =>
-                menu.id === id ? { ...menu, stock: stockInt, loading: false } : menu
-            ));
-            setEditingId(null);
+            await refreshMenus()
+            setEditingId(null)
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
                 text: "Harga telah diperbarui dan riwayat tersimpan.",
-            });
+            })
 
         } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal memperbarui harga",
                 text: "Silakan coba lagi.",
-            });
-
-            setMenus(menus.map((menu) =>
-                menu.id === id ? { ...menu, loading: false } : menu
-            ));
+            })
         }
-    };
-
-    // Handle the search query change
-    const handleSearchChange = (e) => {
-        const query = e.target.value.toLowerCase();
-        setSearchQuery(query);
-
-        // Filter menus based on the search query
-        const filtered = menus.filter(menu => menu.name.toLowerCase().includes(query));
-        setFilteredMenus(filtered);
-    };
-
-    if (!isAuthenticated) {
-        return <Loading />
     }
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value)
+    }
+
+    const filteredMenus = menus.filter(menu => 
+        menu.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
 
     return (
         <div className="max-w-4xl mx-auto">
@@ -130,7 +105,7 @@ export default function Stock() {
                 />
             </div>
             <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
-                {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, loading }) => (
+                {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock }) => (
                     <div key={id} className="p-6 flex flex-col border rounded-3xl bg-white shadow-sm">
                         <span className="font-semibold text-xl mb-3">{name}</span>
                         <div className="flex flex-col text-center items-center">
@@ -148,28 +123,26 @@ export default function Stock() {
                                         placeholder="Ubah harga barang"
                                         ref={(el) => (inputRefs.current[id] = el)}
                                         onInput={(e) => {
-                                            let value = e.target.value.replace(/\D/g, "");
-                                            e.target.value = formatNumber(value);
+                                            let value = e.target.value.replace(/\D/g, "")
+                                            e.target.value = formatNumber(value)
                                         }}
                                     />
                                     <button
                                         onClick={() => handlePriceChange(id, name)}
-                                        disabled={loading}
-                                        className={`absolute end-1.5 bottom-1.5 rounded-full bg-green-100 p-2.5 text-xs border border-green-600 font-medium transition focus:ring-3 focus:outline-hidden ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        className="absolute end-1.5 bottom-1.5 rounded-full bg-green-100 p-2.5 text-xs border border-green-600 font-medium transition focus:ring-3 focus:outline-hidden"
                                     >
-                                        {loading ? "Memperbarui..." : "Ubah bahan"}
+                                        Ubah bahan
                                     </button>
                                 </div>
                             ) : (
-                                <>
-                                    {user?.role === "admin" &&
-                                        <div className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2.5 text-sm border border-green-600 font-medium transition duration-300 hover:scale-105  focus:ring-3 focus:outline-hidden w-full">
-                                            <button onClick={() => setEditingId(id)}>
-                                                <span className="text-gray-900 fony-semibold capitalize">ubah jumlah bahan</span>
-                                            </button>
-                                        </div>
-                                    }
-                                </>
+                                user?.role === "admin" && (
+                                    <button 
+                                        onClick={() => setEditingId(id)}
+                                        className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2.5 text-sm border border-green-600 font-medium transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden w-full"
+                                    >
+                                        <span className="text-gray-900 font-semibold capitalize">ubah jumlah bahan</span>
+                                    </button>
+                                )
                             )}
                         </div>
                         <div className="flex flex-col gap-2 mt-6">
@@ -201,7 +174,6 @@ export default function Stock() {
                     </div>
                 ))}
             </div>
-
         </div>
-    );
+    )
 }

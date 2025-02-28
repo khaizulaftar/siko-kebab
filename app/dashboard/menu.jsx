@@ -23,9 +23,9 @@ export default function Menu() {
     const [countMinuman, setCountMinuman] = useState(1)
 
     // pemasukan
-    const totalHargaKebab = menuKebabHrg * countKebab || menuKebabHrg;
-    const totalHargaBurger = menuBurgerHrg * countBurger || menuBurgerHrg;
-    const totalHargaMinuman = menuMinumanHrg * countMinuman || menuMinuman;
+    const totalHargaKebab = menuKebabHrg * countKebab || menuKebabHrg
+    const totalHargaBurger = menuBurgerHrg * countBurger || menuBurgerHrg
+    const totalHargaMinuman = menuMinumanHrg * countMinuman || menuMinuman
 
     // untuk mengambil nama barang
     const [namakebab, setNamakebab] = useState("")
@@ -34,9 +34,9 @@ export default function Menu() {
 
     const updateStock = async (nama, count) => {
         try {
-            await axios.post("/api/updateStock", { menu_name: nama, count });
+            await axios.post("/api/updateStock", { menu_name: nama, count })
         } catch (error) {
-            console.error("Gagal mengupdate stok!", error);
+
         }
     }
 
@@ -46,14 +46,14 @@ export default function Menu() {
             item: count,
             category,
             nama
-        };
+        }
         const data2 = {
             totalHarga,
             item: `+ ${count}`,
             category,
             nama,
             icon: icon
-        };
+        }
 
         const confirmResult = await Swal.fire({
             title: 'Konfirmasi',
@@ -62,34 +62,34 @@ export default function Menu() {
             showCancelButton: true,
             confirmButtonText: 'Ya, Simpan',
             cancelButtonText: 'Batal'
-        });
+        })
 
         if (!confirmResult.isConfirmed) {
-            return;
+            return
         }
 
         try {
-            await axios.post('/api/income', data);
-            await axios.post('/api/history', data2);
-            await updateStock(nama, count);
+            await axios.post('/api/income', data)
+            await axios.post('/api/history', data2)
+            await updateStock(nama, count)
 
             Swal.fire({
                 title: 'Success',
                 text: `Data ${category} berhasil disimpan!`,
                 icon: 'success',
-            });
+            })
         } catch (error) {
             Swal.fire({
                 title: 'Error',
                 text: `Gagal mengirim data ${category}!`,
                 icon: 'error',
-            });
+            })
         }
-    };
+    }
 
-    const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab, "https://img.icons8.com/emoji/50/burrito-emoji.png");
-    const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger, "https://img.icons8.com/emoji/50/hamburger-emoji.png");
-    const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman, "https://img.icons8.com/emoji/50/cup-with-straw-emoji.png");
+    const kirimKeIncomeKebab = () => kirimKeIncome(totalHargaKebab, countKebab, "kebab", namakebab, "https://img.icons8.com/emoji/50/burrito-emoji.png")
+    const kirimKeIncomeBurger = () => kirimKeIncome(totalHargaBurger, countBurger, "burger", namaburger, "https://img.icons8.com/emoji/50/hamburger-emoji.png")
+    const kirimKeIncomeMinuman = () => kirimKeIncome(totalHargaMinuman, countMinuman, "minuman", namaminuman, "https://img.icons8.com/emoji/50/cup-with-straw-emoji.png")
 
 
     useEffect(() => {
@@ -114,8 +114,8 @@ export default function Menu() {
                     <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-6 py-2.5 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                         href="/trafik">
                         <span className="absolute -end-full transition-all group-hover:end-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         </span>
                         <span className="text-sm font-medium transition-all group-hover:me-4 capitalize"> lihat semua </span>
@@ -138,8 +138,9 @@ export default function Menu() {
                         <div>
                             <p className="capitalize mb-6">daftar menu</p>
                             <div className="flex flex-wrap">
-                                {menuKebab.map((value) => (
+                                {menuKebab.map((value, index) => (
                                     <button
+                                        key={index}
                                         onClick={() => {
                                             setMenuKebabHrg(value.price)
                                             setNamakebab(value.name)
@@ -154,20 +155,20 @@ export default function Menu() {
                         <div className="flex justify-between items-center">
                             <div className="flex gap-1 items-center">
                                 <button onClick={() => countKebab > 0 && setCountKebab(countKebab - 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-red-100'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
                                     </svg>
                                 </button>
                                 <span className='flex border w-14 h-10 items-center justify-center rounded-xl shadow-sm bg-gray-100'>{countKebab}</span>
                                 <button onClick={() => setCountKebab(countKebab + 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-green-100'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                 </button>
                             </div>
                             <button
                                 onClick={kirimKeIncomeKebab}
-                                class="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
+                                className="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
                         </div>
                     </div>
 
@@ -185,13 +186,14 @@ export default function Menu() {
                         <div>
                             <p className="capitalize mb-6">daftar menu</p>
                             <div className="flex flex-wrap">
-                                {menuBurger.map((value) => (
+                                {menuBurger.map((value, index) => (
                                     <button
+                                        key={index}
                                         onClick={() => {
                                             setMenuBurgerHrg(value.price)
                                             setNamaBurger(value.name)
                                         }}
-                                        class="px-5 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80">
+                                        className="px-5 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80">
                                         {value.name}
                                     </button>
                                 ))}
@@ -200,20 +202,21 @@ export default function Menu() {
                         <div className="flex justify-between items-center">
                             <div className="flex gap-1 items-center">
                                 <button onClick={() => countBurger > 0 && setCountBurger(countBurger - 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-red-100'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
                                     </svg>
                                 </button>
                                 <span className='flex border w-14 h-10 items-center justify-center rounded-xl shadow-sm bg-gray-100'>{countBurger}</span>
                                 <button onClick={() => setCountBurger(countBurger + 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-green-100'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                 </button>
                             </div>
                             <button
                                 onClick={kirimKeIncomeBurger}
-                                class="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
+                                className="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">
+                                tambah</button>
                         </div>
                     </div>
 
@@ -231,13 +234,14 @@ export default function Menu() {
                         <div>
                             <p className="capitalize mb-6">daftar menu</p>
                             <div className="flex flex-wrap">
-                                {menuMinuman.map((value) => (
+                                {menuMinuman.map((value, index) => (
                                     <button
+                                        key={index}
                                         onClick={() => {
                                             setMenuMinumanHrg(value.price)
                                             setNamaMinuman(value.name)
                                         }}
-                                        class="px-5 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80">
+                                        className="px-5 py-2 tracking-wide text-gray-800 capitalize text-sm transition-colors duration-300 transform bg-white rounded-full m-1 border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80">
                                         {value.name}
                                     </button>
                                 ))}
@@ -246,20 +250,20 @@ export default function Menu() {
                         <div className="flex justify-between items-center">
                             <div className="flex gap-1 items-center">
                                 <button onClick={() => countMinuman > 0 && setCountMinuman(countMinuman - 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-red-100'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
                                     </svg>
                                 </button>
                                 <span className='flex border w-14 h-10 items-center justify-center rounded-xl shadow-sm bg-gray-100'>{countMinuman}</span>
                                 <button onClick={() => setCountMinuman(countMinuman + 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-green-100'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                 </button>
                             </div>
                             <button
                                 onClick={kirimKeIncomeMinuman}
-                                class="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
+                                className="px-6 py-2.5 text-sm border-2 border-green-600 font-medium tracking-wide text-gray-600 hover:text-white capitalize transition duration-300 transform bg-green-200 rounded-full hover:bg-green-500 hover:scale-110 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">tambah</button>
                         </div>
                     </div>
                 </div>
