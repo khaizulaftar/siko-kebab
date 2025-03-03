@@ -10,6 +10,7 @@ export default function History() {
     const [history, setHistory] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const router = useRouter()
 
     useEffect(() => {
@@ -21,7 +22,11 @@ export default function History() {
         }
 
         axios.get("/api/history")
-            .then(response => setHistory(response.data))
+            .then(response => {
+                setHistory(response.data);
+                setIsLoading(false);
+            });
+
     }, [router])
 
     const filteredHistory = Object.entries(history).map(([date, items]) => {
@@ -42,7 +47,7 @@ export default function History() {
         ]
     }).filter(([date, items]) => items.length > 0)
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || isLoading) {
         return <Loading />
     }
 

@@ -15,6 +15,7 @@ export default function Dashboard() {
 
     const [showPemasukan, setShowPemasukan] = useState(true)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const router = useRouter()
 
     useEffect(() => {
@@ -27,19 +28,22 @@ export default function Dashboard() {
     }, [router])
 
     const { data: dataPemasukan = {}, mutate: refreshIncome } = useSWR("/api/income", 
-        url => axios.get(url).then(res => res.data.data), 
+        url => axios.get(url).then(res => res.data.data).finally(() => setIsLoading(false)), 
         { refreshInterval: 3000 }
     )
     
     const { data: stock = [], mutate: refreshStock } = useSWR("/api/stockSet", 
-        url => axios.get(url).then(res => res.data), 
-        { refreshInterval: 3000 }
+        url => axios.get(url).then(res => res.data).finally(() => setIsLoading(false)),
     )
-    
 
+    if (isLoading) {
+        return <Loading />
+    }
+    
     if (!isAuthenticated) {
         return <Loading />
     }
+    
 
 
     return (

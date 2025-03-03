@@ -13,6 +13,7 @@ export default function Setting() {
     const [formattedPrices, setFormattedPrices] = useState({})
     const [searchQuery, setSearchQuery] = useState("")
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [user, setUser] = useState(null)
     const router = useRouter()
 
@@ -36,9 +37,14 @@ export default function Setting() {
                     return acc
                 }, {})
                 setFormattedPrices(initialPrices)
+                setIsLoading(false)
             })
 
     }, [router])
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     const handleInputChange = (id, e) => {
         let value = e.target.value.replace(/\D/g, "")
@@ -118,7 +124,7 @@ export default function Setting() {
                 icon: "https://img.icons8.com/ultraviolet/50/settings.png",
             })
         } catch (error) {
-            
+
         }
     }
 
