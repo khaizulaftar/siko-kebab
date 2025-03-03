@@ -41,7 +41,7 @@ export default function Trafik() {
 
     return (
         <>
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto min-h-screen">
                 <div className="mx-4 mt-6 sm:mb-6 mb-24">
                     <ChartIncome jumlahHari={14} />
                     <div className="my-6 grid sm:grid-cols-2 gap-6">

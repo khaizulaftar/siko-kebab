@@ -154,7 +154,7 @@ export default function Profile() {
     }
 
     return (
-        <div className="p-4 max-w-4xl mx-auto">
+        <div className="p-4 max-w-4xl mx-auto min-h-screen">
             <div className="mt-4 sm:grid grid-cols-2 gap-6">
                 <div>
                     <div className="border p-6 bg-white rounded-3xl shadow-sm flex flex-col items-center">

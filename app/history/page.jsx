@@ -48,7 +48,7 @@ export default function History() {
 
     return (
         <>
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto min-h-screen">
                 <div className="w-full pb-3 pt-6 bg-[#F9F9FB] sticky top-0 flex items-center">
                     <input
                         type="text"

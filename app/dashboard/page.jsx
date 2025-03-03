@@ -44,7 +44,7 @@ export default function Dashboard() {
 
     return (
         <>
-            <div className="max-w-5xl mx-auto px-4">
+            <div className="max-w-5xl mx-auto px-4 min-h-screen">
                 {/* jumlah pemasukan */}
                 <div className="card border p-6 rounded-3xl my-6 shadow-sm bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
                     <div className="flex flex-col gap-8">
