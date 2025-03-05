@@ -71,8 +71,8 @@ export default function History() {
                                 <div className="grid grid-1 sm:grid-cols-2 gap-3 border rounded-3xl p-6 shadow-sm">
                                     {items.map((value) => (
                                         <div key={value.id} className="flex items-center gap-2">
-                                            <div className="p-2 rounded-full flex items-center border">
-                                                <img src={value.icon} alt="icon" className="w-6" />
+                                            <div className="p-1 rounded-full flex items-center border">
+                                                <img src={value.icon} alt="icon" className="w-8" />
                                             </div>
                                             <div className="flex flex-col gap-2 w-full">
                                                 <div className="flex items-center justify-between">
