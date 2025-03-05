@@ -35,17 +35,11 @@ export default function Dashboard() {
     const { data: stock = [], mutate: refreshStock } = useSWR("/api/stockSet", 
         url => axios.get(url).then(res => res.data).finally(() => setIsLoading(false)),
     )
-
-    if (isLoading) {
+    
+    if (!isAuthenticated || isLoading) {
         return <Loading />
     }
     
-    if (!isAuthenticated) {
-        return <Loading />
-    }
-    
-
-
     return (
         <>
             <div className="max-w-5xl mx-auto px-4 min-h-screen">
