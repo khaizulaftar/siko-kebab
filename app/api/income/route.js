@@ -20,8 +20,6 @@ export async function GET() {
         const today = new Date().toLocaleDateString('id-ID', {
             weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
         }).replace(/\//g, '-')
-
-        await connection.end()
         
         return NextResponse.json({
             success: true,

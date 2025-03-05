@@ -20,7 +20,6 @@ export async function GET() {
             ORDER BY tanggal ASC
         `)
 
-        await connection.end()
         const result = { tanggal: [], hari: {}, total_pemasukan: [] }
 
         rows.forEach(row => {

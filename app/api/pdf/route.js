@@ -8,8 +8,6 @@ export async function GET() {
             "SELECT * FROM history WHERE DATE(tanggal) = CURDATE()"
         )
         
-        await connection.end()
-        
         return NextResponse.json(rows)
     } catch (error) {
         return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
