@@ -19,7 +19,7 @@ export default function ChartIncome({jumlahHari}) {
 
     return (
         <>
-            <div className="w-full p-6 bg-white shadow-sm rounded-3xl border wrap overflow-hidden">
+            <div className="w-full p-6 bg-white rounded-3xl border wrap overflow-hidden">
                 <h2 className="text-xl font-bold text-gray-800 mb-4 text-center capitalize">Traffic penghasilan</h2>
                 <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end  px-4">
                     <div className="flex flex-wrap gap-4 sm:gap-6 items-end w-full justify-center">

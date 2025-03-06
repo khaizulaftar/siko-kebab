@@ -89,14 +89,14 @@ export default function Menu() {
         <div className="mt-12 mb-24 sm:mb-6">
             <div className="flex items-center justify-between mb-6">
                 <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
-                <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-6 py-2.5 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
+                <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                     href="/trafik">
                     <span className="absolute -end-full transition-all group-hover:end-4">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                         </svg>
                     </span>
-                    <span className="text-sm font-medium transition-all group-hover:me-4 capitalize">lihat semua</span>
+                    <span className="text-sm transition-all group-hover:me-4 capitalize">lihat semua</span>
                 </Link>
             </div>
 
@@ -136,7 +136,7 @@ export default function Menu() {
                         totalHarga: totalHargaMinuman,
                         icon: "https://img.icons8.com/emoji/50/cup-with-straw-emoji.png"
                     }].map((item, index) => (
-                        <div key={index} className="flex flex-col align-center gap-6 p-6 border rounded-3xl shadow-sm bg-white">
+                        <div key={index} className="flex flex-col align-center gap-6 p-6 border rounded-3xl bg-white">
                             <div className="flex items-center flex-col">
                                 <div className='w-full flex items-center justify-between mb-6'>
                                     <img src={item.icon} alt={`icon ${item.name}`} />
@@ -162,21 +162,21 @@ export default function Menu() {
                             </div>
                             <div className="flex justify-between items-center">
                                 <div className="flex gap-1 items-center">
-                                    <button onClick={() => item.count > 1 && item.setCount(item.count - 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-red-100'>
+                                    <button onClick={() => item.count > 1 && item.setCount(item.count - 1)} className='p-2.5 border rounded-xl hover:bg-red-100'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
                                         </svg>
                                     </button>
 
-                                    <span className='flex border w-14 h-10 items-center justify-center rounded-xl shadow-sm bg-gray-100'>{item.count}</span>
+                                    <span className='flex border w-14 h-10 items-center justify-center rounded-xl bg-gray-100'>{item.count}</span>
 
-                                    <button onClick={() => item.setCount(item.count + 1)} className='p-2.5 border rounded-xl shadow-sm hover:bg-green-100'>
+                                    <button onClick={() => item.setCount(item.count + 1)} className='p-2.5 border rounded-xl hover:bg-green-100'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                         </svg>
                                     </button>
                                 </div>
-                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-6 py-2.5 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-500">Tambah</button>
+                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 hover:text-white">Tambah</button>
                             </div>
                         </div>
                     ))}

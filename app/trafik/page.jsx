@@ -45,7 +45,7 @@ export default function Trafik() {
                 <div className="mx-4 mt-6 sm:mb-6 mb-24">
                     <ChartIncome jumlahHari={14} />
                     <div className="my-6 grid sm:grid-cols-2 gap-6">
-                        <div className="p-6 bg-white shadow-sm rounded-3xl border">
+                        <div className="p-6 bg-white rounded-3xl border">
                             <h2 className="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik kebab</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
@@ -68,7 +68,7 @@ export default function Trafik() {
                             </div>
                         </div>
 
-                        <div className="p-6 bg-white shadow-sm rounded-3xl border">
+                        <div className="p-6 bg-white rounded-3xl border">
                             <h2 className="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik burger</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
@@ -91,7 +91,7 @@ export default function Trafik() {
                             </div>
                         </div>
 
-                        <div className="p-6 bg-white shadow-sm rounded-3xl border">
+                        <div className="p-6 bg-white rounded-3xl border">
                             <h2 className="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik minuman</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>

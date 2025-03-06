@@ -189,12 +189,12 @@ export default function Setting() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
                     {filteredMenus.map(({ id, icon, category, name, price, dose, loading, composition }) => (
-                        <div key={id} className="p-6 border rounded-3xl bg-white shadow-sm">
+                        <div key={id} className="p-6 border rounded-3xl bg-white">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center gap-2">
                                     <img width="35" height="35" src={icon} alt="hamburger" />
                                     <div className="flex flex-col">
-                                        <span className="text-md font-bold capitalize">{category}</span>
+                                        <span className="text-md font-semibold capitalize">{category}</span>
                                         <span className="text-sm capitalize">{name}</span>
                                     </div>
                                 </div>
@@ -203,8 +203,8 @@ export default function Setting() {
                                         <span className="text-xl font-semibold text-green-600">
                                             Rp{new Intl.NumberFormat("id-ID").format(Number(price) || 0)}
                                         </span>
-                                        <span className="text-md font-semibold text-gray-600">|</span>
-                                        <span className="text-lg font-semibold capitalize text-gray-600">{dose}</span>
+                                        <span className="text-lg font-semibold text-gray-600">|</span>
+                                        <span className="text-xl font-semibold text-gray-600">{dose}</span>
                                     </div>
                                 </div>
                             </div>
@@ -221,7 +221,7 @@ export default function Setting() {
                                     <button
                                         onClick={() => handlePriceChange(id, category, name)}
                                         disabled={loading}
-                                        className={`absolute end-1.5 bottom-1.5 rounded-full bg-green-100 p-2.5 text-xs border border-green-600 font-medium transition focus:ring-3 focus:outline-hidden" ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        className={`absolute end-1.5 bottom-1.5 rounded-full bg-green-100 py-2.5 px-5 text-xs border border-green-600 transition focus:ring-3 focus:outline-hidden" ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                                     >
                                         {loading ? "Memperbarui..." : "Ubah Harga"}
                                     </button>
@@ -229,9 +229,9 @@ export default function Setting() {
                             ) : (
                                 <>
                                     {user?.role === "admin" &&
-                                        <div className="flex mt-3 items-center justify-center rounded-full bg-green-100 p-2.5 text-sm border border-green-600 font-medium transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden">
+                                        <div className="flex mt-3 items-center justify-center rounded-full bg-green-100 p-2 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden">
                                             <button
-                                                className="capitalize text-gray-800 font-semibold"
+                                                className="capitalize text-gray-800"
                                                 onClick={() => setEditingId(id)}
                                             >
                                                 ubah harga
@@ -241,13 +241,13 @@ export default function Setting() {
                                 </>
                             )}
                             <div className="mt-6">
-                                <p className="capitalize font-semibold">pengurangan bahan</p>
+                                <p className="capitalize font-semibold mb-3 text-md">pengurangan bahan</p>
                                 {composition &&
                                     Object.entries(composition).map(([ingredient, qty]) => (
                                         <div key={ingredient} className="flex items-center justify-between border-b py-2">
-                                            <span className="text-gray-600 text-sm font-semibold">{ingredient}</span>
+                                            <span className="text-gray-600 text-sm">{ingredient}</span>
                                             <div className="flex gap-4 items-center">
-                                                <span className="text-red-500 text-md font-semibold">- {qty} </span>
+                                                <span className="text-red-500 text-sm">- {qty} </span>
                                                 {
                                                     user?.role === "admin" && <button className="" onClick={() => handleQtyChange(id, ingredient, qty, composition)}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 text-blue-500">

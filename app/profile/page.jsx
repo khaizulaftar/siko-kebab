@@ -157,7 +157,7 @@ export default function Profile() {
         <div className="p-4 max-w-4xl mx-auto min-h-screen">
             <div className="mt-4 sm:grid grid-cols-2 gap-6">
                 <div>
-                    <div className="border p-6 bg-white rounded-3xl shadow-sm flex flex-col items-center">
+                    <div className="border p-6 bg-white rounded-3xl flex flex-col items-center">
                         {/* Avatar */}
                         <img
                             src={user.role === "admin"
@@ -180,22 +180,22 @@ export default function Profile() {
                     </div>
                 </div>
                 <div className="mt-12 sm:mt-0">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-6">
                         <span className="capitalize font-semibold text-gray-600 text-lg">nama nama staf</span>
                         {user?.role === "admin" &&
                             <button onClick={handleAddUser}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-green-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-10 text-green-600">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                                 </svg>
                             </button>}
                     </div>
                     {daftar.map((value, index) => (
-                        <div key={index} className="flex gap-3 items-center mt-3 border rounded-3xl p-6 shadow-sm bg-white">
+                        <div key={index} className="flex gap-3 items-center mt-3 border rounded-3xl p-6 bg-white">
                             <div className="border p-2 rounded-full bg-gray-200">
                                 <img
                                     src={value.role === "admin"
-                                        ? "https://img.icons8.com/ios/30/administrator-male--v1.png"
-                                        : "https://img.icons8.com/ios/30/commercial-development-management.png"}
+                                        ? "https://img.icons8.com/ios/40/administrator-male--v1.png"
+                                        : "https://img.icons8.com/ios/40/commercial-development-management.png"}
                                     alt={value.role}
                                 />
                             </div>
@@ -222,7 +222,7 @@ export default function Profile() {
             </div>
             <div className="mt-16 sm:mb-0 mb-20 flex justify-center max-w-md mx-auto">
                 <button
-                    className="w-full bg-red-100 border-2 border-red-600 text-lg font-semibold text-red-600 hover:text-white py-2.5 px-6 rounded-full shadow-md transition hover:bg-red-600"
+                    className="w-full bg-red-100 border-2 border-red-600 text-lg font-semibold text-red-600 hover:text-white py-2.5 px-6 rounded-full transition hover:bg-red-600"
                     onClick={() => {
                         Cookies.remove("token")
                         router.push("/login")

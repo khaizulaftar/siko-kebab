@@ -6,7 +6,7 @@ export default function Sidebar() {
             <div className="h-screen p-3 flex-col justify-between items-center border-e bg-white hidden sm:flex sticky top-0">
                 <img src="/images/siko kebab.png" alt="logo" className="w-16 mx-auto" />
 
-                <div className="border rounded-xl flex flex-col gap-3 p-3 shadow-sm">
+                <div className="border rounded-xl flex flex-col gap-3 p-3">
                     <Link
                         href="/"
                         className="group relative flex justify-center rounded-xl border border-transparent hover:scale-110 p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-80"

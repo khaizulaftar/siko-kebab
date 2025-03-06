@@ -12,14 +12,14 @@ export default function Stock() {
     const router = useRouter()
     const token = Cookies.get("token")
 
-    const { data: menus = [], mutate: refreshMenus } = useSWR("/api/stockSet", 
-        () => axios.get("/api/stockSet").then(res => res.data), 
+    const { data: menus = [], mutate: refreshMenus } = useSWR("/api/stockSet",
+        () => axios.get("/api/stockSet").then(res => res.data),
         { refreshInterval: 5000 }
     )
 
-    const { data: user } = useSWR("/api/auth/profile", () => 
+    const { data: user } = useSWR("/api/auth/profile", () =>
         axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
-        .then(res => res.data.user)
+            .then(res => res.data.user)
     )
 
     const [searchQuery, setSearchQuery] = useState("")
@@ -89,7 +89,7 @@ export default function Stock() {
         setSearchQuery(e.target.value)
     }
 
-    const filteredMenus = menus.filter(menu => 
+    const filteredMenus = menus.filter(menu =>
         menu.name.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
@@ -110,14 +110,14 @@ export default function Stock() {
             </div>
             <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
                 {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock }) => (
-                    <div key={id} className="p-6 flex flex-col border rounded-3xl bg-white shadow-sm">
+                    <div key={id} className="p-6 flex flex-col border rounded-3xl bg-white">
                         <span className="font-semibold text-xl mb-3">{name}</span>
                         <div className="flex flex-col text-center items-center">
-                            <span className="capitalize font-semibold">jumlah Stock</span>
-                            <div className="flex gap-1">
-                                <span className="font-semibold text-xl text-gray-700">{formatNumber(stock)}</span>
-                                <span className="text-md text-gray-700 font-semibold">|</span>
-                                <span className="text-lg font-semibold capitalize text-gray-700">{dose}</span>
+                            <span className="capitalize font-semibold text-gray-600">jumlah Stock</span>
+                            <div className="flex gap-1 items-center">
+                                <span className="font-semibold text-xl">{formatNumber(stock)}</span>
+                                <span className="text-lg font-semibold">|</span>
+                                <span className="text-xl font-semibold">{dose}</span>
                             </div>
                             {editingId === id ? (
                                 <div className="relative mt-3 w-full">
@@ -133,18 +133,18 @@ export default function Stock() {
                                     />
                                     <button
                                         onClick={() => handlePriceChange(id, name)}
-                                        className="absolute end-1.5 bottom-1.5 rounded-full bg-green-100 p-2.5 text-xs border border-green-600 font-medium transition focus:ring-3 focus:outline-hidden"
+                                        className="absolute end-1.5 bottom-1.5 rounded-full bg-green-100 px-5 py-2.5 p text-xs border border-green-600 transition focus:ring-3 focus:outline-hidden"
                                     >
                                         Ubah bahan
                                     </button>
                                 </div>
                             ) : (
                                 user?.role === "admin" && (
-                                    <button 
+                                    <button
                                         onClick={() => setEditingId(id)}
-                                        className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2.5 text-sm border border-green-600 font-medium transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden w-full"
+                                        className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden w-full capitalize"
                                     >
-                                        <span className="text-gray-900 font-semibold capitalize">ubah jumlah bahan</span>
+                                        ubah jumlah bahan
                                     </button>
                                 )
                             )}

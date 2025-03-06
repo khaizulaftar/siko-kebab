@@ -28,7 +28,7 @@ export default function Login() {
             <div className="px-4 mb-32 sm-mb-0 max-w-lg mx-auto min-h-screen">
                 <img src="/images/siko kebab.png" alt="logo" className="w-52 mx-auto" />
 
-                <form onSubmit={handleLogin} className="mt-6 space-y-4 rounded-lg p-6 shadow-md">
+                <form onSubmit={handleLogin} className="mt-6 space-y-4 rounded-lg p-6">
                     <p className="text-center text-lg font-semibold text-gray-600">login ke akun anda</p>
                     {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 

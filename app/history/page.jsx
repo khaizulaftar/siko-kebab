@@ -68,7 +68,7 @@ export default function History() {
                         filteredHistory.map(([date, items]) => (
                             <div key={date} className="mb-12">
                                 <p className="capitalize font-semibold text-md mb-4">{date}</p>
-                                <div className="grid grid-1 sm:grid-cols-2 gap-3 border rounded-3xl p-6 shadow-sm">
+                                <div className="grid grid-1 sm:grid-cols-2 gap-3 border rounded-3xl p-6">
                                     {items.map((value) => (
                                         <div key={value.id} className="flex items-center gap-2">
                                             <div className="p-1 rounded-full flex items-center border">

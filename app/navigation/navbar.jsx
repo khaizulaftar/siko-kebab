@@ -4,7 +4,7 @@ export default function Navbar() {
     return (
         <>
             <div className="fixed z-50 w-full h-16 -translate-x-1/2  bottom-0 left-1/2 dark:bg-gray-700 dark:border-gray-600 sm:hidden">
-                <div className="grid h-full grid-cols-5 bg-orange-100 bg-white border border-gray-200 rounded-tl-3xl rounded-tr-3xl shadow-sm">
+                <div className="grid h-full grid-cols-5 bg-orange-100 bg-white border border-gray-200 rounded-tl-3xl rounded-tr-3xl">
                     <Link
                         href="/stock"
                         data-tooltip-target="tooltip-home" type="button" className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-100 dark:hover:bg-gray-800 group">
