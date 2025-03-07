@@ -112,7 +112,7 @@ export default function Menu() {
                         nama: namakebab,
                         setNama: setNamakebab,
                         totalHarga: totalHargaKebab,
-                        icon: "https://img.icons8.com/emoji/50/burrito-emoji.png"
+                        icon: "https://img.icons8.com/bubbles/100/burrito.png"
                     }, {
                         name: "burger",
                         menu: menuBurger,
@@ -123,7 +123,7 @@ export default function Menu() {
                         nama: namaburger,
                         setNama: setNamaBurger,
                         totalHarga: totalHargaBurger,
-                        icon: "https://img.icons8.com/emoji/50/hamburger-emoji.png"
+                        icon: "https://img.icons8.com/bubbles/100/hamburger.png"
                     }, {
                         name: "minuman",
                         menu: menuMinuman,
@@ -134,12 +134,12 @@ export default function Menu() {
                         nama: namaminuman,
                         setNama: setNamaMinuman,
                         totalHarga: totalHargaMinuman,
-                        icon: "https://img.icons8.com/emoji/50/cup-with-straw-emoji.png"
+                        icon: "https://img.icons8.com/bubbles/100/iced-coffee.png"
                     }].map((item, index) => (
                         <div key={index} className="flex flex-col align-center gap-6 p-6 border rounded-3xl bg-white">
-                            <div className="flex items-center flex-col">
-                                <div className='w-full flex items-center justify-between mb-6'>
-                                    <img src={item.icon} alt={`icon ${item.name}`} />
+                            <div className="flex items-center flex-col gap-3">
+                                <div className='w-full flex items-center justify-between'>
+                                    <img src={item.icon} alt={`icon ${item.name}`} className='w-20'/>
                                     <span className='text-md font-semibold capitalize text-gray-600'>{item.nama}</span>
                                 </div>
                                 <div className='flex items-center gap-3'>
@@ -148,7 +148,7 @@ export default function Menu() {
                                 </div>
                             </div>
                             <div>
-                                <p className="capitalize mb-6">daftar menu</p>
+                                <p className="capitalize mb-3">daftar menu</p>
                                 <div className="flex flex-wrap">
                                     {item.menu.map((value, idx) => (
                                         <button key={idx} onClick={() => {

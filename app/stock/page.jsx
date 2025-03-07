@@ -64,7 +64,7 @@ export default function Stock() {
                 item: "change",
                 category: "",
                 nama: name,
-                icon: "https://img.icons8.com/ultraviolet/50/available-updates.png"
+                icon: "https://img.icons8.com/bubbles/100/connection-sync.png"
             })
 
             await refreshMenus()

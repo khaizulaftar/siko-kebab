@@ -121,7 +121,7 @@ export default function Setting() {
                 item: "change",
                 category,
                 nama: name,
-                icon: "https://img.icons8.com/ultraviolet/50/settings.png",
+                icon: "https://img.icons8.com/bubbles/100/gear.png",
             })
         } catch (error) {
 
@@ -171,6 +171,15 @@ export default function Setting() {
         }
     }
 
+    // untuk icon
+    const icons = {
+        kebab: "https://img.icons8.com/bubbles/100/burrito.png",
+        burger: "https://img.icons8.com/bubbles/100/hamburger.png",
+        minuman: "https://img.icons8.com/bubbles/100/iced-coffee.png",
+    }
+    const getCategoryIcon = (category) => icons[category.toLowerCase()] || icons.default
+
+
     if (!isAuthenticated) {
         return <Loading />
     }
@@ -188,11 +197,11 @@ export default function Setting() {
                     />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
-                    {filteredMenus.map(({ id, icon, category, name, price, dose, loading, composition }) => (
+                    {filteredMenus.map(({ id, category, name, price, dose, loading, composition }) => (
                         <div key={id} className="p-6 border rounded-3xl bg-white">
-                            <div className="flex items-start justify-between">
-                                <div className="flex items-center gap-2">
-                                    <img width="35" height="35" src={icon} alt="hamburger" />
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <img src={getCategoryIcon(category)} alt={category} className="w-14"/>
                                     <div className="flex flex-col">
                                         <span className="text-md font-semibold capitalize">{category}</span>
                                         <span className="text-sm capitalize">{name}</span>

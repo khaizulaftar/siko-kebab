@@ -23,9 +23,9 @@ export default function History() {
 
         axios.get("/api/history")
             .then(response => {
-                setHistory(response.data);
-                setIsLoading(false);
-            });
+                setHistory(response.data)
+                setIsLoading(false)
+            })
 
     }, [router])
 
@@ -71,9 +71,7 @@ export default function History() {
                                 <div className="grid grid-1 sm:grid-cols-2 gap-3 border rounded-3xl p-6">
                                     {items.map((value) => (
                                         <div key={value.id} className="flex items-center gap-2">
-                                            <div className="p-1 rounded-full flex items-center border">
-                                                <img src={value.icon} alt="icon" className="w-8" />
-                                            </div>
+                                            <img src={value.icon} alt="icon" className="w-11" />
                                             <div className="flex flex-col gap-2 w-full">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center">
