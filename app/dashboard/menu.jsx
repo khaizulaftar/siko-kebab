@@ -143,12 +143,12 @@ export default function Menu() {
                                     <span className='text-md font-semibold capitalize text-gray-600'>{item.nama}</span>
                                 </div>
                                 <div className='flex items-center gap-3'>
-                                    <span className="text-xl capitalize font-semibold">Rp{new Intl.NumberFormat('id-ID').format(item.totalHarga)}</span>
+                                    <span className="text-xl capitalize font-semibold text-gray-700">Rp{new Intl.NumberFormat('id-ID').format(item.totalHarga)}</span>
                                     <span className='text-green-500'>+ {item.count}</span>
                                 </div>
                             </div>
                             <div>
-                                <p className="capitalize mb-3">daftar menu</p>
+                                <p className="capitalize mb-3 font-semibold text-gray-700">daftar menu</p>
                                 <div className="flex flex-wrap">
                                     {item.menu.map((value, idx) => (
                                         <button key={idx} onClick={() => {
@@ -176,7 +176,7 @@ export default function Menu() {
                                         </svg>
                                     </button>
                                 </div>
-                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 hover:text-white">Tambah</button>
+                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 text-gray-700 hover:text-white">Tambah</button>
                             </div>
                         </div>
                     ))}

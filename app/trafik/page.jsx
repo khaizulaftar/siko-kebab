@@ -29,9 +29,9 @@ export default function Trafik() {
     }, [router])
 
     const getHariColor = (hari) => {
-        if (hari === "Jum") return "text-yellow-500 font-bold"
-        if (hari === "Min") return "text-red-500 font-bold"
-        if (hari === "Sen") return "text-green-500 font-bold"
+        if (hari === "Jum") return "text-yellow-500"
+        if (hari === "Min") return "text-red-500"
+        if (hari === "Sen") return "text-green-500"
         return "text-gray-600"
     }
 
@@ -46,7 +46,7 @@ export default function Trafik() {
                     <ChartIncome jumlahHari={14} />
                     <div className="my-6 grid sm:grid-cols-2 gap-6">
                         <div className="p-6 bg-white rounded-3xl border">
-                            <h2 className="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik kebab</h2>
+                            <h2 className="text-xl font-semibold text-gray-600 mb-4 text-center capitalize">trafik kebab</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
@@ -56,9 +56,9 @@ export default function Trafik() {
                                     {
                                         dataPemasukan.total_kebab.slice(-7).map((value, index) => (
                                             <div key={index} className="flex flex-col items-center justify-center relative mt-6">
-                                                <span className="text-sm absolute -top-6 font-semibold text-gray-600">{value}</span>
-                                                <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value}px` }}></span>
-                                                <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
+                                                <span className="text-sm absolute -top-6 text-gray-600">{value}</span>
+                                                <span className="w-6 bg-blue-500 transition-all duration-500" style={{ height: `${value}px` }}></span>
+                                                <span className={`text-sm capitalize ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
                                                     {dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]]}
                                                 </span>
                                             </div>
@@ -69,7 +69,7 @@ export default function Trafik() {
                         </div>
 
                         <div className="p-6 bg-white rounded-3xl border">
-                            <h2 className="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik burger</h2>
+                            <h2 className="text-xl font-semibold text-gray-600 mb-4 text-center capitalize">trafik burger</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
@@ -79,9 +79,9 @@ export default function Trafik() {
                                     {
                                         dataPemasukan.total_burger.slice(-7).map((value, index) => (
                                             <div key={index} className="flex flex-col items-center justify-center relative mt-6">
-                                                <span className="text-sm absolute -top-6 font-semibold text-gray-600">{value}</span>
-                                                <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value}px` }}></span>
-                                                <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
+                                                <span className="text-sm absolute -top-6 text-gray-600">{value}</span>
+                                                <span className="w-6 bg-blue-500 transition-all duration-500" style={{ height: `${value}px` }}></span>
+                                                <span className={`text-sm capitalize ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
                                                     {dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]]}
                                                 </span>
                                             </div>
@@ -92,7 +92,7 @@ export default function Trafik() {
                         </div>
 
                         <div className="p-6 bg-white rounded-3xl border">
-                            <h2 className="text-xl font-bold text-gray-800 mb-4 text-center capitalize">trafik minuman</h2>
+                            <h2 className="text-xl font-semibold text-gray-600 mb-4 text-center capitalize">trafik minuman</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
@@ -102,9 +102,9 @@ export default function Trafik() {
                                     {
                                         dataPemasukan.total_minuman.slice(-7).map((value, index) => (
                                             <div key={index} className="flex flex-col items-center justify-center relative mt-6">
-                                                <span className="text-sm absolute -top-6 text-gray-600 font-semibold">{value}</span>
-                                                <span className="w-2 bg-blue-500 rounded-t-full transition-all duration-500 hover:bg-blue-600" style={{ height: `${value}px` }}></span>
-                                                <span className={`text-sm capitalize font-semibold ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
+                                                <span className="text-sm absolute -top-6 text-gray-600">{value}</span>
+                                                <span className="w-6 bg-blue-500 transition-all duration-500" style={{ height: `${value}px` }}></span>
+                                                <span className={`text-sm capitalize ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
                                                     {dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]]}
                                                 </span>
                                             </div>

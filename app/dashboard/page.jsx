@@ -92,7 +92,7 @@ export default function Dashboard() {
                         <div className='col-span-2'>
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-2">
-                                    <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
+                                    <span className="capitalize font-semibold text-lg text-gray-600">jumlah menu terjual</span>
                                 </div>
                                 <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                                     href="/trafik">
@@ -101,7 +101,7 @@ export default function Dashboard() {
                                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                         </svg>
                                     </span>
-                                    <span className="text-sm transition-all group-hover:me-4 capitalize"> lihat semua </span>
+                                    <span className="text-sm transition-all group-hover:me-4 capitalize">lihat semua</span>
                                 </Link>
                             </div>
                             <ChartIncome jumlahHari={7} />
@@ -128,11 +128,11 @@ export default function Dashboard() {
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">
                         {stock.slice(0, 4).map((value,index) => (
                             <div key={index} className="p-6 border rounded-3xl flex items-center justify-between bg-white">
-                                <span className="capitalize text-gray-600 text-md">{value.name}</span>
+                                <span className="capitalize text-gray-600 text-md font-semibold">{value.name}</span>
                                 <div className='flex items-center gap-1'>
-                                    <span className="text-md text-gray-600">{value.stock}</span>
-                                    <span className='text-md text-gray-600'>|</span>
-                                    <span className="text-md text-gray-600">{value.dose}</span>
+                                    <span className="text-md text-gray-600 font-semibold text-green-500">{value.stock}</span>
+                                    <span className="text-md text-gray-600 font-semibold">|</span>
+                                    <span className="text-md text-gray-600 font-semibold">{value.dose}</span>
                                 </div>
                             </div>
                         ))}

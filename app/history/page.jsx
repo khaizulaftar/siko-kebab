@@ -70,8 +70,8 @@ export default function History() {
                                 <p className="capitalize font-semibold text-md mb-4">{date}</p>
                                 <div className="grid grid-1 sm:grid-cols-2 gap-3 border rounded-3xl p-6">
                                     {items.map((value) => (
-                                        <div key={value.id} className="flex items-center gap-2">
-                                            <img src={value.icon} alt="icon" className="w-11" />
+                                        <div key={value.id} className="flex items-center gap-1">
+                                            <img src={value.icon} alt="icon" className="w-12" />
                                             <div className="flex flex-col gap-2 w-full">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center">
