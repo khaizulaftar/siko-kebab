@@ -57,12 +57,14 @@ export default function Profile() {
         const { value: formValues } = await Swal.fire({
             title: "Tambah User Baru",
             html: `
-                <input id="swal-username" class="swal2-input" placeholder="Username">
-                <input id="swal-password" type="password" class="swal2-input" placeholder="Password">
-                <select id="swal-role" class="swal2-input">
-                    <option value="admin">Admin</option>
-                    <option value="staf">staf</option>
-                </select>
+                <div style="display: flex; flex-direction: column; gap: 10px; padding: 10px;">
+                    <input id="swal-username" class="swal2-input" placeholder="Username">
+                    <input id="swal-password" type="password" class="swal2-input" placeholder="Password">
+                    <select id="swal-role" class="swal2-input">
+                        <option value="admin">Admin</option>
+                        <option value="staf">Staf</option>
+                    </select>
+                </div>
             `,
             focusConfirm: false,
             preConfirm: () => {
@@ -100,8 +102,10 @@ export default function Profile() {
         const { value: formValues } = await Swal.fire({
             title: "Edit Profil",
             html: `
-                <input id="swal-username" class="swal2-input" placeholder="Username" value="${user.username}">
-                <input id="swal-password" type="password" class="swal2-input" placeholder="Password">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <input id="swal-username" class="swal2-input" placeholder="Masukkan Username" value="${user.username}">
+                    <input id="swal-password" type="password" class="swal2-input" placeholder="Masukkan Password">
+                </div>
             `,
             focusConfirm: false,
             preConfirm: () => {
@@ -161,18 +165,18 @@ export default function Profile() {
                         {/* Avatar */}
                         <img
                             src={user.role === "admin"
-                                ? "https://img.icons8.com/ios/80/administrator-male--v1.png"
-                                : "https://img.icons8.com/ios/80/commercial-development-management.png"}
+                                ? "https://img.icons8.com/3d-fluency/94/star-struck.png"
+                                : "https://img.icons8.com/3d-fluency/94/beaming-face-with-smiling-eyes-1.png"}
                             alt={user.role}
                         />
                         <h2 className="text-xl font-semibold text-gray-600 capitalize text">{user.username}</h2>
                         <div className="w-full mt-6 flex flex-col gap-2">
                             <div className="flex items-center justify-between">
-                                <span className="text-gray-600 text-sm">Role:</span>
+                                <span className="text-gray-600 text-sm font-semibold">Role:</span>
                                 <span className="text-gray-600 text-sm">{user.role}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                                <span className="text-gray-600 text-sm">password:</span>
+                                <span className="text-gray-600 text-sm font-semibold">password:</span>
                                 <span className="text-gray-600 text-sm">{user.password}</span>
                             </div>
                         </div>
@@ -181,24 +185,22 @@ export default function Profile() {
                 </div>
                 <div className="mt-12 sm:mt-0">
                     <div className="flex items-center justify-between mb-6">
-                        <span className="capitalize font-semibold text-gray-600 text-lg">nama nama staf</span>
+                        <span className="capitalize font-semibold text-gray-600 text-lg">jumlah staf</span>
                         {user?.role === "admin" &&
                             <button onClick={handleAddUser}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-10 text-green-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-green-600">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                                 </svg>
                             </button>}
                     </div>
                     {daftar.map((value, index) => (
-                        <div key={index} className="flex gap-3 items-center mt-3 border rounded-3xl p-6 bg-white">
-                            <div className="border p-2 rounded-full bg-gray-200">
-                                <img
-                                    src={value.role === "admin"
-                                        ? "https://img.icons8.com/ios/40/administrator-male--v1.png"
-                                        : "https://img.icons8.com/ios/40/commercial-development-management.png"}
-                                    alt={value.role}
-                                />
-                            </div>
+                        <div key={index} className="flex gap-2 items-center mt-3 border rounded-3xl p-6 bg-white">
+                            <img
+                                src={value.role === "admin"
+                                    ? "https://img.icons8.com/3d-fluency/50/star-struck.png"
+                                    : "https://img.icons8.com/3d-fluency/50/beaming-face-with-smiling-eyes-1.png"}
+                                alt={value.role}
+                            />
                             <div className="flex justify-between w-full">
                                 <div className="flex flex-col items-star gap-1">
                                     <span className="font-semibold text-gray-600">{value.username}</span>
@@ -218,17 +220,16 @@ export default function Profile() {
                         </div>
                     ))}
                 </div>
-
             </div>
-            <div className="mt-16 sm:mb-0 mb-20 flex justify-center max-w-md mx-auto">
+            <div className="mt-12 sm:mb-0 mb-20 flex justify-center max-w-md mx-auto">
                 <button
-                    className="w-full bg-red-100 border-2 border-red-600 text-lg font-semibold text-red-600 hover:text-white py-2.5 px-6 rounded-full transition hover:bg-red-600"
+                    className="w-full bg-red-100 border-2 border-red-600 text-md font-semibold text-red-600 hover:text-white py-2.5 px-6 rounded-full transition hover:bg-red-600 capitalize"
                     onClick={() => {
                         Cookies.remove("token")
                         router.push("/login")
                     }}
                 >
-                    Keluar
+                    keluar
                 </button>
             </div>
         </div >
