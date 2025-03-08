@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     cell: { flex: 1, padding: 4, textAlign: "center", fontSize: 10 }, // Isi tabel tetap kecil
 })
 
-const MyDocument = ({ data1, data2, data3 }) => (
+const MyDocument = ({ data1, data2, data3, role}) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <Text style={styles.header}>Laporan Harian</Text>
@@ -91,6 +91,30 @@ const MyDocument = ({ data1, data2, data3 }) => (
                     </View>
                 ))}
             </View>
+
+            {role === "admin" && (
+                <>
+                    <Text style={styles.sectionTitle}>Detail Harga Stok Bahan</Text>
+                    <View style={styles.table}>
+                        <View style={[styles.row, styles.headerRow]}>
+                            <Text style={styles.cellHeader}>Nama</Text>
+                            <Text style={styles.cellHeader}>Harga</Text>
+                            <Text style={styles.cellHeader}>Harga Masuk</Text>
+                            <Text style={styles.cellHeader}>Harga Keluar</Text>
+                            <Text style={styles.cellHeader}>Selisih</Text>
+                        </View>
+                        {data3?.map((item, index) => (
+                            <View key={index} style={styles.row}>
+                                <Text style={styles.cell}>{item.name}</Text>
+                                <Text style={styles.cell}>Rp{item.price.toLocaleString()}</Text>
+                                <Text style={styles.cell}>Rp{(item.price * item.stock).toLocaleString()}</Text>
+                                <Text style={styles.cell}>Rp{(item.out_stock * item.price).toLocaleString()}</Text>
+                                <Text style={styles.cell}>Rp{((item.stock - item.out_stock) * item.price).toLocaleString()}</Text>
+                            </View>
+                        ))}
+                    </View>
+                </>
+            )}
         </Page>
     </Document>
 )

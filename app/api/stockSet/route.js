@@ -13,16 +13,16 @@ export async function GET() {
 
 export async function PUT(req) {
     try {
-        const { id, stock } = await req.json()
-        if (!id || stock === undefined) {
-            return NextResponse.json({ message: 'ID dan jumlah stock baru diperlukan' }, { status: 400 })
+        const { id, stock, price } = await req.json()
+        if (!id || (stock === undefined && price === undefined)) {
+            return NextResponse.json({ message: 'ID dan salah satu dari stock atau price diperlukan' }, { status: 400 })
         }
 
         const db = await dbConnect()
         const today = new Date().toISOString().split('T')[0]
 
         const [[existing]] = await db.execute(
-            'SELECT stock, initial_stock, final_stock, out_stock, tanggal FROM ingredients WHERE id = ?',
+            'SELECT stock, initial_stock, final_stock, out_stock, tanggal, price FROM ingredients WHERE id = ?',
             [id]
         )
 
@@ -30,29 +30,34 @@ export async function PUT(req) {
             return NextResponse.json({ message: 'Menu tidak ditemukan' }, { status: 404 })
         }
 
-        let { stock: currentStock, initial_stock: initialStock, tanggal: lastUpdatedDate } = existing
-
-        if (lastUpdatedDate !== today) {
-            initialStock = currentStock
-        }
-
+        let { stock: currentStock, initial_stock: initialStock, tanggal: lastUpdatedDate, price: currentPrice } = existing
         let finalStock = existing.final_stock || 0
         let outStock = existing.out_stock || 0
 
-        if (stock > currentStock) {
-            finalStock += stock - currentStock
-        } else if (stock < currentStock) {
-            outStock += currentStock - stock
+        // Update stok jika diberikan
+        if (stock !== undefined) {
+            if (lastUpdatedDate !== today) {
+                initialStock = currentStock
+            }
+
+            if (stock > currentStock) {
+                finalStock += stock - currentStock
+            } else if (stock < currentStock) {
+                outStock += currentStock - stock
+            }
         }
 
+        // Update harga jika diberikan
+        const newPrice = price !== undefined ? price : currentPrice
+
         const [result] = await db.execute(
-            'UPDATE ingredients SET stock = ?, initial_stock = ?, final_stock = ?, out_stock = ?, tanggal = ? WHERE id = ?',
-            [stock, initialStock, finalStock, outStock, today, id]
+            'UPDATE ingredients SET stock = ?, initial_stock = ?, final_stock = ?, out_stock = ?, price = ?, tanggal = ? WHERE id = ?',
+            [stock ?? currentStock, initialStock, finalStock, outStock, newPrice, today, id]
         )
 
         return NextResponse.json({
-            message: result.affectedRows ? 'Stock berhasil diperbarui' : 'Menu tidak ditemukan',
-            data: { stock, initialStock, finalStock, outStock, tanggal: today }
+            message: result.affectedRows ? 'Data berhasil diperbarui' : 'Menu tidak ditemukan',
+            data: { stock, initialStock, finalStock, outStock, price: newPrice, tanggal: today }
         }, { status: result.affectedRows ? 200 : 404 })
 
     } catch (error) {

@@ -118,7 +118,7 @@ export default function Setting() {
         try {
             await axios.post("/api/history", {
                 totalHarga,
-                item: "change",
+                item: "harga diubah",
                 category,
                 nama: name,
                 icon: "https://img.icons8.com/bubbles/100/gear.png",

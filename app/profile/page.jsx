@@ -204,7 +204,9 @@ export default function Profile() {
                             <div className="flex justify-between w-full items-center">
                                 <div className="flex flex-col items-star gap-1">
                                     <span className="font-semibold text-gray-600">{value.username}</span>
-                                    <span className="text-sm text-gray-600">{value.password}</span>
+                                    {user?.role === "admin" &&
+                                        <span className="text-sm text-gray-600">{value.password}</span>
+                                    }
                                 </div>
                                 <div className="flex flex-col items-end gap-1">
                                     <span className="font-semibold text-gray-600">{value.role}</span>

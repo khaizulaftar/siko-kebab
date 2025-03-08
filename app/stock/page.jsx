@@ -33,24 +33,32 @@ export default function Stock() {
 
     const formatNumber = (number) => new Intl.NumberFormat("id-ID").format(number)
 
-    const handlePriceChange = async (id, name) => {
+    const handlePriceChange = async (id, name, currentStock) => {
         const newStock = inputRefs.current[id]?.value.replace(/\./g, "")
         const stockInt = Math.floor(Number(newStock))
 
         if (isNaN(stockInt) || stockInt <= 0) {
             return Swal.fire({
                 icon: "error",
-                title: "Harga tidak valid",
-                text: "Harap masukkan harga yang valid.",
+                title: "Jumlah tidak valid",
+                text: "Harap masukkan jumlah yang valid.",
+            })
+        }
+
+        if (user?.role === "staf" && stockInt < currentStock) {
+            return Swal.fire({
+                icon: "error",
+                title: "Akses Ditolak",
+                text: "Staff hanya bisa menambah stok, bukan mengurangi.",
             })
         }
 
         const result = await Swal.fire({
             title: "Apakah Anda yakin?",
-            text: "Harga akan diubah!",
+            text: "Jumlah stok akan diubah!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Ya, ubah harga",
+            confirmButtonText: "Ya, ubah stok",
             cancelButtonText: "Batal",
         })
 
@@ -61,7 +69,7 @@ export default function Stock() {
 
             await axios.post("/api/history", {
                 totalHarga: stockInt,
-                item: "change",
+                item: "stock diubah",
                 category: "",
                 nama: name,
                 icon: "https://img.icons8.com/bubbles/100/connection-sync.png"
@@ -73,17 +81,67 @@ export default function Stock() {
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: "Harga telah diperbarui dan riwayat tersimpan.",
+                text: "Stok telah diperbarui dan riwayat tersimpan.",
             })
 
         } catch (error) {
             Swal.fire({
                 icon: "error",
-                title: "Gagal memperbarui harga",
+                title: "Gagal memperbarui stok",
                 text: "Silakan coba lagi.",
             })
         }
     }
+
+    const handleEditPrice = async (id, name, currentPrice) => {
+        const { value: newPrice } = await Swal.fire({
+            title: `Ubah harga untuk ${name}`,
+            input: "text",
+            inputValue: formatNumber(currentPrice),
+            inputAttributes: { autocapitalize: "off" },
+            showCancelButton: true,
+            confirmButtonText: "Simpan",
+            cancelButtonText: "Batal",
+            didOpen: () => {
+                const input = Swal.getInput();
+                input.addEventListener("input", () => {
+                    let rawValue = input.value.replace(/\./g, "");
+                    if (!rawValue.match(/^\d+$/)) return;
+                    input.value = formatNumber(Number(rawValue));
+                });
+            },
+            preConfirm: (value) => value.replace(/\./g, ""),
+        });
+
+        if (!newPrice) return;
+
+        try {
+            await axios.put("/api/stockSet", { id, price: Number(newPrice) });
+
+            await axios.post("/api/history", {
+                totalHarga: Number(newPrice),
+                item: "jumlah diubah",
+                category: "",
+                nama: name,
+                icon: "https://img.icons8.com/bubbles/100/discount.png"
+            });
+
+            await refreshMenus();
+
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Harga telah diperbarui dan dicatat dalam riwayat.",
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Gagal memperbarui harga",
+                text: "Silakan coba lagi.",
+            });
+        }
+    };
+
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value)
@@ -109,15 +167,14 @@ export default function Stock() {
                 />
             </div>
             <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
-                {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock }) => (
+                {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, price }) => (
                     <div key={id} className="p-6 flex flex-col rounded-3xl bg-white">
-                        <span className="font-semibold text-xl mb-3">{name}</span>
+                        <span className="font-semibold text-md mb-3">{name}</span>
                         <div className="flex flex-col text-center items-center">
-                            <span className="capitalize font-semibold text-gray-600">jumlah Stock</span>
                             <div className="flex gap-1 items-center">
-                                <span className="font-semibold text-xl">{formatNumber(stock)}</span>
-                                <span className="text-lg font-semibold">|</span>
-                                <span className="text-xl font-semibold">{dose}</span>
+                                <span className="font-semibold text-xl text-gray-600">{formatNumber(stock)}</span>
+                                <span className="text-lg font-semibold text-gray-600">|</span>
+                                <span className="text-xl font-semibold text-gray-600">{dose}</span>
                             </div>
                             {editingId === id ? (
                                 <div className="relative mt-3 w-full">
@@ -132,27 +189,25 @@ export default function Stock() {
                                         }}
                                     />
                                     <button
-                                        onClick={() => handlePriceChange(id, name)}
+                                        onClick={() => handlePriceChange(id, name, stock)}
                                         className="absolute end-1.5 bottom-1.5 rounded-full bg-green-100 px-5 py-2.5 p text-xs border border-green-600 transition focus:ring-3 focus:outline-hidden"
                                     >
                                         Ubah bahan
                                     </button>
                                 </div>
                             ) : (
-                                user?.role === "admin" && (
-                                    <button
-                                        onClick={() => setEditingId(id)}
-                                        className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden w-full capitalize"
-                                    >
-                                        ubah jumlah bahan
-                                    </button>
-                                )
+                                <button
+                                    onClick={() => setEditingId(id)}
+                                    className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden w-full capitalize"
+                                >
+                                    ubah jumlah bahan
+                                </button>
                             )}
                         </div>
                         <div className="flex flex-col gap-2 mt-6">
                             <div className="flex items-center justify-between">
                                 <span className="text-sm capitalize">stok awal</span>
-                                <div className="flex gap-2">
+                                <div className="flex gap-1">
                                     <span>{formatNumber(initial_stock)}</span>
                                     <span>|</span>
                                     <span>{dose}</span>
@@ -160,7 +215,7 @@ export default function Stock() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm capitalize">jumlah masuk</span>
-                                <div className="flex gap-2">
+                                <div className="flex gap-1">
                                     <span>{formatNumber(final_stock)}</span>
                                     <span>|</span>
                                     <span>{dose}</span>
@@ -168,13 +223,42 @@ export default function Stock() {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm capitalize">jumlah habis</span>
-                                <div className="flex gap-2">
+                                <div className="flex gap-1">
                                     <span>{formatNumber(out_stock)}</span>
                                     <span>|</span>
                                     <span>{dose}</span>
                                 </div>
                             </div>
                         </div>
+                        {user?.role === "admin" &&
+                            <>
+                                <hr className="my-3" />
+                                <div className="flex flex-col text-center items-center">
+                                    <div className="flex items-center w-full justify-between">
+                                        <div className="flex items-center gap-1">
+                                            <span className="text-lg font-semibold text-gray-600">Rp{formatNumber(price)}</span>
+                                            <span className="text-md font-semibold text-gray-600">|</span>
+                                            <span className="text-lg font-semibold text-gray-600">{dose}</span>
+                                        </div>
+                                        <button className="text-md font-semibold text-blue-500" onClick={() => handleEditPrice(id, name, price)}>ubah</button>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-2 mt-6">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">jumlah awal</span>
+                                        <span className="text-green-500">Rp{formatNumber(stock * price)}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm capitalize">jumlah habis</span>
+                                        <span className="text-green-500">Rp{formatNumber(out_stock * price)}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between border-t">
+                                        <span className="text-sm capitalize">selisih</span>
+                                        <span className="text-gray-500">Rp{formatNumber((stock - out_stock) * price)}</span>
+                                    </div>
+                                </div>
+                            </>
+                        }
                     </div>
                 ))}
             </div>
