@@ -99,7 +99,7 @@ export default function Stock() {
 
     return (
         <div className="max-w-4xl mx-auto min-h-screen">
-            <div className="w-full pb-3 pt-6 bg-[#F9F9FB] sticky top-0 flex items-center">
+            <div className="w-full pb-3 pt-6 bg-[#F4F5F7] sticky top-0 flex items-center">
                 <input
                     type="text"
                     placeholder="Cari berdasarkan nama"
@@ -108,9 +108,9 @@ export default function Stock() {
                     onChange={handleSearchChange}
                 />
             </div>
-            <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
+            <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                 {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock }) => (
-                    <div key={id} className="p-6 flex flex-col border rounded-3xl bg-white">
+                    <div key={id} className="p-6 flex flex-col rounded-3xl bg-white">
                         <span className="font-semibold text-xl mb-3">{name}</span>
                         <div className="flex flex-col text-center items-center">
                             <span className="capitalize font-semibold text-gray-600">jumlah Stock</span>

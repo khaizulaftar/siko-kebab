@@ -136,7 +136,7 @@ export default function Menu() {
                         totalHarga: totalHargaMinuman,
                         icon: "https://img.icons8.com/bubbles/100/iced-coffee.png"
                     }].map((item, index) => (
-                        <div key={index} className="flex flex-col align-center gap-6 p-6 border rounded-3xl bg-white">
+                        <div key={index} className="flex flex-col align-center gap-6 p-6 rounded-3xl bg-white">
                             <div className="flex items-center flex-col gap-3">
                                 <div className='w-full flex items-center justify-between'>
                                     <img src={item.icon} alt={`icon ${item.name}`} className='w-20'/>
@@ -176,7 +176,7 @@ export default function Menu() {
                                         </svg>
                                     </button>
                                 </div>
-                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 text-gray-700 hover:text-white">Tambah</button>
+                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 text-gray-700 hover:text-white capitalize font-semibold">tambah</button>
                             </div>
                         </div>
                     ))}

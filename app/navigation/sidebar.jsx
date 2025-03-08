@@ -17,7 +17,7 @@ export default function Sidebar() {
 
 
                         <span
-                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-700 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
                         >
                             Home
                         </span>
@@ -32,7 +32,7 @@ export default function Sidebar() {
                         </svg>
 
                         <span
-                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-700 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
                         >
                             History
                         </span>
@@ -47,7 +47,7 @@ export default function Sidebar() {
 
 
                         <span
-                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-700 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
                         >
                             Amount
                         </span>
@@ -63,7 +63,7 @@ export default function Sidebar() {
                         </svg>
 
                         <span
-                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-700 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
                         >
                             Setting
                         </span>
@@ -79,7 +79,7 @@ export default function Sidebar() {
 
 
                         <span
-                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
+                            className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-gray-700 px-2 py-1.5 text-xs font-medium text-white group-hover:visible"
                         >
                             Usser
                         </span>

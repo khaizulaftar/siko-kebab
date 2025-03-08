@@ -44,7 +44,7 @@ export default function Dashboard() {
         <>
             <div className="max-w-5xl mx-auto px-4 min-h-screen">
                 {/* jumlah pemasukan */}
-                <div className="card border p-6 rounded-3xl my-6 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
+                <div className="card p-6 rounded-3xl my-6 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
@@ -75,16 +75,16 @@ export default function Dashboard() {
                 {/* menu terjual  */}
                 <div className="my-12">
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
-                        <div className="grid grid-cols-3 sm:flex flex-col gap-3">
-                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center border rounded-3xl bg-[url('/images/blurry-gradient-haikei.svg')] bg-cover bg-center">
+                        <div className="grid grid-cols-3 sm:flex flex-col gap-4">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_kebab}</span>
                                 <span className="capitalize text-sm text-white font-semibold">kebab</span>
                             </div>
-                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center border rounded-3xl bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_burger}</span>
                                 <span className="capitalize text-sm text-white font-semibold">burger</span>
                             </div>
-                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center border rounded-3xl bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_minuman}</span>
                                 <span className="capitalize text-sm text-white font-semibold">minuman</span>
                             </div>
@@ -127,7 +127,7 @@ export default function Dashboard() {
                     </div>
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">
                         {stock.slice(0, 4).map((value,index) => (
-                            <div key={index} className="p-6 border rounded-3xl flex items-center justify-between bg-white">
+                            <div key={index} className="p-6 rounded-3xl flex items-center justify-between bg-white">
                                 <span className="capitalize text-gray-600 text-md font-semibold">{value.name}</span>
                                 <div className='flex items-center gap-1'>
                                     <span className="text-md text-gray-600 font-semibold text-green-500">{value.stock}</span>

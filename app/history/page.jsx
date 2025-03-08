@@ -30,22 +30,24 @@ export default function History() {
     }, [router])
 
     const filteredHistory = Object.entries(history).map(([date, items]) => {
-        return [
-            date,
-            items.filter((item) => {
-                const searchLower = searchQuery.toLowerCase()
+    return [
+        date,
+        [...items].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
+            .filter((item) => {
+                const searchLower = searchQuery.toLowerCase();
                 const formattedDate = new Date(item.tanggal).toLocaleDateString('id-ID', {
                     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                }).toLowerCase()
+                }).toLowerCase();
 
                 return (
                     item.category.toLowerCase().includes(searchLower) ||
                     item.name.toLowerCase().includes(searchLower) ||
                     formattedDate.includes(searchLower)
-                )
+                );
             })
-        ]
-    }).filter(([date, items]) => items.length > 0)
+    ];
+}).filter(([date, items]) => items.length > 0);
+
 
     if (!isAuthenticated || isLoading) {
         return <Loading />
@@ -54,7 +56,7 @@ export default function History() {
     return (
         <>
             <div className="max-w-4xl mx-auto min-h-screen">
-                <div className="w-full pb-3 pt-6 bg-[#F9F9FB] sticky top-0 flex items-center">
+                <div className="w-full pb-3 pt-6 bg-[#F4F5F7] sticky top-0 flex items-center">
                     <input
                         type="text"
                         placeholder="Cari berdasarkan kategori, nama, atau tanggal"
@@ -68,7 +70,7 @@ export default function History() {
                         filteredHistory.map(([date, items]) => (
                             <div key={date} className="mb-12">
                                 <p className="capitalize font-semibold text-md mb-4">{date}</p>
-                                <div className="grid grid-1 sm:grid-cols-2 gap-3 border rounded-3xl p-6">
+                                <div className="grid grid-1 sm:grid-cols-2 gap-3 rounded-3xl p-6 bg-white">
                                     {items.map((value) => (
                                         <div key={value.id} className="flex items-center gap-1">
                                             <img src={value.icon} alt="icon" className="w-12" />

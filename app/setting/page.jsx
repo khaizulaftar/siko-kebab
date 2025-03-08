@@ -187,7 +187,7 @@ export default function Setting() {
     return (
         <>
             <div className="max-w-4xl mx-auto min-h-screen">
-                <div className="w-full pb-3 pt-6 bg-[#F9F9FB] sticky top-0 flex items-center">
+                <div className="w-full pb-3 pt-6 bg-[#F4F5F7] sticky top-0 flex items-center">
                     <input
                         type="text"
                         placeholder="Cari berdasarkan kategori, nama"
@@ -196,9 +196,9 @@ export default function Setting() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <div className="grid sm:grid-cols-2 gap-3 mx-4 mt-3 mb-20 sm:mb-6">
+                <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                     {filteredMenus.map(({ id, category, name, price, dose, loading, composition }) => (
-                        <div key={id} className="p-6 border rounded-3xl bg-white">
+                        <div key={id} className="p-6 rounded-3xl bg-white">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <img src={getCategoryIcon(category)} alt={category} className="w-14"/>

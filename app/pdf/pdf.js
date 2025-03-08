@@ -36,7 +36,7 @@ const MyDocument = ({ data1, data2, data3 }) => (
             </View>
 
             {/* total */}
-            <Text style={styles.sectionTitle}>Jumalah Habis</Text>
+            <Text style={styles.sectionTitle}>Jumlah Habis</Text>
             <View style={styles.table}>
                 <View style={[styles.row, styles.headerRow]}>
                     <Text style={styles.cellHeader}>Kebab</Text>

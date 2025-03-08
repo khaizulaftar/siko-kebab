@@ -161,7 +161,7 @@ export default function Profile() {
         <div className="p-4 max-w-4xl mx-auto min-h-screen">
             <div className="mt-4 sm:grid grid-cols-2 gap-6">
                 <div>
-                    <div className="border p-6 bg-white rounded-3xl flex flex-col items-center">
+                    <div className="p-6 bg-white rounded-3xl flex flex-col items-center">
                         {/* Avatar */}
                         <img
                             src={user.role === "admin"
@@ -194,14 +194,14 @@ export default function Profile() {
                             </button>}
                     </div>
                     {daftar.map((value, index) => (
-                        <div key={index} className="flex gap-2 items-center mt-3 border rounded-3xl p-6 bg-white">
+                        <div key={index} className="flex gap-1 items-center mt-3 rounded-3xl p-6 bg-white">
                             <img
                                 src={value.role === "admin"
                                     ? "https://img.icons8.com/3d-fluency/50/star-struck.png"
                                     : "https://img.icons8.com/3d-fluency/50/beaming-face-with-smiling-eyes-1.png"}
                                 alt={value.role}
                             />
-                            <div className="flex justify-between w-full">
+                            <div className="flex justify-between w-full items-center">
                                 <div className="flex flex-col items-star gap-1">
                                     <span className="font-semibold text-gray-600">{value.username}</span>
                                     <span className="text-sm text-gray-600">{value.password}</span>

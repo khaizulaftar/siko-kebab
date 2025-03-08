@@ -45,19 +45,19 @@ export default function Trafik() {
                 <div className="mx-4 mt-6 sm:mb-6 mb-24">
                     <ChartIncome jumlahHari={14} />
                     <div className="my-6 grid sm:grid-cols-2 gap-6">
-                        <div className="p-6 bg-white rounded-3xl border">
+                        <div className="p-6 bg-white rounded-3xl">
                             <h2 className="text-xl font-semibold text-gray-600 mb-4 text-center capitalize">trafik kebab</h2>
-                            <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
+                            <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 p-1">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
 
-                                <div className="flex gap-3 md:gap-6 items-end justify-center w-full flex-wrap">
+                                <div className="flex gap-3 items-end justify-center w-full flex-wrap">
                                     {
                                         dataPemasukan.total_kebab.slice(-7).map((value, index) => (
                                             <div key={index} className="flex flex-col items-center justify-center relative mt-6">
                                                 <span className="text-sm absolute -top-6 text-gray-600">{value}</span>
-                                                <span className="w-6 bg-blue-500 transition-all duration-500" style={{ height: `${value}px` }}></span>
+                                                <span className="w-6 bg-blue-500" style={{ height: `${value}px` }}></span>
                                                 <span className={`text-sm capitalize ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
                                                     {dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]]}
                                                 </span>
@@ -68,19 +68,19 @@ export default function Trafik() {
                             </div>
                         </div>
 
-                        <div className="p-6 bg-white rounded-3xl border">
+                        <div className="p-6 bg-white rounded-3xl">
                             <h2 className="text-xl font-semibold text-gray-600 mb-4 text-center capitalize">trafik burger</h2>
-                            <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
+                            <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 p-1">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
 
-                                <div className="flex gap-3 md:gap-6 items-end justify-center w-full flex-wrap">
+                                <div className="flex gap-3 items-end justify-center w-full flex-wrap">
                                     {
                                         dataPemasukan.total_burger.slice(-7).map((value, index) => (
                                             <div key={index} className="flex flex-col items-center justify-center relative mt-6">
                                                 <span className="text-sm absolute -top-6 text-gray-600">{value}</span>
-                                                <span className="w-6 bg-blue-500 transition-all duration-500" style={{ height: `${value}px` }}></span>
+                                                <span className="w-6 bg-blue-500" style={{ height: `${value}px` }}></span>
                                                 <span className={`text-sm capitalize ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]])}`}>
                                                     {dataPemasukan.hari[dataPemasukan.tanggal.slice(-7)[index]]}
                                                 </span>
@@ -91,14 +91,14 @@ export default function Trafik() {
                             </div>
                         </div>
 
-                        <div className="p-6 bg-white rounded-3xl border">
+                        <div className="p-6 bg-white rounded-3xl">
                             <h2 className="text-xl font-semibold text-gray-600 mb-4 text-center capitalize">trafik minuman</h2>
-                            <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 pb-4 px-4">
+                            <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 p-1">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-3/4 w-full border-t border-dashed border-gray-200"></div>
 
-                                <div className="flex gap-3 md:gap-6 items-end justify-center w-full flex-wrap">
+                                <div className="flex gap-3 items-end justify-center w-full flex-wrap">
                                     {
                                         dataPemasukan.total_minuman.slice(-7).map((value, index) => (
                                             <div key={index} className="flex flex-col items-center justify-center relative mt-6">
