@@ -36,24 +36,21 @@ export default function History() {
     if (isAuthenticated === false) return <Loading />
     if (isLoading) return <Loading />
 
-    // Pastikan history adalah objek sebelum diproses
-    const sortedHistory = Object.entries(history)
+    const filteredHistory = Object.entries(history)
         .map(([date, items]) => [
-            date, 
-            items
-                .sort((a, b) => b.id - a.id) // Urutkan berdasarkan ID dari terbesar ke terkecil
-                .filter((item) => {
-                    const searchLower = searchQuery.toLowerCase();
-                    const formattedDate = new Date(item.tanggal).toLocaleDateString('id-ID', {
-                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                    }).toLowerCase();
+            date,
+            items.filter((item) => {
+                const searchLower = searchQuery.toLowerCase();
+                const formattedDate = new Date(item.tanggal).toLocaleDateString('id-ID', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                }).toLowerCase();
 
-                    return (
-                        item.category.toLowerCase().includes(searchLower) ||
-                        item.name.toLowerCase().includes(searchLower) ||
-                        formattedDate.includes(searchLower)
-                    );
-                })
+                return (
+                    item.category.toLowerCase().includes(searchLower) ||
+                    item.name.toLowerCase().includes(searchLower) ||
+                    formattedDate.includes(searchLower)
+                );
+            })
         ])
         .filter(([_, items]) => items.length > 0)
 
@@ -69,7 +66,7 @@ export default function History() {
                 />
             </div>
             <div className="mt-3 mb-20 sm:mb-6 mx-4">
-                {sortedHistory.map(([date, items]) => (
+                {filteredHistory.map(([date, items]) => (
                     <div key={date} className="mb-12">
                         <p className="capitalize font-semibold text-md mb-4">{date}</p>
                         <div className="grid grid-1 sm:grid-cols-2 gap-3 rounded-3xl p-6 bg-white">

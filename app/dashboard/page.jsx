@@ -65,13 +65,11 @@ export default function Dashboard() {
                             <span className='text-sm text-gray-100'>{dataPemasukan.tanggal}</span>
                         </div>
                         {showPemasukan ? <span className="text-4xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
-                        <div className='flex items-center justify-between'>
+                        <div>
                             <Link href="history" className="py-2 px-5 text-sm transition-colors duration-300 text-gray-200 focus:outline-none rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 capitalize">riwayat</Link>
-                            <DownloadPdf />
                         </div>
                     </div>
                 </div>
-
                 {/* menu terjual  */}
                 <div className="my-12">
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
@@ -108,6 +106,9 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
+
+                {/* download pdf */}
+                <DownloadPdf />
 
                 {/* jumlah bahan */}
                 <div className="my-12">
