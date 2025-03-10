@@ -122,31 +122,34 @@ export default function DownloadPdf() {
     return (
         <div className="p-6 rounded-3xl bg-white flex flex-col gap-3">
             <label className="font-medium text-md text-gray-700">Pilih Tanggal:</label>
-            <input 
-                type="date" 
-                value={selectedDate} 
+            <input
+                type="date"
+                value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-gray-50 rounded-lg border border-blue-600 px-5 py-2 text-gray-600 focus:ring focus:outline-none focus:ring-blue-300 focus:border-blue-300 focus:ring-opacity-802"
+                className="bg-gray-50 rounded-lg border border-blue-600 px-5 py-2 text-gray-600 focus:ring focus:outline-none focus:ring-blue-300 focus:border-blue-300 focus:ring-opacity-802 w-full"
             />
-            
-            {isLoading ? (
-                <p className="text-gray-500">Memuat data...</p>
-            ) : (
-                <PDFDownloadLink
-                    document={<MyDocument data1={data1} data2={data2} data3={data3} role={user?.role || "user"} />}
-                    fileName={`siko_kebab_${selectedDate}.pdf`}
-                >
-                    {({ loading, error }) => (
-                        <button
-                            onClick={() => handleDownloadClick(error)}
-                            disabled={loading || isLoading}
-                            className={`px-4 py-2 rounded-full text-sm text-white ${loading || isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"}`}
-                        >
-                            {loading || isLoading ? "Mengunduh..." : "Unduh PDF"}
-                        </button>
-                    )}
-                </PDFDownloadLink>
-            )}
+            <div>
+                {isLoading ? (
+                    <p className="text-gray-500">Memuat data...</p>
+                ) : (
+                    <PDFDownloadLink
+                        document={<MyDocument data1={data1} data2={data2} data3={data3} role={user?.role || "user"} />}
+                        fileName={`siko_kebab_${selectedDate}.pdf`}
+                    >
+                        {({ loading, error }) => (
+                            <button
+                                onClick={() => handleDownloadClick(error)}
+                                disabled={loading || isLoading}
+                                className={`px-4 py-2 rounded-full text-sm text-white ${loading || isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"}`}
+                            >
+                                {loading || isLoading ? "Mengunduh..." : "Unduh PDF"}
+                            </button>
+                        )}
+                    </PDFDownloadLink>
+                )}
+
+            </div>
+
         </div>
     )
 }
