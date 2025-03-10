@@ -29,9 +29,8 @@ export default function Trafik() {
     }, [router])
 
     const getHariColor = (hari) => {
-        if (hari === "Jum") return "text-yellow-500"
+
         if (hari === "Min") return "text-red-500"
-        if (hari === "Sen") return "text-green-500"
         return "text-gray-600"
     }
 

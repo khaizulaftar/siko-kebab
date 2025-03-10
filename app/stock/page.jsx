@@ -208,25 +208,25 @@ export default function Stock() {
                             <div className="flex items-center justify-between">
                                 <span className="text-sm capitalize">stok awal</span>
                                 <div className="flex gap-1">
-                                    <span>{formatNumber(initial_stock)}</span>
-                                    <span>|</span>
-                                    <span>{dose}</span>
+                                    <span className="text-sm">{formatNumber(initial_stock)}</span>
+                                    <span className="text-sm">|</span>
+                                    <span className="text-sm">{dose}</span>
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm capitalize">jumlah masuk</span>
                                 <div className="flex gap-1">
-                                    <span>{formatNumber(final_stock)}</span>
-                                    <span>|</span>
-                                    <span>{dose}</span>
+                                    <span className="text-sm">{formatNumber(final_stock)}</span>
+                                    <span className="text-sm">|</span>
+                                    <span className="text-sm">{dose}</span>
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm capitalize">jumlah habis</span>
                                 <div className="flex gap-1">
-                                    <span>{formatNumber(out_stock)}</span>
-                                    <span>|</span>
-                                    <span>{dose}</span>
+                                    <span className="text-sm">{formatNumber(out_stock)}</span>
+                                    <span className="text-sm">|</span>
+                                    <span className="text-sm">{dose}</span>
                                 </div>
                             </div>
                         </div>
@@ -246,15 +246,15 @@ export default function Stock() {
                                 <div className="flex flex-col gap-2 mt-6">
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm capitalize">jumlah awal</span>
-                                        <span className="text-green-500">Rp{formatNumber(stock * price)}</span>
+                                        <span className="text-green-500 text-sm">Rp{formatNumber(stock * price)}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm capitalize">jumlah habis</span>
-                                        <span className="text-green-500">Rp{formatNumber(out_stock * price)}</span>
+                                        <span className="text-green-500 text-sm">Rp{formatNumber(out_stock * price)}</span>
                                     </div>
                                     <div className="flex items-center justify-between border-t">
                                         <span className="text-sm capitalize">selisih</span>
-                                        <span className="text-gray-500">Rp{formatNumber((stock - out_stock) * price)}</span>
+                                        <span className="text-gray-500 text-sm">Rp{formatNumber((stock - out_stock) * price)}</span>
                                     </div>
                                 </div>
                             </>

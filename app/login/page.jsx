@@ -28,8 +28,8 @@ export default function Login() {
             <div className="px-4 mb-32 sm-mb-0 max-w-lg mx-auto min-h-screen">
                 <img src="/images/siko kebab.png" alt="logo" className="w-52 mx-auto" />
 
-                <form onSubmit={handleLogin} className="mt-6 space-y-4 rounded-lg p-6">
-                    <p className="text-center text-lg font-semibold text-gray-600">login ke akun anda</p>
+                <form onSubmit={handleLogin} className="mt-6 space-y-4 rounded-lg p-6 bg-white">
+                    <p className="text-center text-lg font-semibold text-gray-500">Masuk ke akun anda</p>
                     {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
                     <div>
@@ -40,7 +40,7 @@ export default function Login() {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
-                                className="w-full p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full text-sm p-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#B13069]"
                             />
                         </div>
                     </div>
@@ -53,7 +53,7 @@ export default function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="w-full p-2.5 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                                className="w-full text-sm p-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#B13069]"
                             />
                             <button
                                 type="button"
@@ -75,8 +75,8 @@ export default function Login() {
                         </div>
                     </div>
 
-                    <button type="submit" className="w-full bg-blue-500 text-white py-2.5 rounded hover:bg-blue-600 transition">
-                        Login
+                    <button type="submit" className="w-full bg-[#B13069] text-white py-2.5 rounded hover:bg-[#9E285E] transition">
+                        Masuk
                     </button>
                 </form>
             </div>

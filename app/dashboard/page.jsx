@@ -48,7 +48,7 @@ export default function Dashboard() {
                     <div className="flex flex-col gap-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
-                                <span className="capitalize text-md text-white">pemasukan</span>
+                                <span className="text-md text-white">Pemasukan</span>
                                 <button onClick={() => setShowPemasukan(!showPemasukan)}>
                                     {showPemasukan ?
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
@@ -71,26 +71,26 @@ export default function Dashboard() {
                     </div>
                 </div>
                 {/* menu terjual  */}
-                <div className="my-12">
+                <div className="my-6">
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
                         <div className="grid grid-cols-3 sm:flex flex-col gap-4">
-                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_kebab}</span>
-                                <span className="capitalize text-sm text-white font-semibold">kebab</span>
+                                <span className="text-sm text-white font-semibold">Kebab</span>
                             </div>
                             <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_burger}</span>
-                                <span className="capitalize text-sm text-white font-semibold">burger</span>
+                                <span className="text-sm text-white font-semibold">Burger</span>
                             </div>
                             <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_minuman}</span>
-                                <span className="capitalize text-sm text-white font-semibold">minuman</span>
+                                <span className="text-sm text-white font-semibold">Minuman</span>
                             </div>
                         </div>
                         <div className='col-span-2'>
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-2">
-                                    <span className="capitalize font-semibold text-lg text-gray-600">jumlah menu terjual</span>
+                                    <span className="capitalize font-semibold text-lg text-gray-600">Jumlah terjual</span>
                                 </div>
                                 <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                                     href="/trafik">
@@ -99,7 +99,7 @@ export default function Dashboard() {
                                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                         </svg>
                                     </span>
-                                    <span className="text-sm transition-all group-hover:me-4 capitalize">lihat semua</span>
+                                    <span className="text-sm transition-all group-hover:me-4">Lihat semua</span>
                                 </Link>
                             </div>
                             <ChartIncome jumlahHari={7} />
@@ -111,10 +111,10 @@ export default function Dashboard() {
                 <DownloadPdf />
 
                 {/* jumlah bahan */}
-                <div className="my-12">
+                <div className="my-6">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
-                            <span className="capitalize font-semibold text-lg text-gray-600">jumlah bahan</span>
+                            <span className="font-semibold text-lg text-gray-600">Jumlah bahan</span>
                         </div>
                         <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                             href="/stock">
@@ -123,7 +123,7 @@ export default function Dashboard() {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                 </svg>
                             </span>
-                            <span className="text-sm transition-all group-hover:me-4 capitalize"> lihat semua </span>
+                            <span className="text-sm transition-all group-hover:me-4">Lihat semua</span>
                         </Link>
                     </div>
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">

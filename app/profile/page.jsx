@@ -169,7 +169,17 @@ export default function Profile() {
                                 : "https://img.icons8.com/3d-fluency/94/beaming-face-with-smiling-eyes-1.png"}
                             alt={user.role}
                         />
-                        <h2 className="text-xl font-semibold text-gray-600 capitalize text">{user.username}</h2>
+                        <div className="flex items-center gap-1">
+                            <span className="font-semibold text-gray-600 text-lg capitalize">{user.username}</span>
+                            <img
+                                className="w-5"
+                                src={user.role === "admin"
+                                    ? "https://img.icons8.com/skeuomorphism/32/verified-badge.png"
+                                    : "https://img.icons8.com/windows/32/verified-account.png"
+                                }
+                                alt="verification-badge"
+                            />
+                        </div>
                         <div className="w-full mt-6 flex flex-col gap-2">
                             <div className="flex items-center justify-between">
                                 <span className="text-gray-600 text-sm font-semibold">Role:</span>
@@ -180,36 +190,47 @@ export default function Profile() {
                                 <span className="text-gray-600 text-sm">{user.password}</span>
                             </div>
                         </div>
-                        <button onClick={handleUpdateProfile} className="mt-6 capitalize text-green-600">ubah profile</button>
+                        <button onClick={handleUpdateProfile} className="mt-6 text-green-600">Ganti profil</button>
                     </div>
                 </div>
                 <div className="mt-12 sm:mt-0">
                     <div className="flex items-center justify-between mb-6">
-                        <span className="capitalize font-semibold text-gray-600 text-lg">jumlah staf</span>
+                        <span className="font-semibold text-gray-600 text-lg">Jumlah staf</span>
                         {user?.role === "admin" &&
                             <button onClick={handleAddUser}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-green-600">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                                 </svg>
-                            </button>}
+                            </button>
+                        }
                     </div>
                     {daftar.map((value, index) => (
                         <div key={index} className="flex gap-1 items-center mt-3 rounded-3xl p-6 bg-white">
                             <img
                                 src={value.role === "admin"
-                                    ? "https://img.icons8.com/3d-fluency/50/star-struck.png"
-                                    : "https://img.icons8.com/3d-fluency/50/beaming-face-with-smiling-eyes-1.png"}
+                                    ? "https://img.icons8.com/3d-fluency/45/star-struck.png"
+                                    : "https://img.icons8.com/3d-fluency/45/beaming-face-with-smiling-eyes-1.png"}
                                 alt={value.role}
                             />
                             <div className="flex justify-between w-full items-center">
                                 <div className="flex flex-col items-star gap-1">
-                                    <span className="font-semibold text-gray-600">{value.username}</span>
+                                    <div className="flex items-center gap-1">
+                                        <span className="font-semibold text-gray-600 text-sm capitalize">{value.username}</span>
+                                        <img
+                                            className="w-5"
+                                            src={value.role === "admin"
+                                                ? "https://img.icons8.com/skeuomorphism/32/verified-badge.png"
+                                                : "https://img.icons8.com/windows/32/verified-account.png"
+                                            }
+                                            alt="verification-badge"
+                                        />
+                                    </div>
                                     {user?.role === "admin" &&
                                         <span className="text-sm text-gray-600">{value.password}</span>
                                     }
                                 </div>
                                 <div className="flex flex-col items-end gap-1">
-                                    <span className="font-semibold text-gray-600">{value.role}</span>
+                                    <span className="font-semibold text-gray-600 text-sm">{value.role}</span>
                                     {user?.role === "admin" &&
                                         <button onClick={() => handleDelete(value.id)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 text-red-600">

@@ -88,7 +88,7 @@ export default function Menu() {
     return (
         <div className="mt-12 mb-24 sm:mb-6">
             <div className="flex items-center justify-between mb-6">
-                <span className="capitalize font-semibold text-lg text-gray-600">menu terjual</span>
+                <span className="font-semibold text-lg text-gray-600">Menu terjual</span>
                 <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                     href="/trafik">
                     <span className="absolute -end-full transition-all group-hover:end-4">
@@ -96,7 +96,7 @@ export default function Menu() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                         </svg>
                     </span>
-                    <span className="text-sm transition-all group-hover:me-4 capitalize">lihat semua</span>
+                    <span className="text-sm transition-all group-hover:me-4">Lihat semua</span>
                 </Link>
             </div>
 
@@ -143,12 +143,12 @@ export default function Menu() {
                                     <span className='text-md font-semibold capitalize text-gray-600'>{item.nama}</span>
                                 </div>
                                 <div className='flex items-center gap-3'>
-                                    <span className="text-xl capitalize font-semibold text-gray-700">Rp{new Intl.NumberFormat('id-ID').format(item.totalHarga)}</span>
+                                    <span className="text-xl font-semibold text-gray-700">Rp{new Intl.NumberFormat('id-ID').format(item.totalHarga)}</span>
                                     <span className='text-green-500'>+ {item.count}</span>
                                 </div>
                             </div>
                             <div>
-                                <p className="capitalize mb-3 font-semibold text-gray-700">daftar menu</p>
+                                <p className="mb-3 font-semibold text-gray-700">Daftar menu</p>
                                 <div className="flex flex-wrap">
                                     {item.menu.map((value, idx) => (
                                         <button key={idx} onClick={() => {
@@ -176,7 +176,7 @@ export default function Menu() {
                                         </svg>
                                     </button>
                                 </div>
-                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 text-gray-700 hover:text-white capitalize font-semibold">tambah</button>
+                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 text-gray-700 hover:text-white font-semibold">Tambah</button>
                             </div>
                         </div>
                     ))}
