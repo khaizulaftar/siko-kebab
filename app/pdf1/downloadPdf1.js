@@ -6,22 +6,19 @@ import axios from "axios"
 import useSWR from 'swr'
 import { useEffect, useState, useCallback } from "react"
 import Cookies from "js-cookie"
-import MyDocument from "../pdf/pdf"
+import MyDocument from "../pdf1/pdf1"
 
 const fetcher = url => axios.get(url).then(res => res.data)
 const fetcherIncome = url => axios.get(url).then(res => res.data.data)
 
-export default function DownloadPdf() {
+export default function DownloadPdf1() {
     const [user, setUser] = useState(null)
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0])
+    const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)) // Format YYYY-MM
     const token = Cookies.get("token")
 
-    // Fetch Data
-    const { data: data1 = [], error: error1, isValidating: loading1, mutate: mutate1 } = useSWR(`/api/pdf?tanggal=${selectedDate}`, fetcher)
-    const { data: data2 = {}, error: error2, isValidating: loading2, mutate: mutate2 } = useSWR(`/api/income?tanggal=${selectedDate}`, fetcherIncome)
-    const { data: data3 = [], error: error3, isValidating: loading3, mutate: mutate3 } = useSWR(`/api/stockSet?tanggal=${selectedDate}`, fetcher)
+    const { data: data2 = {}, error: error2, isValidating: loading2, mutate: mutate2 } = useSWR(`/api/pdf1/incomePdf?bulan=${selectedMonth}`, fetcherIncome)
+    const { data: data3 = [], error: error3, isValidating: loading3, mutate: mutate3 } = useSWR(`/api/pdf1/stockSetPdf?bulan=${selectedMonth}`, fetcher)
 
-    // Ambil data user dari API
     useEffect(() => {
         if (token) {
             axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
@@ -30,17 +27,13 @@ export default function DownloadPdf() {
         }
     }, [token])
 
-    // Memuat ulang data saat tanggal berubah
     useEffect(() => {
-        mutate1()
         mutate2()
         mutate3()
-    }, [selectedDate])
+    }, [selectedMonth])
 
-    // Handle error
-    if (error1 || error2 || error3) return <div className="text-red-500">Error loading data...</div>
+    if (error2 || error3) return <div className="text-red-500">Error loading data...</div>
 
-    // Handle download alert
     const handleDownloadClick = useCallback((error) => {
         if (error) {
             Swal.fire("Gagal Mengunduh", "Terjadi kesalahan saat mengunduh PDF.", "error")
@@ -49,15 +42,15 @@ export default function DownloadPdf() {
         }
     }, [])
 
-    const isLoading = loading1 || loading2 || loading3
+    const isLoading = loading2 || loading3
 
     return (
         <div className="p-6 rounded-3xl bg-white flex flex-col gap-3">
-            <label className="font-medium text-md text-gray-700">Pilih Tanggal:</label>
+            <label className="font-medium text-md text-gray-700">Pilih Bulan: 1</label>
             <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
+                type="month"
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
                 className="bg-gray-50 rounded-lg border border-blue-600 px-5 py-2 text-gray-600 focus:ring focus:outline-none focus:ring-blue-300 focus:border-blue-300 focus:ring-opacity-802 w-full"
             />
             <div>
@@ -65,8 +58,8 @@ export default function DownloadPdf() {
                     <p className="text-gray-500">Memuat data...</p>
                 ) : (
                     <PDFDownloadLink
-                        document={<MyDocument data1={data1} data2={data2} data3={data3} role={user?.role || "user"} />}
-                        fileName={`siko_kebab_${selectedDate}.pdf`}
+                        document={<MyDocument data2={data2} data3={data3} role={user?.role || "user"} />}
+                        fileName={`siko_kebab_${selectedMonth}.pdf`}
                     >
                         {({ loading, error }) => (
                             <button
@@ -79,9 +72,7 @@ export default function DownloadPdf() {
                         )}
                     </PDFDownloadLink>
                 )}
-
             </div>
-
         </div>
     )
 }

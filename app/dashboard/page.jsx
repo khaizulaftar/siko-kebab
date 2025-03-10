@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import Cookies from "js-cookie"
 import Loading from './loading'
 import DownloadPdf from '../pdf/downloadPdf'
+import DownloadPdf1 from '../pdf1/downloadPdf1'
 
 export default function Dashboard() {
 
@@ -109,6 +110,7 @@ export default function Dashboard() {
 
                 {/* download pdf */}
                 <DownloadPdf />
+                <DownloadPdf1/>
 
                 {/* jumlah bahan */}
                 <div className="my-6">
