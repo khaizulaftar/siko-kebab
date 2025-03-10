@@ -6,48 +6,53 @@ export async function GET() {
         const connection = await dbConnect();
 
         const [rows] = await connection.query(`
-            SELECT 
-            tanggal, category, SUM(item) as total_item
+            SELECT DATE_FORMAT(tanggal, '%Y-%m-%d') as tanggal, category, SUM(item) as total_item
             FROM income
             GROUP BY tanggal, category
             ORDER BY tanggal ASC
         `);
 
         const [totalIncomeRows] = await connection.query(`
-            SELECT tanggal, SUM(jumlah_pemasukan) as total_pemasukan
+            SELECT DATE_FORMAT(tanggal, '%Y-%m-%d') as tanggal, SUM(jumlah_pemasukan) as total_pemasukan
             FROM income
             GROUP BY tanggal
             ORDER BY tanggal ASC
         `);
 
-        const result = { tanggal: [], hari: {}, total_pemasukan: [] };
+        const result = {
+            tanggal: [],
+            hari: {},
+            total_pemasukan: [],
+            total_kebab: [],
+            total_burger: [],
+            total_minuman: []
+        };
 
-        // Ambil 7 hari terakhir termasuk jika tidak ada data
+        // Ambil jumlah hari terakhir yang diinginkan
         const today = new Date();
-        const last7Days = Array.from({ length: 7 }, (_, i) => {
+        const lastDays = Array.from({ length: 14 }, (_, i) => {
             const date = new Date();
             date.setDate(today.getDate() - i);
             return date;
-        }).reverse(); // Urutkan dari yang paling lama ke terbaru
+        }).reverse();
 
-        last7Days.forEach(dateObj => {
-            const formattedDate = dateObj.toLocaleDateString('id-ID', {
-                day: '2-digit', month: '2-digit', year: 'numeric'
-            }).replace(/\//g, '-');
-
-            const firstLetterOfDay = dateObj.toLocaleDateString('id-ID', { weekday: 'long' }).slice(0, 3);
+        lastDays.forEach(dateObj => {
+            const formattedDate = dateObj.toISOString().split('T')[0];
+            const dayName = dateObj.toLocaleDateString('id-ID', { weekday: 'short' });
 
             result.tanggal.push(formattedDate);
-            result.hari[formattedDate] = firstLetterOfDay;
+            result.hari[formattedDate] = dayName;
 
-            // Cek jika ada pemasukan pada tanggal tersebut
-            const pemasukanData = totalIncomeRows.find(row => {
-                return new Date(row.tanggal).toLocaleDateString('id-ID', {
-                    day: '2-digit', month: '2-digit', year: 'numeric'
-                }).replace(/\//g, '-') === formattedDate;
-            });
-
+            const pemasukanData = totalIncomeRows.find(row => row.tanggal === formattedDate);
             result.total_pemasukan.push(pemasukanData ? pemasukanData.total_pemasukan : 0);
+
+            const kebabData = rows.find(row => row.tanggal === formattedDate && row.category === 'kebab');
+            const burgerData = rows.find(row => row.tanggal === formattedDate && row.category === 'burger');
+            const minumanData = rows.find(row => row.tanggal === formattedDate && row.category === 'minuman');
+
+            result.total_kebab.push(kebabData ? kebabData.total_item : 0);
+            result.total_burger.push(burgerData ? burgerData.total_item : 0);
+            result.total_minuman.push(minumanData ? minumanData.total_item : 0);
         });
 
         return NextResponse.json({
