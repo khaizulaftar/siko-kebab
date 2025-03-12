@@ -56,6 +56,7 @@ const MyDocument = ({ data1, data2, data3, role}) => (
                 <View style={[styles.row, styles.headerRow]}>
                     <Text style={styles.cellHeader}>Nama</Text>
                     <Text style={styles.cellHeader}>Kategori</Text>
+                    <Text style={styles.cellHeader}>item</Text>
                     <Text style={styles.cellHeader}>Keterangan</Text>
                     <Text style={styles.cellHeader}>Jumlah</Text>
                 </View>
@@ -63,8 +64,9 @@ const MyDocument = ({ data1, data2, data3, role}) => (
                     <View key={index} style={styles.row}>
                         <Text style={styles.cell}>{item.name}</Text>
                         <Text style={styles.cell}>{item.category}</Text>
-                        <Text style={styles.cell}>{item.item}</Text>
-                        <Text style={styles.cell}>Rp {item.jumlah_pemasukan?.toLocaleString() || "0"}</Text>
+                        <Text style={styles.cell}>{item.total_item}</Text>
+                        <Text style={styles.cell}>{item.keterangan}</Text>
+                        <Text style={styles.cell}>Rp {item.jumlah_pemasukan}</Text>
                     </View>
                 ))}
             </View>

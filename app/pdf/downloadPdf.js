@@ -16,12 +16,11 @@ export default function DownloadPdf() {
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0])
     const token = Cookies.get("token")
 
-    // Fetch Data
+
     const { data: data1 = [], error: error1, isValidating: loading1, mutate: mutate1 } = useSWR(`/api/pdf?tanggal=${selectedDate}`, fetcher)
     const { data: data2 = {}, error: error2, isValidating: loading2, mutate: mutate2 } = useSWR(`/api/income?tanggal=${selectedDate}`, fetcherIncome)
     const { data: data3 = [], error: error3, isValidating: loading3, mutate: mutate3 } = useSWR(`/api/stockSet?tanggal=${selectedDate}`, fetcher)
 
-    // Ambil data user dari API
     useEffect(() => {
         if (token) {
             axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
@@ -30,17 +29,12 @@ export default function DownloadPdf() {
         }
     }, [token])
 
-    // Memuat ulang data saat tanggal berubah
     useEffect(() => {
         mutate1()
         mutate2()
         mutate3()
     }, [selectedDate])
 
-    // Handle error
-    if (error1 || error2 || error3) return <div className="text-red-500">Error loading data...</div>
-
-    // Handle download alert
     const handleDownloadClick = useCallback((error) => {
         if (error) {
             Swal.fire("Gagal Mengunduh", "Terjadi kesalahan saat mengunduh PDF.", "error")
@@ -50,6 +44,7 @@ export default function DownloadPdf() {
     }, [])
 
     const isLoading = loading1 || loading2 || loading3
+    const hasError = error1 || error2 || error3
 
     return (
         <div className="p-6 rounded-3xl bg-white flex flex-col gap-3">
@@ -61,7 +56,9 @@ export default function DownloadPdf() {
                 className="bg-gray-50 rounded-lg border border-blue-600 px-5 py-2 text-gray-600 focus:ring focus:outline-none focus:ring-blue-300 focus:border-blue-300 focus:ring-opacity-802 w-full"
             />
             <div>
-                {isLoading ? (
+                {hasError ? (
+                    <p className="text-red-500">Error loading data...</p>
+                ) : isLoading ? (
                     <p className="text-gray-500">Memuat data...</p>
                 ) : (
                     <PDFDownloadLink
@@ -79,9 +76,7 @@ export default function DownloadPdf() {
                         )}
                     </PDFDownloadLink>
                 )}
-
             </div>
-
         </div>
     )
 }

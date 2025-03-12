@@ -37,18 +37,14 @@ export default function History() {
     if (isLoading) return <Loading />
 
     const filteredHistory = Object.entries(history)
-        .map(([date, items]) => [
+    .slice().reverse().map(([date, items]) => [
             date,
             items.filter((item) => {
                 const searchLower = searchQuery.toLowerCase();
-                const formattedDate = new Date(item.tanggal).toLocaleDateString('id-ID', {
-                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                }).toLowerCase();
-
                 return (
                     item.category.toLowerCase().includes(searchLower) ||
                     item.name.toLowerCase().includes(searchLower) ||
-                    formattedDate.includes(searchLower)
+                    date.toLowerCase().includes(searchLower)
                 );
             })
         ])
@@ -70,7 +66,7 @@ export default function History() {
                     <div key={date} className="mb-12">
                         <p className="capitalize font-semibold text-sm mb-4">{date}</p>
                         <div className="grid grid-1 sm:grid-cols-2 gap-3 rounded-3xl p-6 bg-white">
-                            {items.map((value) => (
+                            {items.slice().reverse().map((value) => (
                                 <div key={value.id} className="flex items-center gap-1">
                                     <img src={value.icon} alt="icon" className="w-12" />
                                     <div className="flex flex-col gap-2 w-full">
@@ -80,10 +76,11 @@ export default function History() {
                                                 <span className="text-sm capitalize">{value.name}</span>
                                             </div>
                                             <div className="flex flex-col items-end">
-                                                <span className="text-md font-semibold text-green-500">
+                                                <span className="text-md text-[#B13069]">
                                                     {new Intl.NumberFormat('id-ID').format(Number(value.jumlah_pemasukan) || 0)}
                                                 </span>
-                                                <span className="text-xs text-gray-600">{value.item}</span>
+                                                {value.item && <span className="text-sm text-green-500">{`+ ${value.item}`}</span>}
+                                                <span className="text-xs text-gray-600 text-end">{value.keterangan}</span>
                                             </div>
                                         </div>
                                         <hr />

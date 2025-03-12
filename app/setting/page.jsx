@@ -118,7 +118,8 @@ export default function Setting() {
         try {
             await axios.post("/api/history", {
                 totalHarga,
-                item: "harga diubah",
+                item: null,
+                keterangan: `Harga ${category} ${name} diubah`,
                 category,
                 nama: name,
                 icon: "https://img.icons8.com/bubbles/100/gear.png",
@@ -256,7 +257,7 @@ export default function Setting() {
                                         <div key={ingredient} className="flex items-center justify-between border-b py-2">
                                             <span className="text-gray-600 text-sm">{ingredient}</span>
                                             <div className="flex gap-4 items-center">
-                                                <span className="text-red-500 text-sm">- {qty} </span>
+                                                <span className="text-[#B13069] text-sm">- {qty} </span>
                                                 {
                                                     user?.role === "admin" && <button className="" onClick={() => handleQtyChange(id, ingredient, qty, composition)}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 text-blue-500">

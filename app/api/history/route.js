@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
     const db = await dbConnect()
-    const [rows] = await db.execute('SELECT tanggal, id, category, name, jumlah_pemasukan, item , icon FROM history ORDER BY tanggal DESC')
+    const [rows] = await db.execute('SELECT * FROM history')
 
     if (!rows.length) {
         return NextResponse.json({ message: 'Tidak ada history' }, { status: 404 })
@@ -24,13 +24,13 @@ export async function GET() {
 
 export async function POST(req) {
     try {
-        const { totalHarga, item, category, nama, icon} = await req.json()
+        const { totalHarga, item, keterangan, category, nama, icon } = await req.json()
 
         const connection = await dbConnect()
 
         const [result] = await connection.execute(
-            'INSERT INTO history (jumlah_pemasukan, item, category, name, icon) VALUES (?, ?, ?, ?, ?)',
-            [totalHarga, item, category, nama ,icon]
+            'INSERT INTO history (jumlah_pemasukan, item, keterangan, category, name, icon) VALUES (?, ?, ?, ?, ?, ?)',
+            [totalHarga, item, keterangan, category, nama, icon]
         )
 
         return new Response(JSON.stringify({ message: 'Data berhasil disimpan', result }), { status: 200 })

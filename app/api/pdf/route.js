@@ -8,7 +8,16 @@ export async function GET(req) {
         const tanggal = url.searchParams.get("tanggal") || new Date().toISOString().split("T")[0] // Default ke hari ini
 
         const [rows] = await connection.execute(
-            "SELECT * FROM history WHERE DATE(tanggal) = ?",
+            `SELECT 
+    category, 
+    name, 
+    GROUP_CONCAT(DISTINCT keterangan ORDER BY id ASC SEPARATOR ', ') AS keterangan, 
+    SUM(item) AS total_item, 
+    SUM(jumlah_pemasukan) AS jumlah_pemasukan 
+FROM history 
+WHERE DATE(tanggal) = ? 
+GROUP BY category, name 
+ORDER BY category ASC, name ASC`,
             [tanggal]
         )
         

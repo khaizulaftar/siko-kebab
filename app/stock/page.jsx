@@ -33,19 +33,29 @@ export default function Stock() {
 
     const formatNumber = (number) => new Intl.NumberFormat("id-ID").format(number)
 
-    const handlePriceChange = async (id, name, currentStock) => {
-        const newStock = inputRefs.current[id]?.value.replace(/\./g, "")
-        const stockInt = Math.floor(Number(newStock))
+    const handleStockChange = async (id, name, currentStock, action) => {
+        const inputValue = inputRefs.current[id]?.value.replace(/\./g, "")
+        const changeValue = parseInt(inputValue, 10)
 
-        if (isNaN(stockInt) || stockInt <= 0) {
+        if (isNaN(changeValue) || changeValue <= 0) {
             return Swal.fire({
                 icon: "error",
-                title: "Jumlah tidak valid",
-                text: "Harap masukkan jumlah yang valid.",
+                title: "Nilai tidak valid",
+                text: "Harap masukkan nilai yang valid (angka positif).",
             })
         }
 
-        if (user?.role === "staf" && stockInt < currentStock) {
+        const newStock = action === "increase" ? currentStock + changeValue : currentStock - changeValue
+
+        if (newStock < 0) {
+            return Swal.fire({
+                icon: "error",
+                title: "Jumlah tidak valid",
+                text: "Stok tidak boleh kurang dari 0.",
+            })
+        }
+
+        if (user?.role === "staf" && action === "decrease") {
             return Swal.fire({
                 icon: "error",
                 title: "Akses Ditolak",
@@ -55,33 +65,34 @@ export default function Stock() {
 
         const result = await Swal.fire({
             title: "Apakah Anda yakin?",
-            text: "Jumlah stok akan diubah!",
+            text: `Stok akan di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)}!`,
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Ya, ubah stok",
+            confirmButtonText: `Ya, ${action === "increase" ? "tambah" : "kurang"}i stok`,
             cancelButtonText: "Batal",
         })
 
         if (!result.isConfirmed) return
 
         try {
-            await axios.put("/api/stockSet", { id, stock: stockInt })
-
+            await axios.put("/api/stockSet", { id, stock: newStock })
             await axios.post("/api/history", {
-                totalHarga: stockInt,
-                item: "stock diubah",
+                totalHarga: newStock,
+                item: null,
+                keterangan: `Stok ${name} di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)}`,
                 category: "",
                 nama: name,
                 icon: "https://img.icons8.com/bubbles/100/connection-sync.png"
-            })
+            });
 
             await refreshMenus()
+            inputRefs.current[id].value = ""
             setEditingId(null)
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: "Stok telah diperbarui dan riwayat tersimpan.",
+                text: `Stok telah di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)} dan riwayat tersimpan.`,
             })
 
         } catch (error) {
@@ -117,10 +128,10 @@ export default function Stock() {
 
         try {
             await axios.put("/api/stockSet", { id, price: Number(newPrice) });
-
             await axios.post("/api/history", {
                 totalHarga: Number(newPrice),
-                item: "jumlah diubah",
+                item: null,
+                keterangan: `Harga ${name} diubah`,
                 category: "",
                 nama: name,
                 icon: "https://img.icons8.com/bubbles/100/discount.png"
@@ -141,7 +152,6 @@ export default function Stock() {
             });
         }
     };
-
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value)
@@ -176,33 +186,32 @@ export default function Stock() {
                                 <span className="text-lg font-semibold text-gray-600">|</span>
                                 <span className="text-xl font-semibold text-gray-600">{dose}</span>
                             </div>
-                            {editingId === id ? (
-                                <div className="relative mt-3 w-full">
-                                    <input
-                                        type="text"
-                                        className="block w-full px-6 py-3 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
-                                        placeholder="Ubah harga barang"
-                                        ref={(el) => (inputRefs.current[id] = el)}
-                                        onInput={(e) => {
-                                            let value = e.target.value.replace(/\D/g, "")
-                                            e.target.value = formatNumber(value)
-                                        }}
-                                    />
+                            <div className="mt-3 w-full">
+                                <input
+                                    type="text"
+                                    className="block w-full px-6 py-3 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                                    placeholder="Masukkan nilai"
+                                    ref={(el) => (inputRefs.current[id] = el)}
+                                    onInput={(e) => {
+                                        let value = e.target.value.replace(/\D/g, "")
+                                        e.target.value = formatNumber(value)
+                                    }}
+                                />
+                                <div className="flex gap-2 mt-3">
                                     <button
-                                        onClick={() => handlePriceChange(id, name, stock)}
-                                        className="absolute end-1.5 bottom-1.5 rounded-full bg-green-100 px-5 py-2.5 p text-xs border border-green-600 transition focus:ring-3 focus:outline-hidden"
+                                        onClick={() => handleStockChange(id, name, stock, "decrease")}
+                                        className="flex items-center justify-center rounded-full bg-red-100 p-2 text-sm border border-red-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden capitalize w-full"
                                     >
-                                        Ubah bahan
+                                        Kurang
+                                    </button>
+                                    <button
+                                        onClick={() => handleStockChange(id, name, stock, "increase")}
+                                        className="flex items-center justify-center rounded-full bg-green-100 p-2 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden capitalize w-full"
+                                    >
+                                        Tambah
                                     </button>
                                 </div>
-                            ) : (
-                                <button
-                                    onClick={() => setEditingId(id)}
-                                    className="flex items-center justify-center mt-3 rounded-full bg-green-100 p-2 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden w-full capitalize"
-                                >
-                                    ubah jumlah bahan
-                                </button>
-                            )}
+                            </div>
                         </div>
                         <div className="flex flex-col gap-2 mt-6">
                             <div className="flex items-center justify-between">

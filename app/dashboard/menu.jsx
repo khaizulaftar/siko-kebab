@@ -37,25 +37,36 @@ export default function Menu() {
     }
 
     const kirimKeIncome = async (totalHarga, count, category, nama, icon) => {
-        const data = { totalHarga, item: count, category, nama }
-        const data2 = { totalHarga, item: `+ ${count}`, category, nama, icon }
-
+        if (!nama || count < 1) {
+            Swal.fire({
+                title: 'Peringatan',
+                text: 'Silakan pilih menu dan jumlah harus lebih dari 0!',
+                icon: 'warning',
+            })
+            return
+        }
+    
         const confirmResult = await Swal.fire({
             title: 'Konfirmasi',
-            text: `Apakah Anda yakin ingin menyimpan data ${category}?`,
+            text: `Apakah Anda yakin ingin menambahkan ${category} ${nama} sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat('id-ID').format(totalHarga)}?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Ya, Simpan',
             cancelButtonText: 'Batal'
         })
-
+    
         if (!confirmResult.isConfirmed) return
-
+    
         try {
-            await axios.post('/api/income', data)
-            await axios.post('/api/history', data2)
+            const keterangan = `Penjualan ${category} - ${nama}`
+            
+            await axios.post('/api/income', { totalHarga, item: count, category, nama })
+    
+            await axios.post('/api/history', { totalHarga, item: count, keterangan, category, nama, icon })
+    
+            // Update stok
             await updateStock(nama, count)
-
+    
             Swal.fire({
                 title: 'Success',
                 text: `Data ${category} berhasil disimpan!`,
@@ -70,6 +81,7 @@ export default function Menu() {
             })
         }
     }
+    
 
     useEffect(() => {
         Promise.all([
@@ -82,8 +94,15 @@ export default function Menu() {
                 setMenuBurger(burgerRes.data)
                 setMenuMinuman(minumanRes.data)
             })
+            .catch(error => {
+                console.error("Error fetching menu data:", error)
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Gagal memuat menu, periksa koneksi Anda!',
+                    icon: 'error',
+                })
+            })
     }, [])
-
 
     return (
         <div className="mt-12 mb-24 sm:mb-6">
@@ -137,14 +156,14 @@ export default function Menu() {
                         icon: "https://img.icons8.com/bubbles/100/iced-coffee.png"
                     }].map((item, index) => (
                         <div key={index} className="flex flex-col align-center gap-6 p-6 rounded-3xl bg-white">
-                            <div className="flex items-center flex-col gap-3">
+                            <div className="flex items-center flex-col">
                                 <div className='w-full flex items-center justify-between'>
-                                    <img src={item.icon} alt={`icon ${item.name}`} className='w-20'/>
-                                    <span className='text-md font-semibold capitalize text-gray-600'>{item.nama}</span>
+                                    <img src={item.icon} alt={`icon ${item.name}`} className='w-16' />
+                                    <span className='text-sm font-semibold capitalize text-[#B13069]'>{item.nama}</span>
                                 </div>
-                                <div className='flex items-center gap-3'>
-                                    <span className="text-xl font-semibold text-gray-700">Rp{new Intl.NumberFormat('id-ID').format(item.totalHarga)}</span>
-                                    <span className='text-green-500'>+ {item.count}</span>
+                                <div className='flex items-center gap-1'>
+                                    <span className="text-xl font-semibold text-green-500">Rp{new Intl.NumberFormat('id-ID').format(item.totalHarga)}</span>
+                                    <span className='text-gray-600'>+ {item.count}</span>
                                 </div>
                             </div>
                             <div>
@@ -162,21 +181,42 @@ export default function Menu() {
                             </div>
                             <div className="flex justify-between items-center">
                                 <div className="flex gap-1 items-center">
-                                    <button onClick={() => item.count > 1 && item.setCount(item.count - 1)} className='p-2.5 border rounded-xl hover:bg-red-100'>
+                                    <button onClick={() => item.count > 0 && item.setCount(item.count - 1)}
+                                        className='p-2.5 border rounded-xl hover:bg-red-100'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
                                         </svg>
                                     </button>
+                                    <input
+                                        type="tel"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        value={item.count}
+                                        onChange={(e) => {
+                                            const value = e.target.value.replace(/\D/g, '')
+                                            item.setCount(value ? parseInt(value) : 0)
+                                        }}
+                                        className='border w-14 h-10 text-center rounded-xl bg-gray-100'
+                                    />
 
-                                    <span className='flex border w-14 h-10 items-center justify-center rounded-xl bg-gray-100'>{item.count}</span>
-
-                                    <button onClick={() => item.setCount(item.count + 1)} className='p-2.5 border rounded-xl hover:bg-green-100'>
+                                    <button onClick={() => item.setCount(item.count + 1)}
+                                        className='p-2.5 border rounded-xl hover:bg-green-100'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                         </svg>
                                     </button>
                                 </div>
-                                <button onClick={() => kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 text-gray-700 hover:text-white font-semibold">Tambah</button>
+                                <button onClick={async () => {
+                                    try {
+                                        await kirimKeIncome(item.totalHarga, item.count, item.name, item.nama, item.icon)
+                                        item.setMenuHrg(0)
+                                        item.setCount(1)
+                                        item.setNama("")
+                                    } catch (error) {
+                                        console.error("Gagal mengirim data:", error)
+                                    }
+                                }} className="px-5 py-2 border-2 border-green-600 bg-green-200 rounded-full hover:bg-green-400 text-gray-700 hover:text-white font-semibold">Tambah</button>
+                                
                             </div>
                         </div>
                     ))}

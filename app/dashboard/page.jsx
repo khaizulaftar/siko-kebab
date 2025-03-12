@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation"
 import Cookies from "js-cookie"
 import Loading from './loading'
 import DownloadPdf from '../pdf/downloadPdf'
-import DownloadPdf1 from '../pdf1/downloadPdf1'
 
 export default function Dashboard() {
 
@@ -110,7 +109,6 @@ export default function Dashboard() {
 
                 {/* download pdf */}
                 <DownloadPdf />
-                <DownloadPdf1/>
 
                 {/* jumlah bahan */}
                 <div className="my-6">
@@ -133,7 +131,7 @@ export default function Dashboard() {
                             <div key={index} className="p-6 rounded-3xl flex items-center justify-between bg-white">
                                 <span className="capitalize text-gray-600 text-md font-semibold">{value.name}</span>
                                 <div className='flex items-center gap-1'>
-                                    <span className="text-md text-gray-600 font-semibold text-green-500">{value.stock}</span>
+                                    <span className="text-md text-gray-600 font-semibold text-[#B13069]">{value.stock}</span>
                                     <span className="text-md text-gray-600 font-semibold">|</span>
                                     <span className="text-md text-gray-600 font-semibold">{value.dose}</span>
                                 </div>
