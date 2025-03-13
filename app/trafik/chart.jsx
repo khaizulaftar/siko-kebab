@@ -19,7 +19,7 @@ export default function ChartIncome({jumlahHari}) {
     return (
         <>
             <div className="w-full p-6 bg-white rounded-3xl wrap overflow-hidden">
-                <h2 className="text-xl font-semibold text-gray-600 mb-4 text-center capitalize">Traffic penghasilan</h2>
+                <h2 className="text-md font-semibold text-gray-600 mb-4 text-center capitalize">Traffic penghasilan</h2>
                 <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end  p-1">
                     <div className="flex flex-wrap gap-3 items-end w-full justify-center">
                         {
@@ -27,7 +27,7 @@ export default function ChartIncome({jumlahHari}) {
                                 <div key={index} className="flex flex-col items-center justify-center relative mt-6">
                                     <span className="text-xs absolute -top-6 text-gray-600">{new Intl.NumberFormat('id-ID').format(Number(value) || 0)}</span>
                                     <span className="w-6 bg-blue-500" style={{ height: `${value / 5000}px` }}></span>
-                                    <span className={`text-sm capitalize ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-jumlahHari)[index]])}`}>
+                                    <span className={`text-xs capitalize ${getHariColor(dataPemasukan.hari[dataPemasukan.tanggal.slice(-jumlahHari)[index]])}`}>
                                         {dataPemasukan.hari[dataPemasukan.tanggal.slice(-jumlahHari)[index]]}
                                     </span>
                                 </div>

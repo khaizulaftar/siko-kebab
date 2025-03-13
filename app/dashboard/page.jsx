@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import Cookies from "js-cookie"
 import Loading from './loading'
 import DownloadPdf from '../pdf/downloadPdf'
+import NonTunai from './nonTunai'
 
 export default function Dashboard() {
 
@@ -27,28 +28,28 @@ export default function Dashboard() {
         }
     }, [router])
 
-    const { data: dataPemasukan = {}, mutate: refreshIncome } = useSWR("/api/income", 
-        url => axios.get(url).then(res => res.data.data).finally(() => setIsLoading(false)), 
+    const { data: dataPemasukan = {}, mutate: refreshIncome } = useSWR("/api/income",
+        url => axios.get(url).then(res => res.data.data).finally(() => setIsLoading(false)),
         { refreshInterval: 3000 }
     )
-    
-    const { data: stock = [], mutate: refreshStock } = useSWR("/api/stockSet", 
+
+    const { data: stock = [], mutate: refreshStock } = useSWR("/api/stockSet",
         url => axios.get(url).then(res => res.data).finally(() => setIsLoading(false)),
     )
-    
+
     if (!isAuthenticated || isLoading) {
         return <Loading />
     }
-    
+
     return (
         <>
             <div className="max-w-5xl mx-auto px-4 min-h-screen">
                 {/* jumlah pemasukan */}
-                <div className="card p-6 rounded-3xl my-6 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
-                    <div className="flex flex-col gap-8">
+                <div className="card p-6 rounded-3xl my-4 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
+                    <div className="flex flex-col gap-6">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-5">
-                                <span className="text-md text-white">Pemasukan</span>
+                                <span className="text-sm text-white">Total pemasukan</span>
                                 <button onClick={() => setShowPemasukan(!showPemasukan)}>
                                     {showPemasukan ?
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
@@ -62,16 +63,34 @@ export default function Dashboard() {
                                     }
                                 </button>
                             </div>
-                            <span className='text-sm text-gray-100'>{dataPemasukan.tanggal}</span>
+                            <span className='text-xs text-gray-100'>{dataPemasukan.tanggal}</span>
                         </div>
-                        {showPemasukan ? <span className="text-4xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
-                        <div>
-                            <Link href="history" className="py-2 px-5 text-sm transition-colors duration-300 text-gray-200 focus:outline-none rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 capitalize">riwayat</Link>
+                        <div className='flex items-center justify-between'>
+                            {showPemasukan ? <span className="text-3xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
+                            <div>
+                                <Link href="history" className="py-2 px-5 text-sm transition-colors duration-300 text-gray-200 focus:outline-none rounded-full border-2 border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 capitalize">riwayat</Link>
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-1'>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-white">Tunai</span>
+                                {showPemasukan ? <span className="text-sm text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_tunai) || 0)}</span> : <span className='text-sm font-bold text-white'>. . . . . .</span>}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm text-white">Non tunai</span>
+                                {showPemasukan ? <span className="text-sm text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_non_tunai) || 0)}</span> : <span className='text-sm font-bold text-white'>. . . . . .</span>}
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                    <DownloadPdf />
+                    <NonTunai />
+                </div>
+
                 {/* menu terjual  */}
-                <div className="my-6">
+                <div className="my-4">
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
                         <div className="grid grid-cols-3 sm:flex flex-col gap-4">
                             <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
@@ -90,7 +109,7 @@ export default function Dashboard() {
                         <div className='col-span-2'>
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center gap-2">
-                                    <span className="capitalize font-semibold text-lg text-gray-600">Jumlah terjual</span>
+                                    <span className="capitalize font-semibold text-md text-gray-600">Jumlah terjual</span>
                                 </div>
                                 <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                                     href="/trafik">
@@ -107,14 +126,11 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* download pdf */}
-                <DownloadPdf />
-
                 {/* jumlah bahan */}
                 <div className="my-6">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2">
-                            <span className="font-semibold text-lg text-gray-600">Jumlah bahan</span>
+                            <span className="font-semibold text-md text-gray-600">Jumlah bahan</span>
                         </div>
                         <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                             href="/stock">
@@ -127,7 +143,7 @@ export default function Dashboard() {
                         </Link>
                     </div>
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">
-                        {stock.slice(0, 4).map((value,index) => (
+                        {stock.slice(0, 4).map((value, index) => (
                             <div key={index} className="p-6 rounded-3xl flex items-center justify-between bg-white">
                                 <span className="capitalize text-gray-600 text-md font-semibold">{value.name}</span>
                                 <div className='flex items-center gap-1'>

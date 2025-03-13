@@ -48,7 +48,7 @@ export default function DownloadPdf() {
 
     return (
         <div className="p-6 rounded-3xl bg-white flex flex-col gap-3">
-            <label className="font-medium text-md text-gray-700">Pilih Tanggal:</label>
+            <label className="font-medium text-sm text-gray-700">Pilih Tanggal:</label>
             <input
                 type="date"
                 value={selectedDate}

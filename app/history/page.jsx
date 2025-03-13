@@ -73,10 +73,10 @@ export default function History() {
                                         <div className="flex items-center justify-between">
                                             <div className="flex flex-col">
                                                 <span className="text-sm capitalize font-semibold text-gray-800">{value.category}</span>
-                                                <span className="text-sm capitalize">{value.name}</span>
+                                                <span className="text-xs capitalize">{value.name}</span>
                                             </div>
                                             <div className="flex flex-col items-end">
-                                                <span className="text-md text-[#B13069]">
+                                                <span className="text-sm text-[#B13069]">
                                                     {new Intl.NumberFormat('id-ID').format(Number(value.jumlah_pemasukan) || 0)}
                                                 </span>
                                                 {value.item && <span className="text-sm text-green-500">{`+ ${value.item}`}</span>}
