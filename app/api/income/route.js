@@ -4,9 +4,17 @@ import { NextResponse } from 'next/server'
 export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url);
-        const tanggalRaw = searchParams.get("tanggal") || new Date().toISOString().split("T")[0];
+        
+        // Ambil tanggal dengan zona waktu WIB
+        const userTimeZone = "Asia/Jakarta";
+        const now = new Date(new Date().toLocaleString("en-US", { timeZone: userTimeZone }));
 
-        // Format tanggal
+        // Jika masih antara 00:00 - 01:59 WIB, anggap masih hari sebelumnya
+        if (now.getHours() < 2) now.setDate(now.getDate() - 1);
+
+        const tanggalRaw = searchParams.get("tanggal") || now.toISOString().split("T")[0];
+
+        // Format tanggal untuk tampilan
         const [year, month, day] = tanggalRaw.split("-").map(Number);
         const formattedTanggal = new Intl.DateTimeFormat("id-ID", {
             weekday: "long",
@@ -43,20 +51,20 @@ export async function GET(req) {
     }
 }
 
-
 export async function POST(req) {
     try {
-        const { totalHarga, item, category, nama } = await req.json()
+        const { totalHarga, item, category, nama } = await req.json();
 
-        const connection = await dbConnect()
+        const connection = await dbConnect();
 
+        // Simpan data tanpa modifikasi waktu, biarkan MySQL menangani timestamp
         const [result] = await connection.execute(
             'INSERT INTO income (jumlah_pemasukan, item, category, name) VALUES (?, ?, ?, ?)',
             [totalHarga, item, category, nama]
-        )
+        );
 
-        return new Response(JSON.stringify({ message: 'Data berhasil disimpan', result }), { status: 200 })
+        return new Response(JSON.stringify({ message: "Data berhasil disimpan", result }), { status: 200 });
     } catch (error) {
-        return new Response(JSON.stringify({ error: 'Gagal menyimpan data', details: error.message }), { status: 500 })
+        return new Response(JSON.stringify({ error: "Gagal menyimpan data", details: error.message }), { status: 500 });
     }
 }
