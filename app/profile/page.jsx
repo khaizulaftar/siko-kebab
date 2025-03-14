@@ -194,8 +194,8 @@ export default function Profile() {
                     </div>
                 </div>
                 <div className="mt-12 sm:mt-0">
-                    <div className="flex items-center justify-between mb-6">
-                        <span className="font-semibold text-gray-600 text-lg">Jumlah staf</span>
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="font-semibold text-[#B12D67] text-md">Jumlah staf</span>
                         {user?.role === "admin" &&
                             <button onClick={handleAddUser}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-green-600">
@@ -205,7 +205,7 @@ export default function Profile() {
                         }
                     </div>
                     {daftar.map((value, index) => (
-                        <div key={index} className="flex gap-1 items-center mt-3 rounded-3xl p-6 bg-white">
+                        <div key={index} className="flex gap-1 items-center mt-4 rounded-3xl p-6 bg-white">
                             <img
                                 src={value.role === "admin"
                                     ? "https://img.icons8.com/3d-fluency/45/star-struck.png"

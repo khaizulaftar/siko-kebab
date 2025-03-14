@@ -19,7 +19,7 @@ export default function ChartIncome({jumlahHari}) {
     return (
         <>
             <div className="w-full p-6 bg-white rounded-3xl wrap overflow-hidden">
-                <h2 className="text-md font-semibold text-gray-600 mb-4 text-center capitalize">Traffic penghasilan</h2>
+                <h2 className="text-md font-semibold text-[#B12D67] mb-4 text-center capitalize">Traffic penghasilan</h2>
                 <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end  p-1">
                     <div className="flex flex-wrap gap-3 items-end w-full justify-center">
                         {

@@ -204,17 +204,17 @@ export default function Setting() {
                                 <div className="flex items-center">
                                     <img src={getCategoryIcon(category)} alt={category} className="w-14"/>
                                     <div className="flex flex-col">
-                                        <span className="text-md font-semibold capitalize">{category}</span>
-                                        <span className="text-sm capitalize">{name}</span>
+                                        <span className="text-md font-semibold capitalize text-[#B12D67]">{category}</span>
+                                        <span className="text-sm capitalize text-gray-600">{name}</span>
                                     </div>
                                 </div>
                                 <div className="text-end">
                                     <div className="flex gap-1 items-center">
-                                        <span className="text-xl font-semibold text-green-600">
+                                        <span className="text-lg font-semibold text-green-500">
                                             Rp{new Intl.NumberFormat("id-ID").format(Number(price) || 0)}
                                         </span>
                                         <span className="text-lg font-semibold text-gray-600">|</span>
-                                        <span className="text-xl font-semibold text-gray-600">{dose}</span>
+                                        <span className="text-lg font-semibold text-green-500">{dose}</span>
                                     </div>
                                 </div>
                             </div>
@@ -251,13 +251,13 @@ export default function Setting() {
                                 </>
                             )}
                             <div className="mt-6">
-                                <p className="capitalize font-semibold mb-3 text-md">pengurangan bahan</p>
+                                <p className="capitalize font-semibold mb-3 text-sm text-[#B12D67]">pengurangan bahan</p>
                                 {composition &&
                                     Object.entries(composition).map(([ingredient, qty]) => (
                                         <div key={ingredient} className="flex items-center justify-between border-b py-2">
                                             <span className="text-gray-600 text-sm">{ingredient}</span>
                                             <div className="flex gap-4 items-center">
-                                                <span className="text-[#B13069] text-sm">- {qty} </span>
+                                                <span className="text-gray-600 text-sm">- {qty} </span>
                                                 {
                                                     user?.role === "admin" && <button className="" onClick={() => handleQtyChange(id, ingredient, qty, composition)}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 text-blue-500">

@@ -45,47 +45,49 @@ export default function Dashboard() {
         <>
             <div className="max-w-5xl mx-auto px-4 min-h-screen">
                 {/* jumlah pemasukan */}
-                <div className="card p-6 rounded-3xl my-4 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
-                    <div className="flex flex-col gap-6">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-5">
-                                <span className="text-sm text-white">Total pemasukan</span>
-                                <button onClick={() => setShowPemasukan(!showPemasukan)}>
-                                    {showPemasukan ?
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                        :
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-                                        </svg>
-                                    }
-                                </button>
-                            </div>
-                            <span className='text-xs text-gray-100'>{dataPemasukan.tanggal}</span>
+                <div className="card px-6 pt-6 rounded-3xl my-4 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
+                    <div className="flex items-start justify-between mb-6">
+                        <div>
+                            <img src="/images/siko kebab.png" alt="logo" className="w-10 mx-auto" />
                         </div>
-                        <div className='flex items-center justify-between'>
+                        <span className='text-xs text-gray-100'>{dataPemasukan.tanggal}</span>
+                    </div>
+                    <div className='flex items-center justify-between mb-12'>
+                        <div className='flex items-center gap-2'>
                             {showPemasukan ? <span className="text-3xl font-bold text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_pemasukan) || 0)}</span> : <span className='text-3xl font-bold text-white'>. . . . . .</span>}
-                            <div>
-                                <Link href="history" className="py-2 px-5 text-sm transition-colors duration-300 text-gray-200 focus:outline-none rounded-full border-2 border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 capitalize">riwayat</Link>
-                            </div>
+                            <button onClick={() => setShowPemasukan(!showPemasukan)}>
+                                {showPemasukan ?
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+                                    :
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                    </svg>
+                                }
+                            </button>
                         </div>
-                        <div className='flex flex-col gap-1'>
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm text-white">Tunai</span>
-                                {showPemasukan ? <span className="text-sm text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_tunai) || 0)}</span> : <span className='text-sm font-bold text-white'>. . . . . .</span>}
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm text-white">Non tunai</span>
-                                {showPemasukan ? <span className="text-sm text-white">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_non_tunai) || 0)}</span> : <span className='text-sm font-bold text-white'>. . . . . .</span>}
-                            </div>
+                        <div className='flex gap-2'>
+                            <Link href='/history' className="flex flex-col items-center hover:scale-110 transition">
+                                <span className='-mb-2 px-1 text-xs rounded-full bg-white text-gray-600 z-10'>History</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-10 text-white p-2 rounded-full bg-blue-500">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </Link>
+                            <DownloadPdf />
                         </div>
                     </div>
-                </div>
-
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                    <DownloadPdf />
+                    <div className='flex gap-6 items-center mb-4'>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-white font-semibold">Tunai</span>
+                            {showPemasukan ? <span className="text-sm text-white font-semibold">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_tunai) || 0)}</span> : <span className='text-sm font-bold text-white'>. . . . . .</span>}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-white font-semibold">Non tunai</span>
+                            {showPemasukan ? <span className="text-sm text-white font-semibold">Rp{new Intl.NumberFormat('id-ID').format(Number(dataPemasukan?.total_non_tunai) || 0)}</span> : <span className='text-sm font-bold text-white'>. . . . . .</span>}
+                        </div>
+                    </div>
                     <NonTunai />
                 </div>
 
@@ -108,9 +110,7 @@ export default function Dashboard() {
                         </div>
                         <div className='col-span-2'>
                             <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-2">
-                                    <span className="capitalize font-semibold text-md text-gray-600">Jumlah terjual</span>
-                                </div>
+                                <div></div>
                                 <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                                     href="/trafik">
                                     <span className="absolute -end-full transition-all group-hover:end-4">
@@ -128,9 +128,9 @@ export default function Dashboard() {
 
                 {/* jumlah bahan */}
                 <div className="my-6">
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-2">
-                            <span className="font-semibold text-md text-gray-600">Jumlah bahan</span>
+                            <span className="font-semibold text-md text-[#B12D67]">Jumlah bahan</span>
                         </div>
                         <Link className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300 focus:ring-opacity-802"
                             href="/stock">
@@ -147,14 +147,13 @@ export default function Dashboard() {
                             <div key={index} className="p-6 rounded-3xl flex items-center justify-between bg-white">
                                 <span className="capitalize text-gray-600 text-md font-semibold">{value.name}</span>
                                 <div className='flex items-center gap-1'>
-                                    <span className="text-md text-gray-600 font-semibold text-[#B13069]">{value.stock}</span>
-                                    <span className="text-md text-gray-600 font-semibold">|</span>
-                                    <span className="text-md text-gray-600 font-semibold">{value.dose}</span>
+                                    <span className="text-md text-[#B12D67] font-semibold">{value.stock}</span>
+                                    <span className="text-md text-[#B12D67] font-semibold">|</span>
+                                    <span className="text-md text-[#B12D67] font-semibold">{value.dose}</span>
                                 </div>
                             </div>
                         ))}
                     </div>
-
                 </div>
                 {/* menu */}
                 <Menu />

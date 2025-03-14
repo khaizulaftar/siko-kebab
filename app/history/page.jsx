@@ -64,7 +64,7 @@ export default function History() {
             <div className="mt-3 mb-20 sm:mb-6 mx-4">
                 {filteredHistory.map(([date, items]) => (
                     <div key={date} className="mb-12">
-                        <p className="capitalize font-semibold text-sm mb-4">{date}</p>
+                        <p className="capitalize font-semibold text-sm mb-4 text-gray-700">{date}</p>
                         <div className="grid grid-1 sm:grid-cols-2 gap-3 rounded-3xl p-6 bg-white">
                             {items.slice().reverse().map((value) => (
                                 <div key={value.id} className="flex items-center gap-1">
@@ -72,7 +72,7 @@ export default function History() {
                                     <div className="flex flex-col gap-2 w-full">
                                         <div className="flex items-center justify-between">
                                             <div className="flex flex-col">
-                                                <span className="text-sm capitalize font-semibold text-gray-800">{value.category}</span>
+                                                <span className="text-sm capitalize font-semibold text-gray-700">{value.category}</span>
                                                 <span className="text-xs capitalize">{value.name}</span>
                                             </div>
                                             <div className="flex flex-col items-end">

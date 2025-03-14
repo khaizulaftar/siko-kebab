@@ -179,17 +179,25 @@ export default function Stock() {
             <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                 {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, price }) => (
                     <div key={id} className="p-6 flex flex-col rounded-3xl bg-white">
-                        <span className="font-semibold text-md mb-3">{name}</span>
+                        <span className="font-semibold text-[#B12D67] text-md mb-3">{name}</span>
                         <div className="flex flex-col text-center items-center">
                             <div className="flex gap-1 items-center">
-                                <span className="font-semibold text-xl text-gray-600">{formatNumber(stock)}</span>
+                                <span className="font-semibold text-lg text-gray-600">{formatNumber(stock)}</span>
                                 <span className="text-lg font-semibold text-gray-600">|</span>
-                                <span className="text-xl font-semibold text-gray-600">{dose}</span>
+                                <span className="text-lg font-semibold text-gray-600">{dose}</span>
                             </div>
-                            <div className="mt-3 w-full">
+                            <div className="mt-3 flex gap-4 w-full">
+                                <button
+                                    onClick={() => handleStockChange(id, name, stock, "decrease")}
+                                    className="flex items-center justify-center rounded-xl bg-red-100 px-4 text-sm border border-red-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 text-gray-600">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+                                    </svg>
+                                </button>
                                 <input
                                     type="text"
-                                    className="block w-full px-6 py-3 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                                    className="block w-full px-6 py-2.5 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
                                     placeholder="Masukkan nilai"
                                     ref={(el) => (inputRefs.current[id] = el)}
                                     onInput={(e) => {
@@ -197,20 +205,14 @@ export default function Stock() {
                                         e.target.value = formatNumber(value)
                                     }}
                                 />
-                                <div className="flex gap-2 mt-3">
-                                    <button
-                                        onClick={() => handleStockChange(id, name, stock, "decrease")}
-                                        className="flex items-center justify-center rounded-full bg-red-100 p-2 text-sm border border-red-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden capitalize w-full"
-                                    >
-                                        Kurang
-                                    </button>
-                                    <button
-                                        onClick={() => handleStockChange(id, name, stock, "increase")}
-                                        className="flex items-center justify-center rounded-full bg-green-100 p-2 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden capitalize w-full"
-                                    >
-                                        Tambah
-                                    </button>
-                                </div>
+                                <button
+                                    onClick={() => handleStockChange(id, name, stock, "increase")}
+                                    className="flex items-center justify-center rounded-xl bg-green-100 px-4 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 text-gray-600">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 mt-6">
@@ -245,11 +247,15 @@ export default function Stock() {
                                 <div className="flex flex-col text-center items-center">
                                     <div className="flex items-center w-full justify-between">
                                         <div className="flex items-center gap-1">
-                                            <span className="text-lg font-semibold text-gray-600">Rp{formatNumber(price)}</span>
+                                            <span className="text-md font-semibold text-gray-600">Rp{formatNumber(price)}</span>
                                             <span className="text-md font-semibold text-gray-600">|</span>
-                                            <span className="text-lg font-semibold text-gray-600">{dose}</span>
+                                            <span className="text-md font-semibold text-gray-600">{dose}</span>
                                         </div>
-                                        <button className="text-md font-semibold text-blue-500" onClick={() => handleEditPrice(id, name, price)}>ubah</button>
+                                        <button onClick={() => handleEditPrice(id, name, price)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-md font-semibold text-blue-400 hover:scale-110 transition">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2 mt-6">

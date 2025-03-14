@@ -46,7 +46,7 @@ export default function Trafik() {
                     <ChartIncome jumlahHari={14} />
                     <div className="my-6 grid sm:grid-cols-2 gap-6">
                         <div className="p-6 bg-white rounded-3xl">
-                            <h2 className="text-md font-semibold text-gray-600 mb-4 text-center capitalize">trafik kebab</h2>
+                            <h2 className="text-md font-semibold text-[#B12D67] mb-4 text-center capitalize">trafik kebab</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 p-1">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
@@ -69,7 +69,7 @@ export default function Trafik() {
                         </div>
 
                         <div className="p-6 bg-white rounded-3xl">
-                            <h2 className="text-md font-semibold text-gray-600 mb-4 text-center capitalize">trafik burger</h2>
+                            <h2 className="text-md font-semibold text-[#B12D67] mb-4 text-center capitalize">trafik burger</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 p-1">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>
@@ -92,7 +92,7 @@ export default function Trafik() {
                         </div>
 
                         <div className="p-6 bg-white rounded-3xl">
-                            <h2 className="text-md font-semibold text-gray-600 mb-4 text-center capitalize">trafik minuman</h2>
+                            <h2 className="text-md font-semibold text-[#B12D67] mb-4 text-center capitalize">trafik minuman</h2>
                             <div className="relative min-h-40 border-l border-b border-gray-300 flex items-end space-x-3 p-1">
                                 <div className="absolute top-1/4 w-full border-t border-dashed border-gray-200"></div>
                                 <div className="absolute top-1/2 w-full border-t border-dashed border-gray-200"></div>

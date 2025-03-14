@@ -90,8 +90,8 @@ export default function Menu() {
 
     return (
         <div className="mt-12 mb-24 sm:mb-6">
-            <div className="flex items-center justify-between mb-6">
-                <span className="font-semibold text-md text-gray-600">Menu Terjual</span>
+            <div className="flex items-center justify-between mb-4">
+                <span className="font-semibold text-md text-[#B12D67]">Menu Terjual</span>
                 <Link href="/trafik" className="group relative inline-flex items-center overflow-hidden bg-blue-100 rounded-full border border-blue-600 px-5 py-2 text-blue-600 focus:ring focus:outline-none focus:ring-blue-300">
                     <span className="absolute -end-full transition-all group-hover:end-4">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5">
