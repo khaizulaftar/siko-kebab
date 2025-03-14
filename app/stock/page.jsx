@@ -76,15 +76,6 @@ export default function Stock() {
 
         try {
             await axios.put("/api/stockSet", { id, stock: newStock })
-            await axios.post("/api/history", {
-                totalHarga: newStock,
-                item: null,
-                keterangan: `Stok ${name} di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)}`,
-                category: "",
-                nama: name,
-                icon: "https://img.icons8.com/bubbles/100/connection-sync.png"
-            });
-
             await refreshMenus()
             inputRefs.current[id].value = ""
             setEditingId(null)
@@ -92,7 +83,7 @@ export default function Stock() {
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: `Stok telah di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)} dan riwayat tersimpan.`,
+                text: `Stok telah di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)}`,
             })
 
         } catch (error) {
@@ -133,21 +124,12 @@ export default function Stock() {
 
         try {
             await axios.put("/api/stockSet", { id, price: Number(newPrice) });
-            await axios.post("/api/history", {
-                totalHarga: Number(newPrice),
-                item: null,
-                keterangan: `Harga ${name} diubah`,
-                category: "",
-                nama: name,
-                icon: "https://img.icons8.com/bubbles/100/discount.png"
-            });
-
             await refreshMenus();
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
-                text: "Harga telah diperbarui dan dicatat dalam riwayat.",
+                text: "Harga telah diperbarui.",
             });
         } catch (error) {
             Swal.fire({
