@@ -81,7 +81,7 @@ export default function DownloadPdf() {
                     {hasError ? (
                         <p className="text-red-500">Error loading data...</p>
                     ) : isLoading ? (
-                        <p className="text-gray-500">Memuat data...</p>
+                        <p className="text-gray-500 text-xs">Memuat data...</p>
                     ) : (
                         <PDFDownloadLink
                             document={<MyDocument data1={data1} data2={data2} data3={data3} role={user?.role || "user"} />}

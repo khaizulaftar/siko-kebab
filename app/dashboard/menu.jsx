@@ -136,7 +136,7 @@ export default function Menu() {
 
                                 <input type="tel" inputMode="numeric" pattern="[0-9]*" value={data.count}
                                     onChange={(e) => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: Math.max(0, parseInt(e.target.value.replace(/\D/g, '')) || 0) } }))}
-                                    className="border w-14 h-10 text-center rounded-xl bg-gray-100"
+                                    className="border w-20 h-10 text-center rounded-xl bg-gray-100"
                                 />
 
                                 <button onClick={() => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: data.count + 1 } }))}
@@ -147,7 +147,7 @@ export default function Menu() {
                                 </button>
                             </div>
 
-                            <button onClick={() => kirimKeIncome(category)} disabled={loadingCategory[category]} className={`px-5 py-2 border-2 rounded-full font-semibold ${loadingCategory[category] ? "bg-gray-400 cursor-not-allowed" : "bg-green-200 hover:bg-green-400 text-gray-700 hover:text-white"}`}>
+                            <button onClick={() => kirimKeIncome(category)} disabled={loadingCategory[category]} className={`px-5 py-2 border rounded-full font-semibold ${loadingCategory[category] ? "bg-gray-400 cursor-not-allowed" : "bg-green-300 hover:bg-green-400 text-gray-600 hover:text-white border-green-600"}`}>
                                 {loadingCategory[category] ? "Mengirim..." : "Tambah"}
                             </button>
                         </div>

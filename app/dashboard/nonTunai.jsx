@@ -8,10 +8,14 @@ export default function NonTunai() {
 
     const handleOpenModal = () => {
         Swal.fire({
-            title: "Masukkan Pemasukan Non-Tunai",
+            title: "Pemasukan Non-Tunai",
             input: "text",
             inputPlaceholder: "Masukkan jumlah",
-            inputAttributes: { autocapitalize: "off" },
+            inputAttributes: { 
+                autocapitalize: "off",
+                type: "tel",
+                inputMode: "numeric"
+            },
             showCancelButton: true,
             confirmButtonText: "Kirim",
             cancelButtonText: "Batal",
@@ -25,6 +29,8 @@ export default function NonTunai() {
             },
             didOpen: () => {
                 const input = Swal.getInput();
+                input.setAttribute("type", "tel");
+                input.setAttribute("inputmode", "numeric");
                 input.addEventListener("input", (e) => {
                     let numValue = e.target.value.replace(/\D/g, ""); // Ambil angka saja
                     e.target.value = Number(numValue).toLocaleString("id-ID"); // Format ke ribuan
@@ -37,6 +43,7 @@ export default function NonTunai() {
             }
         });
     };
+    
 
     const handleSubmit = async (totalHarga) => {
         setLoading(true);
@@ -62,7 +69,7 @@ export default function NonTunai() {
         <button
             onClick={handleOpenModal}
             disabled={loading}
-            className={`w-full flex justify-between items-center py-4 px-12 hover:px-20 transition rounded-t-full ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 transition hover:bg-blue-600"}`}
+            className={`w-full flex justify-center items-center py-3 hover:px-20 transition rounded-t-full ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 transition hover:bg-blue-600"}`}
         >
             <div className="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
@@ -70,9 +77,6 @@ export default function NonTunai() {
                 </svg>
                 <span className="text-sm font-semibold text-white">Pemasukkan non tunai</span>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-white">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
         </button>
     );
 }

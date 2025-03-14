@@ -47,13 +47,13 @@ export default function Setting() {
     }
 
     const handleInputChange = (id, e) => {
-        let value = e.target.value.replace(/\D/g, "")
+        let value = e.target.value.replace(/\D/g, ""); // Hanya angka
         setFormattedPrices((prev) => ({
             ...prev,
-            [id]: new Intl.NumberFormat("id-ID").format(value),
-        }))
+            [id]: new Intl.NumberFormat("id-ID").format(Number(value)), // Konversi ke Number sebelum diformat
+        }));
     }
-
+        
     const handlePriceChange = async (id, category, name) => {
         const price = parseInt(formattedPrices[id].replace(/\./g, ""), 10)
 
@@ -202,7 +202,7 @@ export default function Setting() {
                         <div key={id} className="p-6 rounded-3xl bg-white">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <img src={getCategoryIcon(category)} alt={category} className="w-14"/>
+                                    <img src={getCategoryIcon(category)} alt={category} className="w-14" />
                                     <div className="flex flex-col">
                                         <span className="text-md font-semibold capitalize text-[#B12D67]">{category}</span>
                                         <span className="text-sm capitalize text-gray-600">{name}</span>
@@ -222,7 +222,8 @@ export default function Setting() {
                             {editingId === id ? (
                                 <div className="relative mt-3">
                                     <input
-                                        type="text"
+                                        type="tel"
+                                        inputMode="numeric"
                                         className="block w-full px-6 py-3 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
                                         placeholder="Ubah harga barang"
                                         value={formattedPrices[id] || ""}

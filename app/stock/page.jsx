@@ -109,20 +109,25 @@ export default function Stock() {
             title: `Ubah harga untuk ${name}`,
             input: "text",
             inputValue: formatNumber(currentPrice),
-            inputAttributes: { autocapitalize: "off" },
+            inputAttributes: {
+                autocapitalize: "off",
+                type: "tel",
+                inputmode: "numeric"
+            },
             showCancelButton: true,
             confirmButtonText: "Simpan",
             cancelButtonText: "Batal",
             didOpen: () => {
                 const input = Swal.getInput();
+                input.setAttribute("type", "tel");
+                input.setAttribute("inputmode", "numeric");
                 input.addEventListener("input", () => {
-                    let rawValue = input.value.replace(/\./g, "");
-                    if (!rawValue.match(/^\d+$/)) return;
-                    input.value = formatNumber(Number(rawValue));
+                    let rawValue = input.value.replace(/\D/g, ""); // Hanya angka
+                    input.value = formatNumber(Number(rawValue)); // Format angka ke ribuan
                 });
             },
-            preConfirm: (value) => value.replace(/\./g, ""),
-        });
+            preConfirm: (value) => value.replace(/\D/g, ""), // Hapus semua non-digit sebelum dikirim
+        })
 
         if (!newPrice) return;
 
@@ -196,13 +201,14 @@ export default function Stock() {
                                     </svg>
                                 </button>
                                 <input
-                                    type="text"
+                                    type="tel"
+                                    inputMode="numeric"
                                     className="block w-full px-6 py-2.5 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
                                     placeholder="Masukkan nilai"
                                     ref={(el) => (inputRefs.current[id] = el)}
                                     onInput={(e) => {
-                                        let value = e.target.value.replace(/\D/g, "")
-                                        e.target.value = formatNumber(value)
+                                        let value = e.target.value.replace(/\D/g, ""); // Hanya angka
+                                        e.target.value = formatNumber(value); // Format angka ke ribuan
                                     }}
                                 />
                                 <button
@@ -253,7 +259,7 @@ export default function Stock() {
                                         </div>
                                         <button onClick={() => handleEditPrice(id, name, price)}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-md font-semibold text-blue-400 hover:scale-110 transition">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                                             </svg>
                                         </button>
                                     </div>
