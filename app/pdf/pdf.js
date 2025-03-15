@@ -8,8 +8,8 @@ const styles = StyleSheet.create({
     summary: { marginBottom: 20, padding: 12, backgroundColor: "#f5f5f5", borderRadius: 6 },
     summaryRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 6 },
     summaryText: { fontSize: 12, fontWeight: "bold" },
-    summaryValue: { fontSize: 16, fontWeight: "bold", color: "#006400" },
-    dateText: { fontSize: 10, color: "gray", textAlign: "right" }, // Tanggal lebih kecil & abu-abu
+    summaryValue: { fontSize: 16, fontWeight: "bold", color: "#22c55e" },
+    dateText: { fontSize: 10, color: "gray", textAlign: "right" },
     sectionTitle: { fontSize: 14, fontWeight: "bold", marginTop: 10, marginBottom: 5, borderBottom: "1px solid #ddd", paddingBottom: 2 },
     table: { display: "table", width: "100%", borderStyle: "solid", borderWidth: 1, borderColor: "#ddd", borderRadius: 4, overflow: "hidden" },
     row: { flexDirection: "row", borderBottom: "1px solid #ddd", backgroundColor: "#fff" },
@@ -32,6 +32,14 @@ const MyDocument = ({ data1, data2, data3, role}) => (
                 <View style={styles.summaryRow}>
                     <Text style={styles.summaryText}>Jumlah Pemasukan:</Text>
                     <Text style={styles.summaryValue}>Rp{(Number(data2?.total_pemasukan) || 0).toLocaleString()}</Text>
+                </View>
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryText}>Tunai:</Text>
+                    <Text style={styles.summaryValue}>Rp{(Number(data2?.total_tunai) || 0).toLocaleString()}</Text>
+                </View>
+                <View style={styles.summaryRow}>
+                    <Text style={styles.summaryText}>Non tunai:</Text>
+                    <Text style={styles.summaryValue}>Rp{(Number(data2?.total_non_tunai) || 0).toLocaleString()}</Text>
                 </View>
             </View>
 

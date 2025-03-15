@@ -25,24 +25,24 @@ export default function History() {
     if (isAuthenticated === false) return <Loading />;
 
     return (
-        <div className="flex flex-col items-center bg-gray-100 mt-4">
+        <div className="flex flex-col items-center bg-gray-100 my-4">
             <div className="flex gap-4">
                 <button
                     onClick={() => setActiveTab("date")}
-                    className={`px-4 py-2 rounded-lg font-medium transition ${
+                    className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
                         activeTab === "date"
-                            ? "bg-blue-600 text-white shadow-md"
-                            : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                            ? "bg-blue-500 text-white shadow-sm"
+                            : "bg-white text-gray-700 hover:bg-gray-300 shadow-sm"
                     }`}
                 >
                     History Date
                 </button>
                 <button
                     onClick={() => setActiveTab("set")}
-                    className={`px-4 py-2 rounded-lg font-medium transition ${
+                    className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
                         activeTab === "set"
-                            ? "bg-blue-600 text-white shadow-md"
-                            : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                            ? "bg-blue-500 text-white shadow-sm"
+                            : "bg-white text-gray-700 hover:bg-gray-300 shadow-sm"
                     }`}
                 >
                     History Set
