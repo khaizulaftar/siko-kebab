@@ -65,14 +65,29 @@ export default function Menu() {
             showCancelButton: true,
             confirmButtonText: "Ya, Simpan",
             cancelButtonText: "Batal",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
         });
 
         if (!confirmResult.isConfirmed) return;
         setLoadingCategory(prev => ({ ...prev, [category]: true }));
 
         try {
-            await axios.post("/api/income", { totalHarga, item: count, category, nama });
-            await axios.post("/api/history", { totalHarga, item: count, keterangan: 'Terjual', category, nama, icon: menuData[category].icon });
+            await axios.post("/api/income", {
+                totalHarga,
+                item: count,
+                category,
+                nama
+            });
+            await axios.post("/api/history", {
+                totalHarga,
+                item: count,
+                keterangan: 'Terjual', 
+                // jangan ubah kalimat Terjual karna berddampak pada pdf
+                category,
+                nama,
+                icon: menuData[category].icon
+            });
             await updateStock(nama, count);
 
             Swal.fire({ title: "Success", text: `Data ${category} berhasil disimpan!`, icon: "success" });

@@ -26,10 +26,10 @@ export default function AddMenuForm({ onMenuAdded }) {
                     </select>
                     <select id="dose" class="swal2-select">
                         <option value="pcs">Pcs</option>
-                        <option value="kg">Kg</option>
-                        <option value="gr">Gr</option>
-                        <option value="ml">Ml</option>
-                        <option value="lt">Lt</option>
+                        <option value="kg">kg</option>
+                        <option value="gr">gr</option>
+                        <option value="ml">ml</option>
+                        <option value="ltr">ltr</option>
                     </select>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                         <select id="ingredient" class="swal2-select">
@@ -44,6 +44,8 @@ export default function AddMenuForm({ onMenuAdded }) {
             `,
             showCancelButton: true,
             confirmButtonText: "Simpan",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
             didOpen: () => {
                 const compList = document.getElementById("composition-list");
                 const selectedComps = {};
@@ -74,12 +76,12 @@ export default function AddMenuForm({ onMenuAdded }) {
                     composition[key] = parseFloat(val);
                 });
 
-                return { 
-                    name, 
-                    price: parseInt(price, 10), 
-                    category: document.getElementById("category").value, 
-                    dose: document.getElementById("dose").value, 
-                    composition 
+                return {
+                    name,
+                    price: parseInt(price, 10),
+                    category: document.getElementById("category").value,
+                    dose: document.getElementById("dose").value,
+                    composition
                 };
             }
         });
@@ -90,16 +92,31 @@ export default function AddMenuForm({ onMenuAdded }) {
             .then(res => {
                 Swal.fire("Berhasil", "Menu berhasil ditambahkan", "success");
                 onMenuAdded(res.data);
+
+                // Kirim data ke history
+                axios.post("/api/history", {
+                    totalHarga: Number(value.price),
+                    item: null, // Kirim NULL
+                    keterangan: "menu baru",
+                    category: value.category,
+                    nama: value.name,
+                    icon: "https://img.icons8.com/bubbles/50/menu.png"
+                })                
+
+                    .then(() => console.log("Data history berhasil dikirim"))
+                    .catch(() => console.error("Gagal mengirim data ke history"))
             })
-            .catch(() => Swal.fire("Error", "Gagal menambahkan menu", "error"));
+            .catch(() => Swal.fire("Error", "Gagal menambahkan menu", "error"))
     };
 
     return (
-        <button 
-            onClick={handleAddMenu} 
-            className=" mx-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all w-full sm:w-auto"
-        >
-            Tambah Menu
-        </button>
-    );
+        <div className="mx-4 flex justify-end ">
+            <button
+                onClick={handleAddMenu}
+                className="flex px-4 py-2 bg-blue-500 text-md text-white rounded-full hover:bg-blue-600 transition-all"
+            >
+                Tambah Menu
+            </button>
+        </div>
+    )
 }

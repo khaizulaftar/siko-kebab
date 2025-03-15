@@ -19,6 +19,8 @@ export default function NonTunai() {
             showCancelButton: true,
             confirmButtonText: "Kirim",
             cancelButtonText: "Batal",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
             inputValidator: (value) => {
                 if (!value) {
                     return "Jumlah harus diisi!";

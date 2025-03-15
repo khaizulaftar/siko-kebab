@@ -33,8 +33,8 @@ export default function Profile() {
             text: "Data ini akan dihapus secara permanen!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
+            confirmButtonColor: "#EF4444",
+            cancelButtonColor: "#3B82F6",
             confirmButtonText: "Ya, hapus!",
             cancelButtonText: "Batal",
         })

@@ -6,6 +6,7 @@ import Swal from "sweetalert2"
 import Loading from "../dashboard/loading"
 import { useRouter } from "next/navigation"
 import Cookies from "js-cookie"
+import AddMenuForm from "./addMenuForm"
 
 export default function SettingMenu() {
     const [menus, setMenus] = useState([])
@@ -53,7 +54,7 @@ export default function SettingMenu() {
             [id]: new Intl.NumberFormat("id-ID").format(Number(value)), // Konversi ke Number sebelum diformat
         }));
     }
-        
+
     const handlePriceChange = async (id, category, name) => {
         const price = parseInt(formattedPrices[id].replace(/\./g, ""), 10)
 
@@ -73,6 +74,8 @@ export default function SettingMenu() {
             showCancelButton: true,
             confirmButtonText: "Ya, ubah harga!",
             cancelButtonText: "Batal",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
         })
 
         if (result.isConfirmed) {
@@ -86,7 +89,18 @@ export default function SettingMenu() {
         )
 
         try {
+            // Update menu price
             await axios.put("/api/menuSet", { id, price })
+
+            // Update history
+            await axios.post("/api/history", {
+                totalHarga: price,
+                item: null,
+                keterangan: "Perubahan harga untuk " + name,
+                category,
+                nama: name,
+                icon: getCategoryIcon(category)
+            })
 
             setMenus((prev) =>
                 prev.map((m) => (m.id === id ? { ...m, price, loading: false } : m))
@@ -112,6 +126,55 @@ export default function SettingMenu() {
         }
     }
 
+    const handleDelete = async (id) => {
+        if (user?.role !== "admin") {
+            Swal.fire("Akses Ditolak", "Hanya admin yang dapat menghapus menu.", "error")
+            return
+        }
+    
+        const confirmDelete = await Swal.fire({
+            title: "Hapus Menu?",
+            text: "Data menu ini akan dihapus secara permanen!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#EF4444",
+            cancelButtonColor: "#3B82F6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal"
+        })
+    
+        if (confirmDelete.isConfirmed) {
+            try {
+                // Dapatkan nama menu dan kategori
+                const menuToDelete = menus.find((menu) => menu.id === id)
+                const { name, category } = menuToDelete
+    
+                // Hapus menu
+                await axios.delete("/api/menuSet", { data: { id } })
+                setMenus(menus.filter(menu => menu.id !== id))
+    
+                // Kirim data ke history
+                await axios.post("/api/history", {
+                    totalHarga: null,
+                    item: null,
+                    keterangan: `Menu ${name} dihapus`,
+                    category: "Menu",
+                    nama: name,
+                    icon: "https://img.icons8.com/bubbles/50/cancel--v2.png"
+                })
+    
+                Swal.fire("Dihapus!", "Menu telah dihapus.", "success")
+            } catch (error) {
+                Swal.fire("Error!", "Gagal menghapus menu.", "error")
+            }
+        }
+    }
+    
+
+    const handleMenuAdded = (newMenu) => {
+        setMenus([...menus, newMenu]);
+    };
+
 
     const filteredMenus = menus.filter(
         ({ name, category }) =>
@@ -128,33 +191,50 @@ export default function SettingMenu() {
             showCancelButton: true,
             confirmButtonText: "Simpan",
             cancelButtonText: "Batal",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
             inputValidator: (value) => {
                 if (!value || value < 0) {
                     return "Jumlah harus lebih dari 0!"
                 }
             },
         })
-
+    
         if (newQty !== undefined && newQty !== oldQty) {
             try {
                 // Update hanya `composition` tanpa mengubah format lainnya
                 const updatedComposition = { ...composition, [ingredient]: Number(newQty) }
-
+    
                 await axios.put("/api/menuSet", { id: menuId, composition: updatedComposition })
-
+    
                 Swal.fire("Berhasil!", `Jumlah ${ingredient} diperbarui ke ${newQty}`, "success")
-
+    
+                // Kirim data ke history
+                const historyData = {
+                    totalHarga: null,  // Misalnya total harga disesuaikan jika perlu
+                    item: newQty,
+                    keterangan: 'Perubahan jumlah bahan',
+                    category: "Bahan",  // Kategori bisa disesuaikan sesuai dengan kebutuhan
+                    nama: ingredient,
+                    icon: "https://img.icons8.com/bubbles/50/recurring-appointment.png",  // Misalnya kosong, atau kamu bisa menambahkannya jika diperlukan
+                }
+    
+                await axios.post("/api/history", historyData)
+    
                 // Perbarui state lokal setelah berhasil mengubah
                 setMenus((prevMenus) =>
                     prevMenus.map((menu) =>
                         menu.id === menuId ? { ...menu, composition: updatedComposition } : menu
                     )
                 )
+    
             } catch (error) {
                 Swal.fire("Gagal!", "Terjadi kesalahan saat memperbarui jumlah.", "error")
             }
         }
     }
+    
+    
 
     // untuk icon
     const icons = {
@@ -181,6 +261,7 @@ export default function SettingMenu() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
+                <AddMenuForm onMenuAdded={handleMenuAdded} />
                 <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                     {filteredMenus.map(({ id, category, name, price, dose, loading, composition }) => (
                         <div key={id} className="p-6 rounded-3xl bg-white">
@@ -236,7 +317,19 @@ export default function SettingMenu() {
                                 </>
                             )}
                             <div className="mt-6">
-                                <p className="capitalize font-semibold mb-3 text-sm text-[#B12D67]">pengurangan bahan</p>
+                                <div className="flex items-center justify-between mb-3">
+                                    <p className="capitalize font-semibold text-sm text-[#B12D67]">pengurangan bahan</p>
+                                    {user?.role === "admin" && (
+                                        <button
+                                            onClick={() => handleDelete(id)}
+                                            className=""
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-red-500">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                            </svg>
+                                        </button>
+                                    )}
+                                </div>
                                 {composition &&
                                     Object.entries(composition).map(([ingredient, qty]) => (
                                         <div key={ingredient} className="flex items-center justify-between border-b py-2">

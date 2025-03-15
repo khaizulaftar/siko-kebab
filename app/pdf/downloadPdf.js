@@ -52,6 +52,9 @@ export default function DownloadPdf() {
             },
             showCancelButton: true,
             confirmButtonText: "Pilih tanggal",
+            cancelButtonText: "Batal",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
             preConfirm: (value) => {
                 if (!value) {
                     Swal.showValidationMessage("Tanggal harus dipilih")

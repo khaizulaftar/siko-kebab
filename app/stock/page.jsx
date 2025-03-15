@@ -70,6 +70,8 @@ export default function Stock() {
             showCancelButton: true,
             confirmButtonText: `Ya, ${action === "increase" ? "tambah" : "kurang"}i stok`,
             cancelButtonText: "Batal",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
         })
 
         if (!result.isConfirmed) return
@@ -79,6 +81,16 @@ export default function Stock() {
             await refreshMenus()
             inputRefs.current[id].value = ""
             setEditingId(null)
+
+            // Simpan ke history
+            await axios.post("/api/history", {
+                totalHarga: changeValue, // Tidak terkait pemasukan
+                item: null,
+                keterangan: `${action === "increase" ? "ditambah" : "dikurangi"}`,
+                category: "stok",
+                nama: name,
+                icon: action === "increase" ? "https://img.icons8.com/bubbles/50/plus.png" : "https://img.icons8.com/bubbles/50/minus.png"
+            });
 
             Swal.fire({
                 icon: "success",
@@ -108,6 +120,8 @@ export default function Stock() {
             showCancelButton: true,
             confirmButtonText: "Simpan",
             cancelButtonText: "Batal",
+            confirmButtonColor: "#3B82F6",
+            cancelButtonColor: "#B12D67",
             didOpen: () => {
                 const input = Swal.getInput();
                 input.setAttribute("type", "tel");
@@ -126,6 +140,16 @@ export default function Stock() {
             await axios.put("/api/stockSet", { id, price: Number(newPrice) });
             await refreshMenus();
 
+            // Simpan ke history
+            await axios.post("/api/history", {
+                totalHarga: newPrice,
+                item: null,
+                keterangan: 'diubah',
+                category: "harga",
+                nama: name,
+                icon: "https://img.icons8.com/bubbles/50/summer-sales.png"
+            });
+
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
@@ -138,7 +162,7 @@ export default function Stock() {
                 text: "Silakan coba lagi.",
             });
         }
-    };
+    }
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value)

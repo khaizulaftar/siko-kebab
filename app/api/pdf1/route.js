@@ -7,11 +7,15 @@ export async function GET(req) {
         const connection = await dbConnect();
         const url = new URL(req.url);
 
+        // Set waktu zona waktu Asia/Jakarta
         const userTimeZone = "Asia/Jakarta";
         const now = moment().tz(userTimeZone);
-        const tanggal = url.searchParams.get("tanggal") || now.format("YYYY-MM-DD");
 
-        // Menambahkan kondisi untuk hanya mengambil history yang berhubungan dengan penjualan
+        // Ambil tanggal min dan max, atau defaultkan ke hari ini jika tidak ada
+        const minDate = url.searchParams.get("min") || now.format("YYYY-MM-DD");
+        const maxDate = url.searchParams.get("max") || now.format("YYYY-MM-DD");
+
+        // Query untuk mengambil data berdasarkan rentang tanggal
         const [rows] = await connection.execute(
             `SELECT 
                 category, 
@@ -20,11 +24,10 @@ export async function GET(req) {
                 SUM(item) AS total_item, 
                 SUM(jumlah_pemasukan) AS jumlah_pemasukan 
             FROM history 
-            WHERE DATE(tanggal) = ? 
-            AND keterangan LIKE '%Terjual%'  -- Kondisi untuk hanya mengambil history penjualan
+            WHERE DATE(tanggal) BETWEEN ? AND ? 
             GROUP BY category, name 
             ORDER BY category ASC, name ASC`,
-            [tanggal]
+            [minDate, maxDate]
         );
         
         return NextResponse.json(rows);
