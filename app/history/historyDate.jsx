@@ -48,27 +48,29 @@ export default function DateRangePicker() {
                 <div className="flex items-start justify-between w-full">
                     <h2 className="text-lg font-semibold teaxt-gray-600">Pilih rentang tanggal</h2>
                     <div className="flex justify-center">
-                        <PDFDownloadLink
-                            document={<MyDocument data={history} startDate={dateRange.min} endDate={dateRange.max} />}
-                            fileName={`Laporan_${dateRange.min}_${dateRange.max}.pdf`}
-                            className=""
-                        >
-                            {({ loading }) => (loading ?
-                                <div className="flex flex-col items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-blue-500">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                    </svg>
-                                    <span className="text-gray-600 text-xs">Loading</span>
-                                </div>
-                                :
-                                <div className="flex flex-col items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-blue-500">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                    </svg>
-                                    <span className="text-gray-600 text-xs">Download</span>
-                                </div>
-                            )}
-                        </PDFDownloadLink>
+                        {history.length > 0 && (
+                            <PDFDownloadLink
+                                document={<MyDocument data={history} startDate={dateRange.min} endDate={dateRange.max} />}
+                                fileName={`Laporan_${dateRange.min}_${dateRange.max}.pdf`}
+                            >
+                                {({ loading }) =>
+                                    loading ? 
+                                    <div className="flex flex-col items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-blue-500">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                        </svg>
+                                        <span className="text-gray-600 text-xs">Loading</span>
+                                    </div>
+                                    : 
+                                    <div className="flex flex-col items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 text-blue-500">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                        </svg>
+                                        <span className="text-gray-600 text-xs">Download</span>
+                                    </div>
+                                }
+                            </PDFDownloadLink>
+                        )}
                     </div>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2 w-full">
@@ -76,14 +78,14 @@ export default function DateRangePicker() {
                         type="date"
                         value={dateRange.min}
                         onChange={handleDateChange}
-                        className="border rounded-lg p-2"
+                        className="border rounded-lg p-2 w-full"
                         max={today} // Batasi agar tidak bisa memilih lebih dari hari ini
                     />
                     <input
                         type="date"
                         value={dateRange.max}
                         onChange={handleDateChange}
-                        className="border rounded-lg p-2"
+                        className="border rounded-lg p-2 w-full"
                         min={dateRange.min || today} // Tidak bisa kurang dari min
                         max={today}
                         disabled={!dateRange.min}
@@ -98,7 +100,7 @@ export default function DateRangePicker() {
                     </div>
                 </div>
             )}
-            {!loading && history.length > 0 && (
+            {!loading && (
                 <>
                     <h2 className="text-lg font-semibold mb-4 text-md text-gray-600">Detail history</h2>
                     <div className="grid sm:grid-cols-2 bg-white p-6 rounded-3xl gap-4 text-sm mb-20 sm:mb-6">
