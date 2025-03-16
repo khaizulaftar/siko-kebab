@@ -9,6 +9,9 @@ export async function GET(req) {
 
         const userTimeZone = "Asia/Jakarta";
         const now = moment().tz(userTimeZone);
+        if (now.hour() < 2) {
+            now.subtract(1, "day");
+        }
         const tanggal = url.searchParams.get("tanggal") || now.format("YYYY-MM-DD");
 
         // Menambahkan kondisi untuk hanya mengambil history yang berhubungan dengan penjualan

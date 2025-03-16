@@ -45,7 +45,7 @@ export default function Dashboard() {
         <>
             <div className="max-w-5xl mx-auto px-4 min-h-screen">
                 {/* jumlah pemasukan */}
-                <div className="card px-6 pt-6 rounded-3xl my-4 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
+                <div className="card px-6 pt-6 rounded-3xl shadow-sm my-4 bg-[url('/images/stacked-waves-haikei.svg')] bg-cover bg-center">
                     <div className="flex items-start justify-between mb-6">
                         <div>
                             <img src="/images/siko kebab.png" alt="logo" className="w-10 mx-auto" />
@@ -87,15 +87,15 @@ export default function Dashboard() {
                 <div className="my-4">
                     <div className='flex flex-col sm:grid grid-cols-3 gap-6'>
                         <div className="grid grid-cols-3 sm:flex flex-col gap-4">
-                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl shadow-sm bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_kebab}</span>
                                 <span className="text-sm text-white font-semibold">Kebab</span>
                             </div>
-                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl shadow-sm bg-[url('/images/blurry-gradient-haikei1.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_burger}</span>
                                 <span className="text-sm text-white font-semibold">Burger</span>
                             </div>
-                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
+                            <div className="p-4 sm:p-6 flex flex-col gap-1 text-center rounded-3xl shadow-sm bg-[url('/images/blurry-gradient-haikei2.svg')] bg-cover bg-center">
                                 <span className="capitalize text-xl text-white font-semibold">{dataPemasukan.total_minuman}</span>
                                 <span className="text-sm text-white font-semibold">Minuman</span>
                             </div>
@@ -136,7 +136,7 @@ export default function Dashboard() {
                     </div>
                     <div className="grid grid-1 sm:grid-cols-2 gap-3">
                         {stock.slice(0, 4).map((value, index) => (
-                            <div key={index} className="p-6 rounded-3xl flex items-center justify-between bg-white">
+                            <div key={index} className="p-6 rounded-3xl shadow-sm flex items-center justify-between bg-white">
                                 <span className="capitalize text-gray-600 text-md font-semibold">{value.name}</span>
                                 <div className='flex items-center gap-1'>
                                     <span className="text-md text-[#B12D67] font-semibold">{value.stock}</span>

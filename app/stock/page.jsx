@@ -189,7 +189,7 @@ export default function Stock() {
             </div>
             <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                 {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, price }) => (
-                    <div key={id} className="p-6 flex flex-col rounded-3xl bg-white">
+                    <div key={id} className="p-6 flex flex-col rounded-3xl shadow-sm bg-white">
                         <span className="font-semibold text-[#B12D67] text-md mb-3">{name}</span>
                         <div className="flex flex-col text-center items-center">
                             <div className="flex gap-1 items-center">
@@ -255,7 +255,7 @@ export default function Stock() {
                         </div>
                         {user?.role === "admin" &&
                             <>
-                                <hr className="my-3" />
+                                <hr className="my-3 border-2 border-dashed" />
                                 <div className="flex flex-col text-center items-center">
                                     <div className="flex items-center w-full justify-between">
                                         <div className="flex items-center gap-1">
@@ -279,7 +279,7 @@ export default function Stock() {
                                         <span className="text-sm capitalize">jumlah habis</span>
                                         <span className="text-green-500 text-sm">Rp{formatNumber(out_stock * price)}</span>
                                     </div>
-                                    <div className="flex items-center justify-between border-t">
+                                    <div className="flex items-center justify-between border-t-2 border-dashed pt-2">
                                         <span className="text-sm capitalize">selisih</span>
                                         <span className="text-gray-500 text-sm">Rp{formatNumber((stock - out_stock) * price)}</span>
                                     </div>

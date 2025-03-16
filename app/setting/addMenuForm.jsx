@@ -101,7 +101,7 @@ export default function AddMenuForm({ onMenuAdded }) {
                     category: value.category,
                     nama: value.name,
                     icon: "https://img.icons8.com/bubbles/50/menu.png"
-                })                
+                })
 
                     .then(() => console.log("Data history berhasil dikirim"))
                     .catch(() => console.error("Gagal mengirim data ke history"))
@@ -113,9 +113,12 @@ export default function AddMenuForm({ onMenuAdded }) {
         <div className="mx-4 flex justify-end ">
             <button
                 onClick={handleAddMenu}
-                className="flex px-4 py-2 bg-blue-500 text-md text-white rounded-full hover:bg-blue-600 transition-all"
+                className="flex items-center gap-1 px-4 py-2 bg-blue-100 border border-blue-500 text-sm text-blue-600 rounded-full hover:bg-blue-200 transition-all"
             >
-                Tambah Menu
+                <span>Tambah menu</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
             </button>
         </div>
     )

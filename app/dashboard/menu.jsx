@@ -211,7 +211,7 @@ const categoryIcons = {
     kebab: "https://img.icons8.com/bubbles/100/burrito.png",
     burger: "https://img.icons8.com/bubbles/100/hamburger.png",
     minuman: "https://img.icons8.com/bubbles/100/iced-coffee.png",
-    paket: "https://img.icons8.com/bubbles/50/take-away-food.png",
+    paket: "https://img.icons8.com/bubbles/100/take-away-food.png",
 };
 
 export default function Menu() {
@@ -219,7 +219,7 @@ export default function Menu() {
         kebab: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.kebab },
         burger: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.burger },
         minuman: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.minuman },
-        paket: { items: [], harga: 0, count: 1, nama: "Paket", selectedItems: [], icon: categoryIcons.paket },
+        paket: { items: [], harga: 0, count: 1, nama: "Menu paket", selectedItems: [], icon: categoryIcons.paket },
     });
 
     const [loadingCategory, setLoadingCategory] = useState({
@@ -331,7 +331,7 @@ export default function Menu() {
                 await axios.post("/api/history", {
                     totalHarga: totalHarga * count,
                     item: count,
-                    keterangan: "Terjual",
+                    keterangan: "Terjual", // jangan ubah kalimat Terjual untuk falidasi history dan income
                     category: "paket",
                     nama: selectedItems.kebab ? selectedItems.kebab.packageName : selectedItems.burger.packageName,
                     icon: menuData[category].icon,
@@ -427,7 +427,7 @@ export default function Menu() {
 
             <div className="grid md:grid-cols-2 gap-6">
                 {Object.entries(menuData).map(([category, data], index) => (
-                    <div key={index} className="flex flex-col align-center gap-6 p-6 rounded-3xl bg-white">
+                    <div key={index} className="flex flex-col align-center gap-6 p-6 rounded-3xl shadow-sm bg-white">
                         <div className="flex items-center flex-col">
                             <div className="w-full flex items-center justify-between">
                                 <img src={data.icon} alt={`icon ${category}`} className="w-16" />
@@ -443,7 +443,7 @@ export default function Menu() {
                             <div className="flex flex-col gap-4">
                                 {Object.entries(packages).map(([key, options]) => (
                                     <div key={key}>
-                                        <h3 className="font-semibold mb-2">Pilih {key}</h3>
+                                        <h3 className="font-semibold mb-2 text-sm text-gray-600">Pilih {key}</h3>
 
                                         <select
                                             value={selectedItems[key] ? `${selectedItems[key].packageName} - ${selectedItems[key].variant}` : ""}
@@ -460,7 +460,7 @@ export default function Menu() {
                                                     return newSelectedItems;
                                                 });
                                             }}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-sm text-gray-600 mb-2"
                                             disabled={(key === "burger" && selectedItems.kebab) || (key === "kebab" && selectedItems.burger)}
                                         >
                                             <option value="">Pilih {key} (Opsional)</option>
@@ -526,7 +526,7 @@ export default function Menu() {
                                 disabled={loadingCategory[category]}
                                 className={`px-5 py-2 border rounded-full font-semibold transition-all ${loadingCategory[category]
                                     ? "bg-gray-400 cursor-not-allowed"
-                                    : "bg-green-300 hover:bg-green-400 text-gray-600 hover:text-white border-green-600"
+                                    : "bg-green-200 hover:bg-green-300 text-gray-600 hover:text-white border-green-600"
                                     }`}
                             >
                                 {loadingCategory[category] ? "Mengirim..." : "Tambah"}

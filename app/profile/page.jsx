@@ -161,7 +161,7 @@ export default function Profile() {
         <div className="p-4 max-w-4xl mx-auto min-h-screen">
             <div className="mt-4 sm:grid grid-cols-2 gap-6">
                 <div>
-                    <div className="p-6 bg-white rounded-3xl flex flex-col items-center">
+                    <div className="p-6 bg-white rounded-3xl shadow-sm flex flex-col items-center">
                         {/* Avatar */}
                         <img
                             src={user.role === "admin"
@@ -205,7 +205,7 @@ export default function Profile() {
                         }
                     </div>
                     {daftar.map((value, index) => (
-                        <div key={index} className="flex gap-1 items-center mt-4 rounded-3xl p-6 bg-white">
+                        <div key={index} className="flex gap-1 items-center mt-4 rounded-3xl shadow-sm p-6 bg-white">
                             <img
                                 src={value.role === "admin"
                                     ? "https://img.icons8.com/3d-fluency/45/star-struck.png"

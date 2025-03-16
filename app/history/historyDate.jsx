@@ -44,7 +44,7 @@ export default function DateRangePicker() {
 
     return (
         <div className="max-w-4xl mx-auto min-h-screen p-4">
-            <div className="flex flex-col items-center gap-4 bg-white p-6 rounded-3xl mb-12">
+            <div className="flex flex-col items-center gap-4 bg-white p-6 rounded-3xl shadow-sm mb-12">
                 <div className="flex items-start justify-between w-full">
                     <h2 className="text-lg font-semibold teaxt-gray-600">Pilih rentang tanggal</h2>
                     <div className="flex justify-center">
@@ -103,12 +103,12 @@ export default function DateRangePicker() {
             {!loading && (
                 <>
                     <h2 className="text-lg font-semibold mb-4 text-md text-gray-600">Detail history</h2>
-                    <div className="grid sm:grid-cols-2 bg-white p-6 rounded-3xl gap-4 text-sm mb-20 sm:mb-6">
+                    <div className="grid sm:grid-cols-2 bg-white p-6 rounded-3xl shadow-sm gap-4 text-sm mb-20 sm:mb-6">
                         {history.map((item, index) => (
                             <div key={index} className="border-2 border-dashed p-6 rounded-3xl">
                                 <div className="flex items-center gap-2 justify-between">
                                     <span>Nama:</span>
-                                    <span>{item.name}</span>
+                                    <span className="text-[#B12D67]">{item.name}</span>
                                 </div>
                                 <div className="flex items-center gap-2 justify-between">
                                     <span>category:</span>
@@ -120,7 +120,7 @@ export default function DateRangePicker() {
                                 </div>
                                 <div className="flex items-center gap-2 justify-between">
                                     <span>jumlah pemasukan:</span>
-                                    <span>Rp {item.jumlah_pemasukan.toLocaleString()}</span>
+                                    <span className="text-green-500">Rp {item.jumlah_pemasukan.toLocaleString()}</span>
                                 </div>
                             </div>
                         ))}

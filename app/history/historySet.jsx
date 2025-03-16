@@ -65,9 +65,9 @@ export default function HistorySet() {
                 {filteredHistory.map(([date, items]) => (
                     <div key={date} className="mb-12">
                         <p className="capitalize font-semibold text-sm mb-4 text-gray-700">{date}</p>
-                        <div className="grid grid-1 sm:grid-cols-2 gap-3 rounded-3xl p-6 bg-white">
+                        <div className="grid grid-1 sm:grid-cols-2 gap-3 rounded-3xl shadow-sm p-6 bg-white">
                             {items.slice().reverse().map((value) => (
-                                <div key={value.id} className="flex items-center gap-1">
+                                <div key={value.id} className="flex items-center gap-2">
                                     {value.icon && <img src={value.icon} alt="icon" className="w-12" />}
                                     <div className="flex flex-col gap-2 w-full">
                                         <div className="flex items-center justify-between">
@@ -77,7 +77,7 @@ export default function HistorySet() {
                                             </div>
                                             <div className="flex flex-col items-end">
                                                 {value.jumlah_pemasukan && Number(value.jumlah_pemasukan) !== 0 && (
-                                                    <span className="text-sm text-[#B13069]">
+                                                    <span className="text-sm font-semibold text-[#B13069]">
                                                         {new Intl.NumberFormat('id-ID').format(Number(value.jumlah_pemasukan))}
                                                     </span>
                                                 )}

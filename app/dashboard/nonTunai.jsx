@@ -11,7 +11,7 @@ export default function NonTunai() {
             title: "Pemasukan Non-Tunai",
             input: "text",
             inputPlaceholder: "Masukkan jumlah",
-            inputAttributes: { 
+            inputAttributes: {
                 autocapitalize: "off",
                 type: "tel",
                 inputMode: "numeric"
@@ -45,20 +45,27 @@ export default function NonTunai() {
             }
         });
     };
-    
+
 
     const handleSubmit = async (totalHarga) => {
         setLoading(true);
 
-        const data = {
-            totalHarga,
-            item: "Item 1",
-            category: "Non Tunai",
-            nama: "Non Tunai",
-        };
-
         try {
-            await axios.post("/api/income", data);
+            await axios.post("/api/income", {
+                totalHarga,
+                item: "Item 1",
+                category: "Non Tunai",
+                nama: "Non Tunai",
+            });
+
+            await axios.post("/api/history", {
+                totalHarga,
+                item: 1,
+                keterangan: "Terjual", // jangan hapus keterangan Terjual
+                category: "non tunai",
+                nama: "Non Tunai",
+                icon: "https://img.icons8.com/bubbles/50/money.png"
+            })
             Swal.fire("Berhasil!", "Data berhasil dikirim", "success");
         } catch (error) {
             Swal.fire("Gagal!", "Terjadi kesalahan saat mengirim data", "error");

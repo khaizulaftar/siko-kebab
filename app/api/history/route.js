@@ -65,9 +65,6 @@ export async function GET() {
 export async function POST(req) {
     try {
         const { totalHarga, item, keterangan, category, nama, icon } = await req.json();
-        if (!category || !nama) {  // Menghapus pengecekan totalHarga
-            return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
-        }
 
         const db = await dbConnect();
 

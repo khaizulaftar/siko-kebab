@@ -264,7 +264,7 @@ export default function SettingMenu() {
                 <AddMenuForm onMenuAdded={handleMenuAdded} />
                 <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                     {filteredMenus.map(({ id, category, name, price, dose, loading, composition }) => (
-                        <div key={id} className="p-6 rounded-3xl bg-white">
+                        <div key={id} className="p-6 rounded-3xl bg-white shadow-sm">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <img src={getCategoryIcon(category)} alt={category} className="w-14" />
@@ -332,7 +332,7 @@ export default function SettingMenu() {
                                 </div>
                                 {composition &&
                                     Object.entries(composition).map(([ingredient, qty]) => (
-                                        <div key={ingredient} className="flex items-center justify-between border-b py-2">
+                                        <div key={ingredient} className="flex items-center justify-between border-b-2 border-dashed py-2">
                                             <span className="text-gray-600 text-sm">{ingredient}</span>
                                             <div className="flex gap-4 items-center">
                                                 <span className="text-gray-600 text-sm">- {qty} </span>
