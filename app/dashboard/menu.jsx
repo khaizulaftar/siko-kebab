@@ -174,7 +174,6 @@
 // }
 
 
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -220,7 +219,7 @@ export default function Menu() {
         kebab: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.kebab },
         burger: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.burger },
         minuman: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.minuman },
-        paket: { items: [], harga: 0, count: 1, nama: "Paket Kebab", selectedItems: [], icon: categoryIcons.paket },
+        paket: { items: [], harga: 0, count: 1, nama: "Paket", selectedItems: [], icon: categoryIcons.paket },
     });
 
     const [loadingCategory, setLoadingCategory] = useState({
@@ -284,7 +283,6 @@ export default function Menu() {
     }, [selectedItems]);
 
     // Kirim data ke income
-
     const kirimKeIncome = async (category) => {
         const { harga, count, nama } = menuData[category];
 
@@ -335,7 +333,7 @@ export default function Menu() {
                     item: count,
                     keterangan: "Terjual",
                     category: "paket",
-                    nama: "Paket Kebab",
+                    nama: selectedItems.kebab ? selectedItems.kebab.packageName : selectedItems.burger.packageName,
                     icon: menuData[category].icon,
                 });
 
@@ -452,9 +450,18 @@ export default function Menu() {
                                             onChange={(e) => {
                                                 const selectedPackage = e.target.value;
                                                 const selectedItem = options.find((item) => `${item.packageName} - ${item.variant}` === selectedPackage);
-                                                setSelectedItems((prev) => ({ ...prev, [key]: selectedItem || null }));
+                                                setSelectedItems((prev) => {
+                                                    const newSelectedItems = { ...prev, [key]: selectedItem || null };
+                                                    if (key === "kebab" && selectedItem) {
+                                                        newSelectedItems.burger = null;
+                                                    } else if (key === "burger" && selectedItem) {
+                                                        newSelectedItems.kebab = null;
+                                                    }
+                                                    return newSelectedItems;
+                                                });
                                             }}
                                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                            disabled={(key === "burger" && selectedItems.kebab) || (key === "kebab" && selectedItems.burger)}
                                         >
                                             <option value="">Pilih {key} (Opsional)</option>
                                             {options.map((item, idx) => (
