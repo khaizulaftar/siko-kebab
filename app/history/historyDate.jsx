@@ -46,7 +46,7 @@ export default function DateRangePicker() {
         <div className="max-w-4xl mx-auto min-h-screen p-4">
             <div className="flex flex-col items-center gap-4 bg-white p-6 rounded-3xl shadow-sm mb-12">
                 <div className="flex items-start justify-between w-full">
-                    <h2 className="text-lg font-semibold teaxt-gray-600">Pilih rentang tanggal</h2>
+                    <h2 className="text-md text-gray-600 font-semibold teaxt-gray-600">Pilih rentang tanggal</h2>
                     <div className="flex justify-center">
                         {history.length > 0 && (
                             <PDFDownloadLink
@@ -102,7 +102,7 @@ export default function DateRangePicker() {
             )}
             {!loading && (
                 <>
-                    <h2 className="text-lg font-semibold mb-4 text-md text-gray-600">Detail history</h2>
+                    <h2 className="text-md font-semibold mb-4 text-md text-gray-600">Detail history</h2>
                     <div className="grid sm:grid-cols-2 bg-white p-6 rounded-3xl shadow-sm gap-4 text-sm mb-20 sm:mb-6">
                         {history.map((item, index) => (
                             <div key={index} className="border-2 border-dashed p-6 rounded-3xl">

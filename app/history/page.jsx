@@ -84,38 +84,41 @@ export default function History() {
     if (isAuthenticated === false) return <Loading />;
 
     return (
-        <div className="flex flex-col items-center bg-gray-100 my-4">
+        <div className="flex flex-col items-center bg-gray-100 mt-6">
             {/* Tab Navigation */}
-            <div className="flex gap-4">
+            <div className="flex gap-3 items-center justify-center">
                 <button
                     onClick={() => setActiveTab("date")}
-                    className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
-                        activeTab === "date"
-                            ? "bg-blue-500 text-white shadow-sm"
-                            : "bg-white text-gray-700 hover:bg-gray-300 shadow-sm"
-                    }`}
+                    className={`px-6 py-2 text-sm rounded-lg font-medium shadow-sm transition ${activeTab === "date"
+                        ? "bg-blue-400 text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-300"
+                        }`}
                 >
-                    History Date
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                    </svg>
                 </button>
                 <button
                     onClick={() => setActiveTab("set")}
-                    className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
-                        activeTab === "set"
-                            ? "bg-blue-500 text-white shadow-sm"
-                            : "bg-white text-gray-700 hover:bg-gray-300 shadow-sm"
-                    }`}
+                    className={`px-6 py-2 text-sm rounded-lg shadow-sm font-medium transition ${activeTab === "set"
+                        ? "bg-blue-400 text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-300"
+                        }`}
                 >
-                    History Set
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
                 </button>
                 <button
                     onClick={() => setActiveTab("income")}
-                    className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
-                        activeTab === "income"
-                            ? "bg-blue-500 text-white shadow-sm"
-                            : "bg-white text-gray-700 hover:bg-gray-300 shadow-sm"
-                    }`}
+                    className={`px-6 py-2 text-sm rounded-lg font-medium shadow-sm transition ${activeTab === "income"
+                        ? "bg-blue-400 text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-300"
+                        }`}
                 >
-                    History Income
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
+                    </svg>
                 </button>
             </div>
 

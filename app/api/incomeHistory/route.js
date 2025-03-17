@@ -56,3 +56,40 @@ export async function GET() {
         );
     }
 }
+
+export async function DELETE(request) {
+    try {
+        const db = await dbConnect();
+        const { id } = await request.json();
+
+        // Hapus data income berdasarkan ID
+        const [result] = await db.execute("DELETE FROM income WHERE id = ?", [id]);
+
+        if (result.affectedRows > 0) {
+            return NextResponse.json(
+                {
+                    success: true,
+                    message: "Data berhasil dihapus",
+                },
+                { status: 200 }
+            );
+        }
+
+        return NextResponse.json(
+            {
+                success: false,
+                message: "Data tidak ditemukan",
+            },
+            { status: 404 }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            {
+                success: false,
+                error: error.message,
+                message: "Gagal menghapus data income",
+            },
+            { status: 500 }
+        );
+    }
+}

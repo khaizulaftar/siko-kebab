@@ -87,28 +87,28 @@ export default function HistoryPage() {
             html: `
             <div class="flex flex-col gap-3">
                 <div class="flex justify-between">
-                    <p><strong>Tanggal:</strong></p>
-                    <p>${moment(item.tanggal).locale("id").format("dddd, DD MMMM YYYY")}</p>
+                    <span class="font-semibold">Tanggal:</span>
+                    <span>${moment(item.tanggal).locale("id").format("dddd, DD MMMM YYYY")}</span>
                 </div>
                 <div class="flex justify-between">
-                    <p><strong>Kategori:</strong></p>
-                    <p>${item.category}</p>
+                    <span class="font-semibold">Kategori:</span>
+                    <span>${item.category}</span>
                 </div>
                 <div class="flex justify-between">
-                    <p><strong>Nama:</strong></p>
-                    <p>${item.name}</p>
+                    <span class="font-semibold">Nama:</span>
+                    <span>${item.name}</span>
                 </div>
                 <div class="flex justify-between">
-                    <p><strong>Jumlah Pemasukan:</strong></p>
-                    <p>${item.jumlah_pemasukan ? new Intl.NumberFormat("id-ID").format(Number(item.jumlah_pemasukan)) : "-"}</p>
+                    <span class="font-semibold">Jumlah Pemasukan:</span>
+                    <span>${item.jumlah_pemasukan ? new Intl.NumberFormat("id-ID").format(Number(item.jumlah_pemasukan)) : "-"}</span>
                 </div>
                 <div class="flex justify-between">
-                    <p><strong>Item:</strong></p>
-                    <p>${item.item || "-"}</p>
+                    <span class="font-semibold">Item:</span>
+                    <span>${item.item || "-"}</span>
                 </div>
                 <div class="flex justify-between">
-                    <p><strong>Keterangan:</strong></p>
-                    <p>${item.keterangan || "-"}</p>
+                    <span class="font-semibold">Keterangan:</span>
+                    <span>${item.keterangan || "-"}</span>
                 </div>
             </div>
         `,
