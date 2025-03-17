@@ -32,35 +32,6 @@ export async function GET() {
     }
 }
 
-// export async function POST(req) {
-//     try {
-//         const { totalHarga, item, keterangan, category, nama, icon } = await req.json();
-//         if (!totalHarga || !category || !nama) {  // Hapus pengecekan !item
-//             return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
-//         }
-
-//         const db = await dbConnect();
-
-//         // Ambil tanggal sekarang dalam zona waktu WIB
-//         const userTimeZone = "Asia/Jakarta";
-//         let now = moment().tz(userTimeZone);
-
-//         // Jika masih antara 00:00 - 01:59 WIB, anggap masih hari sebelumnya
-//         if (now.hour() < 2) now.subtract(1, "day");
-
-//         const tanggal = now.format("YYYY-MM-DD");
-
-//         // Simpan data dengan item bisa NULL
-//         const [result] = await db.execute(
-//             "INSERT INTO history (tanggal, jumlah_pemasukan, item, keterangan, category, name, icon) VALUES (?, ?, ?, ?, ?, ?, ?)",
-//             [tanggal, totalHarga, item ?? null, keterangan || "", category, nama, icon || ""]
-//         );
-
-//         return NextResponse.json({ message: "Data berhasil disimpan", result }, { status: 200 });
-//     } catch (error) {
-//         return NextResponse.json({ error: "Gagal menyimpan data", details: error.message }, { status: 500 });
-//     }
-// }
 
 export async function POST(req) {
     try {
@@ -86,5 +57,22 @@ export async function POST(req) {
         return NextResponse.json({ message: "Data berhasil disimpan", result }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: "Gagal menyimpan data", details: error.message }, { status: 500 });
+    }
+}
+
+export async function DELETE(req) {
+    try {
+        const { id } = await req.json(); // Ambil ID dari body request
+        const db = await dbConnect();
+
+        const [result] = await db.execute("DELETE FROM history WHERE id = ?", [id]);
+
+        if (result.affectedRows === 0) {
+            return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "Data berhasil dihapus" }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: "Gagal menghapus data", details: error.message }, { status: 500 });
     }
 }

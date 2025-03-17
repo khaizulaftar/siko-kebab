@@ -333,16 +333,18 @@ export default function Stock() {
     const handleAddMenu = async () => {
         const { value: formValues } = await Swal.fire({
             title: "Tambah Menu Stok Baru",
-            html:
-                '<input id="swal-input1" class="swal2-input" placeholder="Nama Menu">' +
-                '<select id="swal-input2" class="swal2-input" style="width: 59%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-top: 15px;">' +
-                '   <option value="g">g</option>' +
-                '   <option value="kg">kg</option>' +
-                '   <option value="ml">ml</option>' +
-                '   <option value="pcs">pcs</option>' +
-                '</select>' +
-                '<input id="swal-input3" class="swal2-input" placeholder="Stok" type="text">' +
-                '<input id="swal-input4" class="swal2-input" placeholder="Harga" type="text">',
+            html:`
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                <input id="swal-input1" class="swal2-input" placeholder="Nama Menu">
+                <select id="swal-input2" class="swal2-select"">
+                    <option value="g">g</option>
+                    <option value="kg">kg</option>
+                    <option value="ml">ml</option>
+                    <option value="pcs">pcs</option>
+                </select>
+                <input id="swal-input3" class="swal2-input" placeholder="Stok" type="text">
+                <input id="swal-input4" class="swal2-input" placeholder="Harga" type="text">
+                </div>`,
             focusConfirm: false,
             showCancelButton: true,
             confirmButtonText: "Tambah",
