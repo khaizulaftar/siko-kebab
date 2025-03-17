@@ -184,25 +184,28 @@ import Swal from "sweetalert2";
 // Data paket yang fleksibel (bisa ditambah/dihapus dengan mudah)
 const packages = {
     kebab: [
-        { packageName: "Paket Kebab 1", variant: "Original", price: 25000 },
-        { packageName: "Paket Kebab 2", variant: "Jumbo", price: 30000 },
-        { packageName: "Paket Kebab 3", variant: "Telur", price: 28000 },
+        { packageName: "Paket Kebab 1", variant: "Original", price: 29000 },
+        { packageName: "Paket Kebab 2", variant: "Jumbo", price: 31000 },
+        { packageName: "Paket Kebab 3", variant: "Telur", price: 26000 },
+        { packageName: "Paket Kebab 4", variant: "Ayam", price: 31000 },
+        { packageName: "Paket Kebab 5", variant: "Sosis", price: 28000 },
     ],
     kentang: [
-        { packageName: "Kentang Goreng", variant: "Regular", price: 15000 },
-        { packageName: "Kentang Keju", variant: "Spesial", price: 18000 },
+        { packageName: "Paket Kentang 1", variant: "Kentang Goreng", price: 15000 },
     ],
     burger: [
-        { packageName: "Paket Burger 1", variant: "Ayam Original", price: 30000 },
-        { packageName: "Paket Burger 2", variant: "Ayam Spesial", price: 35000 },
+        { packageName: "Paket Burger 1", variant: "Ayam Original", price: 28000 },
+        { packageName: "Paket Burger 2", variant: "Ayam Spesial", price: 34000 },
+        { packageName: "Paket Burger 3", variant: "Sapi Original", price: 26000 },
+        { packageName: "Paket Burger 4", variant: "Sapi Spesial", price: 30000 },
     ],
     burgerManis: [
-        { packageName: "Burger Manis 1", variant: "Coklat", price: 20000 },
-        { packageName: "Burger Manis 2", variant: "Keju", price: 22000 },
+        { packageName: "Paket BurgerManis 1", variant: "Coklat", price: 20000 },
+        { packageName: "Paket BurgerManis 2", variant: "Coklat Keju", price: 22000 },
     ],
     minuman: [
-        { packageName: "Minuman", variant: "Cola", price: 10000 },
-        { packageName: "Minuman", variant: "Fanta", price: 10000 },
+        { packageName: "Paket Minuman 1", variant: "Cola", price: 10000 },
+        { packageName: "Paket Minuman 2", variant: "Fanta", price: 10000 },
     ],
 };
 
@@ -229,6 +232,11 @@ export default function Menu() {
         paket: false,
     });
 
+    const categoryMapping = {
+        kentang: "kebab",
+        burgerManis: "burger",
+        minuman: "minuman",
+    };
     const [selectedItems, setSelectedItems] = useState({
         kebab: null,
         kentang: null,
@@ -283,6 +291,140 @@ export default function Menu() {
     }, [selectedItems]);
 
     // Kirim data ke income
+    // const kirimKeIncome = async (category) => {
+    //     const { harga, count, nama } = menuData[category];
+
+    //     if (category === "paket") {
+    //         const totalHarga = calculateTotalPrice();
+    //         const selectedItemsList = Object.entries(selectedItems)
+    //             .map(([key, item]) => {
+    //                 if (item) {
+    //                     // Perbaikan: Ubah kategori kentang dan burgerManis ke kategori valid
+    //                     const updatedCategory = categoryMapping[key] || key;
+    //                     return { ...item, category: updatedCategory }; // Pastikan category diisi
+    //                 }
+    //                 return null;
+    //             })
+    //             .filter((item) => item !== null);
+
+    //         if (count < 1) {
+    //             Swal.fire({ title: "Peringatan", text: "Jumlah harus lebih dari 0!", icon: "warning" });
+    //             return;
+    //         }
+
+    //         const confirmResult = await Swal.fire({
+    //             title: "Konfirmasi",
+    //             text: `Apakah Anda yakin ingin menambahkan paket sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(totalHarga * count)}?`,
+    //             icon: "question",
+    //             showCancelButton: true,
+    //             confirmButtonText: "Ya, Simpan",
+    //             cancelButtonText: "Batal",
+    //             confirmButtonColor: "#3B82F6",
+    //             cancelButtonColor: "#B12D67",
+    //         });
+
+    //         if (!confirmResult.isConfirmed) return;
+    //         setLoadingCategory((prev) => ({ ...prev, [category]: true }));
+
+    //         if (!selectedItemsList.every(item => item && item.variant && item.price)) {
+    //             Swal.fire({ title: "Error", text: "Data tidak valid!", icon: "error" });
+    //             return;
+    //         }
+
+    //         try {
+    //             for (const item of selectedItemsList) {
+    //                 // Perbaikan: Gunakan updatedCategory yang sudah diubah sebelumnya
+    //                 await axios.post("/api/income", {
+    //                     totalHarga: item.price * count,
+    //                     item: count,
+    //                     category: item.category, // Gunakan item.category yang sudah diubah
+    //                     nama: item.variant,
+    //                 });
+    //             }
+
+    //             await axios.post("/api/history", {
+    //                 totalHarga: totalHarga * count,
+    //                 item: count,
+    //                 keterangan: "Terjual", // jangan ubah kalimat Terjual untuk falidasi history dan income
+    //                 category: "paket",
+    //                 nama: selectedItems.kebab ? selectedItems.kebab.packageName : selectedItems.burger.packageName,
+    //                 icon: menuData[category].icon,
+    //             });
+
+    //             for (const item of selectedItemsList) {
+    //                 // Perbaikan: Gunakan item.variant untuk updateStock
+    //                 await updateStock(item.variant, count);
+    //             }
+
+    //             Swal.fire({ title: "Success", text: `Data ${category} berhasil disimpan!`, icon: "success" });
+
+    //             setMenuData((prev) => ({
+    //                 ...prev,
+    //                 [category]: { ...prev[category], harga: 0, count: 1, selectedItems: [] },
+    //             }));
+    //             setSelectedItems({
+    //                 kebab: null,
+    //                 kentang: null,
+    //                 burger: null,
+    //                 burgerManis: null,
+    //                 minuman: null,
+    //             });
+    //         } catch (error) {
+    //             Swal.fire({ title: "Error", text: `Gagal mengirim data ${category}!`, icon: "error" });
+    //         } finally {
+    //             setLoadingCategory((prev) => ({ ...prev, [category]: false }));
+    //         }
+    //     } else {
+    //         if (!nama || count < 1) {
+    //             Swal.fire({ title: "Peringatan", text: "Silakan pilih menu dan jumlah harus lebih dari 0!", icon: "warning" });
+    //             return;
+    //         }
+
+    //         const confirmResult = await Swal.fire({
+    //             title: "Konfirmasi",
+    //             text: `Apakah Anda yakin ingin menambahkan ${category} ${nama} sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(harga * count)}?`,
+    //             icon: "question",
+    //             showCancelButton: true,
+    //             confirmButtonText: "Ya, Simpan",
+    //             cancelButtonText: "Batal",
+    //             confirmButtonColor: "#3B82F6",
+    //             cancelButtonColor: "#B12D67",
+    //         });
+
+    //         if (!confirmResult.isConfirmed) return;
+    //         setLoadingCategory((prev) => ({ ...prev, [category]: true }));
+
+    //         try {
+    //             await axios.post("/api/income", {
+    //                 totalHarga: harga * count,
+    //                 item: count,
+    //                 category,
+    //                 nama,
+    //             });
+    //             await axios.post("/api/history", {
+    //                 totalHarga: harga * count,
+    //                 item: count,
+    //                 keterangan: "Terjual",
+    //                 category,
+    //                 nama,
+    //                 icon: menuData[category].icon,
+    //             });
+    //             await updateStock(nama, count);
+
+    //             Swal.fire({ title: "Success", text: `Data ${category} berhasil disimpan!`, icon: "success" });
+
+    //             setMenuData((prev) => ({
+    //                 ...prev,
+    //                 [category]: { ...prev[category], harga: 0, count: 1, nama: "" },
+    //             }));
+    //         } catch (error) {
+    //             Swal.fire({ title: "Error", text: `Gagal mengirim data ${category}!`, icon: "error" });
+    //         } finally {
+    //             setLoadingCategory((prev) => ({ ...prev, [category]: false }));
+    //         }
+    //     }
+    // };
+
     const kirimKeIncome = async (category) => {
         const { harga, count, nama } = menuData[category];
 
@@ -291,8 +433,7 @@ export default function Menu() {
             const selectedItemsList = Object.entries(selectedItems)
                 .map(([key, item]) => {
                     if (item) {
-                        // Ubah kategori kentang menjadi kebab dan burgerManis menjadi burger
-                        const updatedCategory = key === "kentang" ? "kebab" : key === "burgerManis" ? "burger" : key;
+                        const updatedCategory = categoryMapping[key] || key;
                         return { ...item, category: updatedCategory };
                     }
                     return null;
@@ -303,6 +444,11 @@ export default function Menu() {
                 Swal.fire({ title: "Peringatan", text: "Jumlah harus lebih dari 0!", icon: "warning" });
                 return;
             }
+
+            // Debugging: Log data yang akan dikirim
+            console.log("Selected Items List:", selectedItemsList);
+            console.log("Total Harga:", totalHarga);
+            console.log("Count:", count);
 
             const confirmResult = await Swal.fire({
                 title: "Konfirmasi",
@@ -318,28 +464,36 @@ export default function Menu() {
             if (!confirmResult.isConfirmed) return;
             setLoadingCategory((prev) => ({ ...prev, [category]: true }));
 
+            if (!selectedItemsList.every(item => item && item.variant && item.price)) {
+                Swal.fire({ title: "Error", text: "Data tidak valid!", icon: "error" });
+                return;
+            }
+
             try {
                 for (const item of selectedItemsList) {
                     await axios.post("/api/income", {
                         totalHarga: item.price * count,
                         item: count,
                         category: item.category,
-                        nama: item.variant,
+                        nama: item.variant, // Menggunakan variant sebagai nama
                     });
                 }
 
                 await axios.post("/api/history", {
                     totalHarga: totalHarga * count,
                     item: count,
-                    keterangan: "Terjual", // jangan ubah kalimat Terjual untuk falidasi history dan income
+                    keterangan: "Terjual",
                     category: "paket",
-                    nama: selectedItems.kebab ? selectedItems.kebab.packageName : selectedItems.burger.packageName,
+                    nama: selectedItems.kebab ? selectedItems.kebab.variant : selectedItems.burger ? selectedItems.burger.variant : "Paket Minuman", // Menggunakan variant sebagai nama
                     icon: menuData[category].icon,
                 });
 
                 for (const item of selectedItemsList) {
-                    await updateStock(item.packageName, count);
+                    await updateStock(item.variant, count);
                 }
+
+                console.log("Selected Items:", selectedItems);
+                console.log("Total Harga:", totalHarga);
 
                 Swal.fire({ title: "Success", text: `Data ${category} berhasil disimpan!`, icon: "success" });
 
@@ -355,6 +509,7 @@ export default function Menu() {
                     minuman: null,
                 });
             } catch (error) {
+                console.error("Error sending data:", error);
                 Swal.fire({ title: "Error", text: `Gagal mengirim data ${category}!`, icon: "error" });
             } finally {
                 setLoadingCategory((prev) => ({ ...prev, [category]: false }));
@@ -384,14 +539,14 @@ export default function Menu() {
                     totalHarga: harga * count,
                     item: count,
                     category,
-                    nama,
+                    nama: nama, // Pastikan nama yang dikirim adalah nama dari variant
                 });
                 await axios.post("/api/history", {
                     totalHarga: harga * count,
                     item: count,
                     keterangan: "Terjual",
                     category,
-                    nama,
+                    nama: nama, // Pastikan nama yang dikirim adalah nama dari variant
                     icon: menuData[category].icon,
                 });
                 await updateStock(nama, count);
@@ -403,14 +558,17 @@ export default function Menu() {
                     [category]: { ...prev[category], harga: 0, count: 1, nama: "" },
                 }));
             } catch (error) {
+                console.error("Error sending data:", error);
                 Swal.fire({ title: "Error", text: `Gagal mengirim data ${category}!`, icon: "error" });
             } finally {
                 setLoadingCategory((prev) => ({ ...prev, [category]: false }));
             }
         }
+
     };
 
-    // Render komponen
+
+
     return (
         <div className="mt-12 mb-24 sm:mb-6">
             <div className="flex items-center justify-between mb-4">

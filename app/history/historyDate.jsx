@@ -120,7 +120,7 @@ export default function DateRangePicker() {
                                 </div>
                                 <div className="flex items-center gap-2 justify-between">
                                     <span>jumlah pemasukan:</span>
-                                    <span className="text-green-500">Rp {item.jumlah_pemasukan.toLocaleString()}</span>
+                                    <span className="text-green-500">Rp {new Intl.NumberFormat("id-ID").format(item.jumlah_pemasukan || 0)}</span>
                                 </div>
                             </div>
                         ))}

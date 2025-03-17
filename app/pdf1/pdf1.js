@@ -1,5 +1,3 @@
-"use client";
-
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
@@ -33,7 +31,7 @@ const PDFReport = ({ data, startDate, endDate }) => (
                         <Text style={styles.cell}>{item.name}</Text>
                         <Text style={styles.cell}>{item.category}</Text>
                         <Text style={styles.cell}>{item.total_item}</Text>
-                        <Text style={styles.cell}>Rp {item.jumlah_pemasukan?.toLocaleString()}</Text>
+                        <Text style={styles.cell}>Rp{new Intl.NumberFormat("id-ID").format(Number(item.jumlah_pemasukan) || 0)}</Text>
                     </View>
                 ))}
             </View>

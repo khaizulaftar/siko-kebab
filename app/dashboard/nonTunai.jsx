@@ -78,7 +78,7 @@ export default function NonTunai() {
         <button
             onClick={handleOpenModal}
             disabled={loading}
-            className={`w-full flex justify-center items-center py-3 transition rounded-t-full ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 transition hover:bg-blue-600"}`}
+            className={`w-full flex justify-center items-center py-3 transition rounded-t-full ${loading ? "bg-blue-500/25 cursor-not-allowed" : "bg-blue-500 transition hover:bg-blue-600"}`}
         >
             <div className="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-white">
