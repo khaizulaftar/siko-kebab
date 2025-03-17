@@ -12,7 +12,7 @@ export default function AddMenuForm({ onMenuAdded }) {
     }, []);
 
     const handleAddMenu = async () => {
-        const { value } = await Swal.fire({
+        const { value, isConfirmed } = await Swal.fire({
             title: "Tambah Menu",
             width: "600px",
             html: `
@@ -68,13 +68,24 @@ export default function AddMenuForm({ onMenuAdded }) {
             preConfirm: () => {
                 const name = document.getElementById("name").value.trim();
                 const price = document.getElementById("price").value.replace(/\./g, "");
-                if (!name || !price) return Swal.showValidationMessage("Nama & harga harus diisi!");
+
+                // Validasi input
+                if (!name || !price) {
+                    Swal.showValidationMessage("Nama & harga harus diisi!");
+                    return false;
+                }
 
                 const composition = {};
                 document.querySelectorAll("#composition-list div").forEach(div => {
                     const [key, val] = div.innerText.split("\n");
                     composition[key] = parseFloat(val);
                 });
+
+                // Validasi bahan
+                if (Object.keys(composition).length === 0) {
+                    Swal.showValidationMessage("Bahan harus diisi!");
+                    return false;
+                }
 
                 return {
                     name,
@@ -86,27 +97,30 @@ export default function AddMenuForm({ onMenuAdded }) {
             }
         });
 
-        if (!value || Object.keys(value.composition).length === 0) return Swal.fire("Error", "Minimal satu bahan harus diisi!", "error");
+        // Jika pengguna membatalkan, langsung return tanpa menampilkan notifikasi
+        if (!isConfirmed) return;
+
+        // Jika pengguna menyimpan, lanjutkan validasi
+        if (!value || Object.keys(value.composition).length === 0) {
+            return Swal.fire("Error", "Minimal satu bahan harus diisi!", "error");
+        }
 
         axios.post("/api/menuSet", value)
             .then(res => {
                 Swal.fire("Berhasil", "Menu berhasil ditambahkan", "success");
                 onMenuAdded(res.data);
 
-                // Kirim data ke history
+                // Kirim data ke history (tanpa console.log atau console.error)
                 axios.post("/api/history", {
                     totalHarga: Number(value.price),
-                    item: null, // Kirim NULL
+                    item: null,
                     keterangan: "menu baru",
                     category: value.category,
                     nama: value.name,
                     icon: "https://img.icons8.com/bubbles/50/menu.png"
-                })
-
-                    .then(() => console.log("Data history berhasil dikirim"))
-                    .catch(() => console.error("Gagal mengirim data ke history"))
+                }).catch(() => { }); // Tidak menampilkan error di konsol
             })
-            .catch(() => Swal.fire("Error", "Gagal menambahkan menu", "error"))
+            .catch(() => Swal.fire("Error", "Gagal menambahkan menu", "error"));
     };
 
     return (
