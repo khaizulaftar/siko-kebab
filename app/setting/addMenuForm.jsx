@@ -124,7 +124,7 @@ export default function AddMenuForm({ onMenuAdded }) {
     };
 
     return (
-        <div className="mx-4 flex justify-end ">
+        <div className="mx-4 flex justify-end mt-1">
             <button
                 onClick={handleAddMenu}
                 className="flex items-center gap-1 px-4 py-2 bg-blue-100 border border-blue-500 text-sm text-blue-600 rounded-full hover:bg-blue-200 transition-all"

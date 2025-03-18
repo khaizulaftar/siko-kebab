@@ -173,7 +173,6 @@
 //     );
 // }
 
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -225,10 +224,10 @@ export default function Menu() {
     const [isMainItemSelected, setIsMainItemSelected] = useState(false);
 
     const [menuData, setMenuData] = useState({
-        kebab: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.kebab },
-        burger: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.burger },
-        minuman: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.minuman },
-        paket: { items: [], harga: 0, count: 1, nama: "Menu paket", selectedItems: [], icon: categoryIcons.paket },
+        kebab: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.kebab, diskon: 0 },
+        burger: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.burger, diskon: 0 },
+        minuman: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.minuman, diskon: 0 },
+        paket: { items: [], harga: 0, count: 1, nama: "Menu paket", selectedItems: [], icon: categoryIcons.paket, diskon: 0 },
     });
 
     const [loadingCategory, setLoadingCategory] = useState({
@@ -287,7 +286,7 @@ export default function Menu() {
         }
     };
 
-    // Hitung total harga
+    // Hitung total harga setelah diskon
     const calculateTotalPrice = () => {
         return Object.values(selectedItems).reduce((total, item) => total + (item?.price || 0), 0);
     };
@@ -299,10 +298,11 @@ export default function Menu() {
     }, [selectedItems]);
 
     const kirimKeIncome = async (category) => {
-        const { harga, count, nama } = menuData[category];
+        const { harga, count, nama, diskon } = menuData[category];
 
         if (category === "paket") {
             const totalHarga = calculateTotalPrice();
+            const totalHargaSetelahDiskon = totalHarga * count - diskon;
             const selectedItemsList = Object.entries(selectedItems)
                 .map(([key, item]) => {
                     if (item) {
@@ -320,7 +320,7 @@ export default function Menu() {
 
             const confirmResult = await Swal.fire({
                 title: "Konfirmasi",
-                text: `Apakah Anda yakin ingin menambahkan paket sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(totalHarga * count)}?`,
+                text: `Apakah Anda yakin ingin menambahkan paket sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(totalHargaSetelahDiskon)}?`,
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "Ya, Simpan",
@@ -348,7 +348,7 @@ export default function Menu() {
                 }
 
                 await axios.post("/api/history", {
-                    totalHarga: totalHarga * count,
+                    totalHarga: totalHargaSetelahDiskon,
                     item: count,
                     keterangan: "Terjual",
                     category: "paket",
@@ -361,13 +361,13 @@ export default function Menu() {
                 }
 
                 console.log("Selected Items:", selectedItems);
-                console.log("Total Harga:", totalHarga);
+                console.log("Total Harga:", totalHargaSetelahDiskon);
 
                 Swal.fire({ title: "Success", text: `Data ${category} berhasil disimpan!`, icon: "success" });
 
                 setMenuData((prev) => ({
                     ...prev,
-                    [category]: { ...prev[category], harga: 0, count: 1, selectedItems: [] },
+                    [category]: { ...prev[category], harga: 0, count: 1, selectedItems: [], diskon: 0 },
                 }));
                 setSelectedItems({
                     kebab: null,
@@ -388,9 +388,11 @@ export default function Menu() {
                 return;
             }
 
+            const totalHargaSetelahDiskon = harga * count - diskon;
+
             const confirmResult = await Swal.fire({
                 title: "Konfirmasi",
-                text: `Apakah Anda yakin ingin menambahkan ${category} ${nama} sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(harga * count)}?`,
+                text: `Apakah Anda yakin ingin menambahkan ${category} ${nama} sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(totalHargaSetelahDiskon)}?`,
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "Ya, Simpan",
@@ -404,13 +406,13 @@ export default function Menu() {
 
             try {
                 await axios.post("/api/income", {
-                    totalHarga: harga * count,
+                    totalHarga: totalHargaSetelahDiskon,
                     item: count,
                     category,
                     nama: nama,
                 });
                 await axios.post("/api/history", {
-                    totalHarga: harga * count,
+                    totalHarga: totalHargaSetelahDiskon,
                     item: count,
                     keterangan: "Terjual",
                     category,
@@ -423,7 +425,7 @@ export default function Menu() {
 
                 setMenuData((prev) => ({
                     ...prev,
-                    [category]: { ...prev[category], harga: 0, count: 1, nama: "" },
+                    [category]: { ...prev[category], harga: 0, count: 1, nama: "", diskon: 0 },
                 }));
             } catch (error) {
                 console.error("Error sending data:", error);
@@ -432,7 +434,6 @@ export default function Menu() {
                 setLoadingCategory((prev) => ({ ...prev, [category]: false }));
             }
         }
-
     };
 
     return (
@@ -458,7 +459,7 @@ export default function Menu() {
                                 <span className="text-sm font-semibold capitalize text-[#B13069]">{data.nama}</span>
                             </div>
                             <div className="flex items-center gap-1 mt-2">
-                                <span className="text-xl font-semibold text-green-500">Rp{new Intl.NumberFormat("id-ID").format(data.harga * data.count)}</span>
+                                <span className="text-xl font-semibold text-green-500">Rp{new Intl.NumberFormat("id-ID").format((data.harga * data.count) - data.diskon)}</span>
                                 <span className="text-gray-600">+ {data.count}</span>
                             </div>
                         </div>
@@ -519,46 +520,69 @@ export default function Menu() {
                             </div>
                         )}
 
-                        <div className="flex justify-between items-center">
-                            <div className="flex gap-1 items-center">
-                                <button
-                                    onClick={() => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: Math.max(0, data.count - 1) } }))}
-                                    className="p-2.5 border rounded-xl hover:bg-red-100 transition-all"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-                                    </svg>
-                                </button>
+                        <div className="flex flex-col gap-4">
+                            <div className="flex gap-4 items-center w-full justify-between">
+                                <div className="flex gap-2 items-center">
+                                    <button
+                                        onClick={() => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: Math.max(0, data.count - 1) } }))}
+                                        className="p-2.5 border rounded-xl hover:bg-red-100 transition-all"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+                                        </svg>
+                                    </button>
 
+                                    <input
+                                        type="tel"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        value={data.count}
+                                        onChange={(e) => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: Math.max(0, parseInt(e.target.value.replace(/\D/g, "")) || 0) } }))}
+                                        className="border w-full h-10 text-center rounded-xl bg-gray-100 focus:outline-none focus:border-blue-500"
+                                    />
+
+                                    <button
+                                        onClick={() => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: data.count + 1 } }))}
+                                        className="p-2.5 border rounded-xl hover:bg-green-100 transition-all"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <button
+                                    onClick={() => kirimKeIncome(category)}
+                                    disabled={loadingCategory[category]}
+                                    className={`px-5 py-2 border rounded-full font-semibold transition-all ${loadingCategory[category]
+                                        ? "bg-gray-400 cursor-not-allowed"
+                                        : "bg-green-200 hover:bg-green-300 text-gray-600 hover:text-white border-green-600"
+                                        }`}
+                                >
+                                    {loadingCategory[category] ? "Mengirim..." : "Tambah"}
+                                </button>
+                            </div>
+                            <div className="flex items-center gap-2 justify-between gap-4">
+                                <span className="text-sm text-gray-600 font-semibold">Diskon:</span>
                                 <input
                                     type="tel"
                                     inputMode="numeric"
                                     pattern="[0-9]*"
-                                    value={data.count}
-                                    onChange={(e) => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: Math.max(0, parseInt(e.target.value.replace(/\D/g, "")) || 0) } }))}
-                                    className="border w-20 h-10 text-center rounded-xl bg-gray-100 focus:outline-none focus:border-blue-500"
+                                    value={new Intl.NumberFormat("id-ID").format(data.diskon || 0)}
+                                    onChange={(e) => {
+                                        const numericValue = parseInt(e.target.value.replace(/\D/g, ""), 10) || 0;
+                                        setMenuData((prev) => ({
+                                            ...prev,
+                                            [category]: {
+                                                ...prev[category],
+                                                diskon: numericValue
+                                            }
+                                        }));
+                                    }}
+                                    className="border w-full h-10 text-center rounded-xl bg-gray-100 focus:outline-none focus:border-blue-500"
                                 />
-
-                                <button
-                                    onClick={() => setMenuData((prev) => ({ ...prev, [category]: { ...prev[category], count: data.count + 1 } }))}
-                                    className="p-2.5 border rounded-xl hover:bg-green-100 transition-all"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                </button>
                             </div>
 
-                            <button
-                                onClick={() => kirimKeIncome(category)}
-                                disabled={loadingCategory[category]}
-                                className={`px-5 py-2 border rounded-full font-semibold transition-all ${loadingCategory[category]
-                                    ? "bg-gray-400 cursor-not-allowed"
-                                    : "bg-green-200 hover:bg-green-300 text-gray-600 hover:text-white border-green-600"
-                                    }`}
-                            >
-                                {loadingCategory[category] ? "Mengirim..." : "Tambah"}
-                            </button>
                         </div>
                     </div>
                 ))}
