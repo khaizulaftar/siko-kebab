@@ -292,14 +292,24 @@ export default function HistoryIncome() {
 
             if (result.isConfirmed) {
                 const response = await axios.delete("/api/incomeHistory", { data: { id } });
-                await axios.post("/api/history", {
-                    totalHarga: null,
-                    item: null,
-                    keterangan: "income di hapus",
-                    category: "income",
-                    nama: "",
-                    icon: "https://img.icons8.com/bubbles/100/delete.png",
-                });
+
+                // Cari data yang dihapus
+                const deletedItem = groupedData
+                    .flatMap(group => group.items)
+                    .find(item => item.id === id);
+
+                if (deletedItem) {
+                    // Kirim data yang dihapus ke endpoint history dengan keterangan yang lebih jelas
+                    await axios.post("/api/history", {
+                        totalHarga: deletedItem.jumlah_pemasukan, // Jumlah pemasukan yang dihapus
+                        item: null, // Nama item yang dihapus
+                        keterangan: "income di hapus", // Keterangan yang lebih detail
+                        category: deletedItem.category, // Kategori income yang dihapus
+                        nama: deletedItem.name, // Nama yang terkait dengan income
+                        icon: "https://img.icons8.com/bubbles/100/delete.png", // Icon untuk penghapusan
+                    });
+                }
+
                 if (response.data.success) {
                     Swal.fire("Dihapus!", "Data income telah dihapus.", "success");
                     // Perbarui state setelah penghapusan
@@ -315,7 +325,6 @@ export default function HistoryIncome() {
             Swal.fire("Error!", "Gagal menghapus data income.", "error");
         }
     };
-
     useEffect(() => {
         fetchIncomeData();
     }, []);

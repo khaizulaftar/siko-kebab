@@ -184,28 +184,32 @@ import Swal from "sweetalert2";
 // Data paket yang fleksibel (bisa ditambah/dihapus dengan mudah)
 const packages = {
     kebab: [
-        { packageName: "Paket Kebab 1", variant: "Original", price: 29000 },
-        { packageName: "Paket Kebab 2", variant: "Jumbo", price: 31000 },
-        { packageName: "Paket Kebab 3", variant: "Telur", price: 26000 },
-        { packageName: "Paket Kebab 4", variant: "Ayam", price: 31000 },
-        { packageName: "Paket Kebab 5", variant: "Sosis", price: 28000 },
+        { packageName: "Paket Kebab 1", variant: "Original", price: 13000 },
+        { packageName: "Paket Kebab 2", variant: "Jumbo", price: 25000 },
+        { packageName: "Paket Kebab 3", variant: "Telur", price: 10000 },
+        { packageName: "Paket Kebab 4", variant: "Ayam", price: 15000 },
+        { packageName: "Paket Kebab 5", variant: "Sosis", price: 12000 },
     ],
     burger: [
-        { packageName: "Paket Burger 1", variant: "Ayam Original", price: 28000 },
-        { packageName: "Paket Burger 2", variant: "Ayam Spesial", price: 34000 },
-        { packageName: "Paket Burger 3", variant: "Sapi Original", price: 26000 },
-        { packageName: "Paket Burger 4", variant: "Sapi Spesial", price: 30000 },
+        { packageName: "Paket Burger 1", variant: "Ayam Original", price: 12000 },
+        { packageName: "Paket Burger 2", variant: "Ayam Spesial", price: 18000 },
+        { packageName: "Paket Burger 3", variant: "Sapi Original", price: 10000 },
+        { packageName: "Paket Burger 4", variant: "Sapi Spesial", price: 14000 },
     ],
     kentang: [
-        { packageName: "Paket Kentang 1", variant: "Kentang Goreng", price: 15000 },
+        { packageName: "Paket Kentang 1", variant: "Kentang Goreng", price: 10000 },
     ],
     burgerManis: [
-        { packageName: "Paket BurgerManis 1", variant: "Coklat", price: 20000 },
-        { packageName: "Paket BurgerManis 2", variant: "Coklat Keju", price: 22000 },
+        { packageName: "Paket BurgerManis 1", variant: "Coklat", price: 10000 },
+        { packageName: "Paket BurgerManis 2", variant: "Coklat Keju", price: 10000 },
+        { packageName: "Paket BurgerManis 3", variant: "Tiramisu", price: 10000 },
+        { packageName: "Paket BurgerManis 4", variant: "Lotus", price: 10000 },
     ],
     minuman: [
-        { packageName: "Paket Minuman 1", variant: "Cola", price: 10000 },
-        { packageName: "Paket Minuman 2", variant: "Fanta", price: 10000 },
+        { packageName: "Paket Minuman 1", variant: "Cola", price: 6000 },
+        { packageName: "Paket Minuman 2", variant: "Fanta", price: 6000 },
+        { packageName: "Paket Minuman 3", variant: "Sprite", price: 6000 },
+        { packageName: "Paket Minuman 4", variant: "Mineral", price: 6000 },
     ],
 };
 

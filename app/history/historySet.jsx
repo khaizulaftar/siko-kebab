@@ -26,19 +26,15 @@ export default function HistoryPage() {
             return;
         }
 
-        axios
-            .get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
-            .then(({ data: { user = {} } }) => {
-                setUser(user); // Simpan data pengguna ke state
-                setIsAuthenticated(true);
-                return axios.get("/api/history", { headers: { Authorization: `Bearer ${token}` } });
-            })
-            .then(({ data }) => data && setHistory(data)) // Set data history jika ada
-            .catch(() => {
-                setIsAuthenticated(false);
-                router.push("/login");
-            })
-            .finally(() => setIsLoading(false)); // Set loading selesai
+        axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
+    .then(({ data: { user = {} } }) => {
+        setUser(user);
+        setIsAuthenticated(true);
+        return axios.get("/api/history", { headers: { Authorization: `Bearer ${token}` } });
+    })
+    .then(({ data }) => data && setHistory(data))
+    .catch((err) => err.response?.status === 401 && setIsAuthenticated(false))
+    .finally(() => setIsLoading(false));
     }, [router]);
 
 
