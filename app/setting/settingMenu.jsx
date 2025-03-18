@@ -131,7 +131,7 @@ export default function SettingMenu() {
             Swal.fire("Akses Ditolak", "Hanya admin yang dapat menghapus menu.", "error")
             return
         }
-    
+
         const confirmDelete = await Swal.fire({
             title: "Hapus Menu?",
             text: "Data menu ini akan dihapus secara permanen!",
@@ -142,17 +142,17 @@ export default function SettingMenu() {
             confirmButtonText: "Ya, hapus!",
             cancelButtonText: "Batal"
         })
-    
+
         if (confirmDelete.isConfirmed) {
             try {
                 // Dapatkan nama menu dan kategori
                 const menuToDelete = menus.find((menu) => menu.id === id)
                 const { name, category } = menuToDelete
-    
+
                 // Hapus menu
                 await axios.delete("/api/menuSet", { data: { id } })
                 setMenus(menus.filter(menu => menu.id !== id))
-    
+
                 // Kirim data ke history
                 await axios.post("/api/history", {
                     totalHarga: null,
@@ -162,14 +162,14 @@ export default function SettingMenu() {
                     nama: name,
                     icon: "https://img.icons8.com/bubbles/50/cancel--v2.png"
                 })
-    
+
                 Swal.fire("Dihapus!", "Menu telah dihapus.", "success")
             } catch (error) {
                 Swal.fire("Error!", "Gagal menghapus menu.", "error")
             }
         }
     }
-    
+
 
     const handleMenuAdded = (newMenu) => {
         setMenus([...menus, newMenu]);
@@ -199,16 +199,16 @@ export default function SettingMenu() {
                 }
             },
         })
-    
+
         if (newQty !== undefined && newQty !== oldQty) {
             try {
                 // Update hanya `composition` tanpa mengubah format lainnya
                 const updatedComposition = { ...composition, [ingredient]: Number(newQty) }
-    
+
                 await axios.put("/api/menuSet", { id: menuId, composition: updatedComposition })
-    
+
                 Swal.fire("Berhasil!", `Jumlah ${ingredient} diperbarui ke ${newQty}`, "success")
-    
+
                 // Kirim data ke history
                 const historyData = {
                     totalHarga: null,  // Misalnya total harga disesuaikan jika perlu
@@ -218,23 +218,23 @@ export default function SettingMenu() {
                     nama: ingredient,
                     icon: "https://img.icons8.com/bubbles/50/recurring-appointment.png",  // Misalnya kosong, atau kamu bisa menambahkannya jika diperlukan
                 }
-    
+
                 await axios.post("/api/history", historyData)
-    
+
                 // Perbarui state lokal setelah berhasil mengubah
                 setMenus((prevMenus) =>
                     prevMenus.map((menu) =>
                         menu.id === menuId ? { ...menu, composition: updatedComposition } : menu
                     )
                 )
-    
+
             } catch (error) {
                 Swal.fire("Gagal!", "Terjadi kesalahan saat memperbarui jumlah.", "error")
             }
         }
     }
-    
-    
+
+
 
     // untuk icon
     const icons = {
@@ -261,7 +261,9 @@ export default function SettingMenu() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
-                <AddMenuForm onMenuAdded={handleMenuAdded} />
+                {user?.role === "admin" && (
+                    <AddMenuForm onMenuAdded={handleMenuAdded} />
+                )}
                 <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                     {filteredMenus.map(({ id, category, name, price, dose, loading, composition }) => (
                         <div key={id} className="p-6 rounded-3xl bg-white shadow-sm">
