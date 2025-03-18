@@ -160,7 +160,7 @@ export default function SettingMenu() {
                     keterangan: `Menu ${name} dihapus`,
                     category: "Menu",
                     nama: name,
-                    icon: "https://img.icons8.com/bubbles/50/cancel--v2.png"
+                    icon: "https://img.icons8.com/bubbles/100/cancel--v2.png"
                 })
 
                 Swal.fire("Dihapus!", "Menu telah dihapus.", "success")
@@ -216,7 +216,7 @@ export default function SettingMenu() {
                     keterangan: 'Perubahan jumlah bahan',
                     category: "Bahan",  // Kategori bisa disesuaikan sesuai dengan kebutuhan
                     nama: ingredient,
-                    icon: "https://img.icons8.com/bubbles/50/recurring-appointment.png",  // Misalnya kosong, atau kamu bisa menambahkannya jika diperlukan
+                    icon: "https://img.icons8.com/bubbles/100/recurring-appointment.png",  // Misalnya kosong, atau kamu bisa menambahkannya jika diperlukan
                 }
 
                 await axios.post("/api/history", historyData)

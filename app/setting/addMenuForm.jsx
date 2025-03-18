@@ -117,7 +117,7 @@ export default function AddMenuForm({ onMenuAdded }) {
                     keterangan: "menu baru",
                     category: value.category,
                     nama: value.name,
-                    icon: "https://img.icons8.com/bubbles/50/menu.png"
+                    icon: "https://img.icons8.com/bubbles/100/menu.png"
                 }).catch(() => { }); // Tidak menampilkan error di konsol
             })
             .catch(() => Swal.fire("Error", "Gagal menambahkan menu", "error"));

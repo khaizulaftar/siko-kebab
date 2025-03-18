@@ -502,8 +502,8 @@ export default function Stock() {
                 nama: name,
                 icon:
                     action === "increase"
-                        ? "https://img.icons8.com/bubbles/50/plus.png"
-                        : "https://img.icons8.com/bubbles/50/minus.png",
+                        ? "https://img.icons8.com/bubbles/100/plus.png"
+                        : "https://img.icons8.com/bubbles/100/minus.png",
             });
 
             Swal.fire({
@@ -560,7 +560,7 @@ export default function Stock() {
                 keterangan: "diubah",
                 category: "harga",
                 nama: name,
-                icon: "https://img.icons8.com/bubbles/50/summer-sales.png",
+                icon: "https://img.icons8.com/bubbles/100/summer-sales.png",
             });
 
             Swal.fire({

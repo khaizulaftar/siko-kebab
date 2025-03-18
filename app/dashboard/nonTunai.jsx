@@ -64,7 +64,7 @@ export default function NonTunai() {
                 keterangan: "Terjual", // jangan hapus keterangan Terjual
                 category: "non tunai",
                 nama: "Non Tunai",
-                icon: "https://img.icons8.com/bubbles/50/money.png"
+                icon: "https://img.icons8.com/bubbles/100/money.png"
             })
             Swal.fire("Berhasil!", "Data berhasil dikirim", "success");
         } catch (error) {
