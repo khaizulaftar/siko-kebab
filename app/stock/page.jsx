@@ -295,7 +295,7 @@
 
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useSWR from "swr";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -319,6 +319,58 @@ export default function Stock() {
             .get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => res.data.user)
     );
+
+    const notifiedItems = useRef(new Set()); // Simpan ID item yang sudah dinotifikasi
+
+    useEffect(() => {
+        if (menus && Array.isArray(menus)) {
+            // Kumpulkan menu yang stoknya kurang dari 500 dan belum dinotifikasi
+            const lowStockMenus = menus.filter(
+                (menu) => menu.stock < 100 && !notifiedItems.current.has(menu.id)
+            );
+
+            if (lowStockMenus.length > 0) {
+                // Buat tabel HTML untuk notifikasi
+                const tableRows = lowStockMenus
+                    .map(
+                        (menu) => `
+                    <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">${menu.name}</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${menu.stock}</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #ddd;">${menu.dose}</td>
+                    </tr>
+                `
+                    )
+                    .join("");
+
+                const table = `
+                <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 8px; border-bottom: 2px solid #ddd; text-align: left;">Menu</th>
+                            <th style="padding: 8px; border-bottom: 2px solid #ddd; text-align: right;">Stok</th>
+                            <th style="padding: 8px; border-bottom: 2px solid #ddd; text-align: left;">Satuan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+            `;
+
+                // Tampilkan notifikasi dengan tabel
+                Swal.fire({
+                    icon: "warning",
+                    title: "Stok Menipis!",
+                    html: `Beberapa menu memiliki stok kurang dari 100:<br><br>${table}<br>Segera lakukan pengisian ulang!`,
+                    confirmButtonColor: "#3B82F6",
+                });
+
+                // Tandai menu-menu ini sudah dinotifikasi
+                lowStockMenus.forEach((menu) => notifiedItems.current.add(menu.id));
+            }
+        }
+    }, [menus]);
 
     const [searchQuery, setSearchQuery] = useState("");
     const inputRefs = useRef({});
