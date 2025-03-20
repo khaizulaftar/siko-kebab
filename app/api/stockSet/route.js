@@ -119,9 +119,9 @@ export async function PUT(req) {
         // Gunakan waktu Jakarta (WIB) dan cek apakah sudah lewat jam 2 pagi
         const now = moment().tz("Asia/Jakarta");
         const today = now.format("YYYY-MM-DD"); // Tanggal hari ini
-        const resetTime = moment().tz("Asia/Jakarta").startOf("day").add(2, "hours"); // Jam 2 pagi
+        const resetTime = moment().tz("Asia/Jakarta").startOf("day").add(4, "hours"); // Jam 4 pagi
 
-        // Jika sekarang masih sebelum jam 2 pagi, gunakan tanggal kemarin
+        // Jika sekarang masih sebelum jam 4 pagi, gunakan tanggal kemarin
         const effectiveDate = now.isBefore(resetTime)
             ? moment().tz("Asia/Jakarta").subtract(1, "day").format("YYYY-MM-DD")
             : today;

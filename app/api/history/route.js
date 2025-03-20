@@ -15,8 +15,8 @@ export async function GET() {
         const userTimeZone = "Asia/Jakarta";
         let now = moment().tz(userTimeZone);
 
-        // Jika masih antara 00:00 - 01:59 WIB, anggap masih hari sebelumnya
-        if (now.hour() < 2) now.subtract(1, "day");
+        // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
+        if (now.hour() < 4) now.subtract(1, "day");
 
         const groupedHistory = rows.reduce((acc, value) => {
             const formattedDate = moment(value.tanggal).locale("id").format("dddd, DD MMMM YYYY");
@@ -43,8 +43,8 @@ export async function POST(req) {
         const userTimeZone = "Asia/Jakarta";
         let now = moment().tz(userTimeZone);
 
-        // Jika masih antara 00:00 - 01:59 WIB, anggap masih hari sebelumnya
-        if (now.hour() < 2) now.subtract(1, "day");
+        // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
+        if (now.hour() < 4) now.subtract(1, "day");
 
         const tanggal = now.format("YYYY-MM-DD");
 

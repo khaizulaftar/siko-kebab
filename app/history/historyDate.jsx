@@ -12,9 +12,9 @@ export default function DateRangePicker() {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Cek apakah masih sebelum jam 02:00 WIB
+    // Cek apakah masih sebelum jam 04:00 WIB
     const now = moment().tz("Asia/Jakarta");
-    const today = now.hour() < 2 ? now.subtract(1, "day").format("YYYY-MM-DD") : now.format("YYYY-MM-DD");
+    const today = now.hour() < 4 ? now.subtract(1, "day").format("YYYY-MM-DD") : now.format("YYYY-MM-DD");
 
     const handleDateChange = (e) => {
         const selectedDate = e.target.value;

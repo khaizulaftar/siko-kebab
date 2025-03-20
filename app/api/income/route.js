@@ -10,8 +10,8 @@ export async function GET(req) {
         const userTimeZone = "Asia/Jakarta";
         let now = moment().tz(userTimeZone);
 
-        // Jika masih antara 00:00 - 01:59 WIB, anggap masih hari sebelumnya
-        if (now.hour() < 2) now.subtract(1, "day");
+        // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
+        if (now.hour() < 4) now.subtract(1, "day");
 
         const tanggalRaw = searchParams.get("tanggal") || now.format("YYYY-MM-DD");
 
@@ -65,8 +65,8 @@ export async function POST(req) {
         const userTimeZone = "Asia/Jakarta";
         let now = moment().tz(userTimeZone);
 
-        // Jika masih antara 00:00 - 01:59 WIB, anggap masih hari sebelumnya
-        if (now.hour() < 2) now.subtract(1, "day");
+        // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
+        if (now.hour() < 4) now.subtract(1, "day");
 
         const tanggalWIB = now.format("YYYY-MM-DD"); // Format YYYY-MM-DD
 

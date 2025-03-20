@@ -36,8 +36,8 @@ export async function GET() {
         const lastDays = Array.from({ length: 14 }, (_, i) => {
             let date = today.clone().subtract(i, "days");
 
-            // Jika masih antara 00:00 - 01:59 WIB, anggap masih hari sebelumnya
-            if (date.hour() < 2) date.subtract(1, "day");
+            // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
+            if (date.hour() < 4) date.subtract(1, "day");
 
             return date;
         }).reverse();
