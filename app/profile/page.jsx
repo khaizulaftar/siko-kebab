@@ -151,8 +151,6 @@ export default function Profile() {
         }
     }
 
-
-
     if (!user) {
         return <Loading />
     }

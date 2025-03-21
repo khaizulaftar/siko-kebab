@@ -1,10 +1,10 @@
-"use client";
-import React, { useState } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
+"use client"
+import React, { useState } from "react"
+import axios from "axios"
+import Swal from "sweetalert2"
 
 export default function NonTunai() {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false)
 
     const handleOpenModal = () => {
         Swal.fire({
@@ -23,32 +23,32 @@ export default function NonTunai() {
             cancelButtonColor: "#B12D67",
             inputValidator: (value) => {
                 if (!value) {
-                    return "Jumlah harus diisi!";
+                    return "Jumlah harus diisi!"
                 }
                 if (!/^\d+$/.test(value.replace(/\D/g, ""))) {
-                    return "Masukkan angka yang valid!";
+                    return "Masukkan angka yang valid!"
                 }
             },
             didOpen: () => {
-                const input = Swal.getInput();
-                input.setAttribute("type", "tel");
-                input.setAttribute("inputmode", "numeric");
+                const input = Swal.getInput()
+                input.setAttribute("type", "tel")
+                input.setAttribute("inputmode", "numeric")
                 input.addEventListener("input", (e) => {
-                    let numValue = e.target.value.replace(/\D/g, ""); // Ambil angka saja
-                    e.target.value = Number(numValue).toLocaleString("id-ID"); // Format ke ribuan
-                });
+                    let numValue = e.target.value.replace(/\D/g, "")
+                    e.target.value = Number(numValue).toLocaleString("id-ID")
+                })
             },
             preConfirm: (value) => Number(value.replace(/\D/g, "")),
         }).then((result) => {
             if (result.isConfirmed) {
-                handleSubmit(result.value);
+                handleSubmit(result.value)
             }
-        });
-    };
+        })
+    }
 
 
     const handleSubmit = async (totalHarga) => {
-        setLoading(true);
+        setLoading(true)
 
         try {
             await axios.post("/api/income", {
@@ -56,7 +56,7 @@ export default function NonTunai() {
                 item: "Item 1",
                 category: "Non Tunai",
                 nama: "Non Tunai",
-            });
+            })
 
             await axios.post("/api/history", {
                 totalHarga,
@@ -66,13 +66,13 @@ export default function NonTunai() {
                 nama: "Non Tunai",
                 icon: "https://img.icons8.com/bubbles/100/money.png"
             })
-            Swal.fire("Berhasil!", "Data berhasil dikirim", "success");
+            Swal.fire("Berhasil!", "Data berhasil dikirim", "success")
         } catch (error) {
-            Swal.fire("Gagal!", "Terjadi kesalahan saat mengirim data", "error");
+            Swal.fire("Gagal!", "Terjadi kesalahan saat mengirim data", "error")
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <button
@@ -87,5 +87,5 @@ export default function NonTunai() {
                 <span className="text-sm font-semibold text-white">Pemasukkan non tunai</span>
             </div>
         </button>
-    );
+    )
 }

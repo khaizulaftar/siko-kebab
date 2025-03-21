@@ -1,49 +1,46 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-import moment from "moment-timezone";
-import Loading from "../dashboard/loading";
+import { useEffect, useState } from "react"
+import axios from "axios"
+import Swal from "sweetalert2"
+import { useRouter } from "next/navigation"
+import Cookies from "js-cookie"
+import moment from "moment-timezone"
+import Loading from "../dashboard/loading"
 
 export default function HistoryPage() {
-    const [history, setHistory] = useState({});
-    const [searchQuery, setSearchQuery] = useState("");
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-    const [user, setUser] = useState(null); // State untuk menyimpan data pengguna
-    const router = useRouter();
+    const [history, setHistory] = useState({})
+    const [searchQuery, setSearchQuery] = useState("")
+    const [isAuthenticated, setIsAuthenticated] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+    const [user, setUser] = useState(null)
+    const router = useRouter()
 
-    // Fetch data history dan profil pengguna saat komponen dimuat
     useEffect(() => {
-        const token = Cookies.get("token");
+        const token = Cookies.get("token")
         if (!token) {
-            setIsAuthenticated(false);
-            router.push("/login");
-            return;
+            setIsAuthenticated(false)
+            router.push("/login")
+            return
         }
 
         axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
     .then(({ data: { user = {} } }) => {
-        setUser(user);
-        setIsAuthenticated(true);
-        return axios.get("/api/history", { headers: { Authorization: `Bearer ${token}` } });
+        setUser(user)
+        setIsAuthenticated(true)
+        return axios.get("/api/history", { headers: { Authorization: `Bearer ${token}` } })
     })
     .then(({ data }) => data && setHistory(data))
     .catch((err) => err.response?.status === 401 && setIsAuthenticated(false))
-    .finally(() => setIsLoading(false));
-    }, [router]);
+    .finally(() => setIsLoading(false))
+    }, [router])
 
-
-    // Fungsi untuk menghapus history
     const handleDeleteHistory = async (id) => {
-        if (showDeleteAlert || user?.role !== "admin") return; // Hanya admin yang bisa menghapus
+        if (showDeleteAlert || user?.role !== "admin") return // Hanya admin yang bisa menghapus
     
         try {
-            setShowDeleteAlert(true);
+            setShowDeleteAlert(true)
     
             const result = await Swal.fire({
                 title: "Apakah Anda yakin?",
@@ -54,29 +51,28 @@ export default function HistoryPage() {
                 cancelButtonColor: "#3B82F6",
                 confirmButtonText: "Ya, hapus!",
                 cancelButtonText: "Batal",
-            });
+            })
     
             if (result.isConfirmed) {
                 await axios.delete("/api/history", {
                     headers: { Authorization: `Bearer ${Cookies.get("token")}` },
                     data: { id },
-                });
-                Swal.fire("Dihapus!", "Data history telah dihapus.", "success");
+                })
+                Swal.fire("Dihapus!", "Data history telah dihapus.", "success")
     
                 // Refresh data history setelah menghapus
                 const response = await axios.get("/api/history", {
                     headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-                });
-                setHistory(response.data);
+                })
+                setHistory(response.data)
             }
         } catch {
-            Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+            Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error")
         } finally {
-            setShowDeleteAlert(false);
+            setShowDeleteAlert(false)
         }
-    };
+    }
 
-    // Fungsi untuk menampilkan detail history
     const showDetailHistory = (item) => {
         Swal.fire({
             title: "Detail History",
@@ -108,42 +104,39 @@ export default function HistoryPage() {
                 </div>
             </div>
         `,
-            showCancelButton: user?.role === "admin", // Tampilkan tombol hapus hanya jika admin
-            confirmButtonText: user?.role === "admin" ? "Hapus" : "Tutup", // Ubah teks tombol berdasarkan role
+            showCancelButton: user?.role === "admin",
+            confirmButtonText: user?.role === "admin" ? "Hapus" : "Tutup",
             cancelButtonText: "Tutup",
             confirmButtonColor: "#3B82F6",
             cancelButtonColor: "#B12D67",
             showCloseButton: true,
             preConfirm: () => {
                 if (user?.role === "admin") {
-                    handleDeleteHistory(item.id);
+                    handleDeleteHistory(item.id)
                 }
             },
-        });
-    };
+        })
+    }
 
-    // Redirect ke halaman login jika tidak terautentikasi
-    if (isAuthenticated === false) return <Loading />;
+    if (isAuthenticated === false) return <Loading />
 
-    // Tampilkan loading spinner jika data masih dimuat
-    if (isLoading) return <Loading />;
+    if (isLoading) return <Loading />
 
-    // Filter data history berdasarkan query pencarian
     const filteredHistory = Object.entries(history)
         .slice()
         .reverse()
         .map(([date, items]) => [
             date,
             items.filter((item) => {
-                const searchLower = searchQuery.toLowerCase();
+                const searchLower = searchQuery.toLowerCase()
                 return (
                     item.category.toLowerCase().includes(searchLower) ||
                     item.name.toLowerCase().includes(searchLower) ||
                     date.toLowerCase().includes(searchLower)
-                );
+                )
             }),
         ])
-        .filter(([_, items]) => items.length > 0);
+        .filter(([_, items]) => items.length > 0)
 
     return (
         <div className="max-w-4xl mx-auto min-h-screen">
@@ -198,5 +191,5 @@ export default function HistoryPage() {
                 ))}
             </div>
         </div>
-    );
+    )
 }

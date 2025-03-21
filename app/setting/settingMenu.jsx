@@ -48,11 +48,11 @@ export default function SettingMenu() {
     }
 
     const handleInputChange = (id, e) => {
-        let value = e.target.value.replace(/\D/g, ""); // Hanya angka
+        let value = e.target.value.replace(/\D/g, "") // Hanya angka
         setFormattedPrices((prev) => ({
             ...prev,
-            [id]: new Intl.NumberFormat("id-ID").format(Number(value)), // Konversi ke Number sebelum diformat
-        }));
+            [id]: new Intl.NumberFormat("id-ID").format(Number(value)),
+        }))
     }
 
     const handlePriceChange = async (id, category, name) => {
@@ -89,10 +89,8 @@ export default function SettingMenu() {
         )
 
         try {
-            // Update menu price
             await axios.put("/api/menuSet", { id, price })
 
-            // Update history
             await axios.post("/api/history", {
                 totalHarga: price,
                 item: null,
@@ -149,11 +147,9 @@ export default function SettingMenu() {
                 const menuToDelete = menus.find((menu) => menu.id === id)
                 const { name, category } = menuToDelete
 
-                // Hapus menu
                 await axios.delete("/api/menuSet", { data: { id } })
                 setMenus(menus.filter(menu => menu.id !== id))
 
-                // Kirim data ke history
                 await axios.post("/api/history", {
                     totalHarga: null,
                     item: null,
@@ -170,10 +166,9 @@ export default function SettingMenu() {
         }
     }
 
-
     const handleMenuAdded = (newMenu) => {
-        setMenus([...menus, newMenu]);
-    };
+        setMenus([...menus, newMenu])
+    }
 
 
     const filteredMenus = menus.filter(
@@ -202,26 +197,23 @@ export default function SettingMenu() {
 
         if (newQty !== undefined && newQty !== oldQty) {
             try {
-                // Update hanya `composition` tanpa mengubah format lainnya
                 const updatedComposition = { ...composition, [ingredient]: Number(newQty) }
 
                 await axios.put("/api/menuSet", { id: menuId, composition: updatedComposition })
 
                 Swal.fire("Berhasil!", `Jumlah ${ingredient} diperbarui ke ${newQty}`, "success")
 
-                // Kirim data ke history
                 const historyData = {
-                    totalHarga: null,  // Misalnya total harga disesuaikan jika perlu
+                    totalHarga: null,
                     item: newQty,
                     keterangan: 'Perubahan jumlah bahan',
-                    category: "Bahan",  // Kategori bisa disesuaikan sesuai dengan kebutuhan
+                    category: "Bahan",
                     nama: ingredient,
-                    icon: "https://img.icons8.com/bubbles/100/recurring-appointment.png",  // Misalnya kosong, atau kamu bisa menambahkannya jika diperlukan
+                    icon: "https://img.icons8.com/bubbles/100/recurring-appointment.png",
                 }
 
                 await axios.post("/api/history", historyData)
 
-                // Perbarui state lokal setelah berhasil mengubah
                 setMenus((prevMenus) =>
                     prevMenus.map((menu) =>
                         menu.id === menuId ? { ...menu, composition: updatedComposition } : menu
@@ -234,16 +226,12 @@ export default function SettingMenu() {
         }
     }
 
-
-
-    // untuk icon
     const icons = {
         kebab: "https://img.icons8.com/bubbles/100/burrito.png",
         burger: "https://img.icons8.com/bubbles/100/hamburger.png",
         minuman: "https://img.icons8.com/bubbles/100/iced-coffee.png",
     }
     const getCategoryIcon = (category) => icons[category.toLowerCase()] || icons.default
-
 
     if (!isAuthenticated) {
         return <Loading />

@@ -10,7 +10,6 @@ export async function GET() {
             return NextResponse.json({ message: 'Menu kosong' }, { status: 404 })
         }
 
-        // Konversi kolom composition dari JSON string ke objek
         const formattedRows = rows.map(row => ({
             ...row,
             composition: row.composition ? JSON.parse(row.composition) : null
@@ -24,42 +23,39 @@ export async function GET() {
 
 export async function POST(req) {
     try {
-        const { name, price, category, dose, composition } = await req.json();
+        const { name, price, category, dose, composition } = await req.json()
 
-        // Validasi input
         if (!name || !price || !category || !dose) {
             return NextResponse.json(
                 { message: "Nama, harga, kategori, dan dose diperlukan" },
                 { status: 400 }
-            );
+            )
         }
 
-        // Pastikan composition adalah objek
         if (typeof composition !== 'object' || composition === null) {
             return NextResponse.json(
                 { message: "Komposisi harus berupa objek" },
                 { status: 400 }
-            );
+            )
         }
 
-        const db = await dbConnect();
+        const db = await dbConnect()
 
-        // Insert data ke database
         await db.execute(
             "INSERT INTO menu (name, price, category, dose, composition) VALUES (?, ?, ?, ?, ?)",
             [name, price, category, dose, JSON.stringify(composition)]
-        );
+        )
 
         return NextResponse.json(
             { message: "Menu berhasil ditambahkan" },
             { status: 201 }
-        );
+        )
     } catch (error) {
-        console.error("Error in POST /api/menuSet:", error);
+        console.error("Error in POST /api/menuSet:", error)
         return NextResponse.json(
             { error: error.message },
             { status: 500 }
-        );
+        )
     }
 }
 

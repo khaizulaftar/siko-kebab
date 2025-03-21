@@ -1,0 +1,9 @@
+{
+    "crons": [
+        {
+            "path": "/api/resetStock",
+            "schedule": "0 4 * * *",
+            "timezone": "Asia/Jakarta"
+        }
+    ]
+}

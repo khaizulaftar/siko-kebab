@@ -1,46 +1,46 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import MyDocument from "../pdf1/pdf1";
-import moment from "moment-timezone";
+import { useState, useEffect } from "react"
+import axios from "axios"
+import Swal from "sweetalert2"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import MyDocument from "../pdf1/pdf1"
+import moment from "moment-timezone"
 
 export default function DateRangePicker() {
-    const [dateRange, setDateRange] = useState({ min: "", max: "" });
-    const [history, setHistory] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [dateRange, setDateRange] = useState({ min: "", max: "" })
+    const [history, setHistory] = useState([])
+    const [loading, setLoading] = useState(false)
 
-    // Cek apakah masih sebelum jam 04:00 WIB
-    const now = moment().tz("Asia/Jakarta");
-    const today = now.hour() < 4 ? now.subtract(1, "day").format("YYYY-MM-DD") : now.format("YYYY-MM-DD");
+    // Cek sebelum jam 04:00 WIB
+    const now = moment().tz("Asia/Jakarta")
+    const today = now.hour() < 4 ? now.subtract(1, "day").format("YYYY-MM-DD") : now.format("YYYY-MM-DD")
 
     const handleDateChange = (e) => {
-        const selectedDate = e.target.value;
+        const selectedDate = e.target.value
 
         setDateRange((prev) =>
             prev.min && !prev.max ? { ...prev, max: selectedDate } : { min: selectedDate, max: "" }
-        );
-    };
+        )
+    }
 
     useEffect(() => {
         if (dateRange.min && dateRange.max) {
-            fetchHistory();
+            fetchHistory()
         }
-    }, [dateRange.min, dateRange.max]);
+    }, [dateRange.min, dateRange.max])
 
     const fetchHistory = async () => {
-        setLoading(true);
+        setLoading(true)
         try {
-            const response = await axios.get(`/api/pdf1?min=${dateRange.min}&max=${dateRange.max}`);
-            setHistory(response.data);
+            const response = await axios.get(`/api/pdf1?min=${dateRange.min}&max=${dateRange.max}`)
+            setHistory(response.data)
         } catch (error) {
-            Swal.fire("Error", "Gagal mengambil data history.", "error");
+            Swal.fire("Error", "Gagal mengambil data history.", "error")
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <div className="max-w-4xl mx-auto min-h-screen p-4">
@@ -128,5 +128,5 @@ export default function DateRangePicker() {
                 </>
             )}
         </div>
-    );
+    )
 }

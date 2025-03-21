@@ -7,7 +7,7 @@ import useSWR from 'swr'
 import { useEffect, useState, useCallback } from "react"
 import Cookies from "js-cookie"
 import MyDocument from "../pdf/pdf"
-import moment from "moment";
+import moment from "moment"
 
 const fetcher = url => axios.get(url).then(res => res.data)
 const fetcherIncome = url => axios.get(url).then(res => res.data.data)
@@ -43,7 +43,7 @@ export default function DownloadPdf() {
         })
     }, [])
 
-    const today = moment().format("YYYY-MM-DD");
+    const today = moment().format("YYYY-MM-DD")
     const handleOpenModal = () => {
         Swal.fire({
             title: "Pilih Tanggal",

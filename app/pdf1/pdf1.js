@@ -1,4 +1,4 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
 
 const styles = StyleSheet.create({
     page: { padding: 30, fontSize: 12, fontFamily: "Helvetica", color: "#333" },
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     headerRow: { backgroundColor: "#f0f0f0", fontSize: 12, fontWeight: "bold" },
     cellHeader: { flex: 1, padding: 6, textAlign: "center", fontWeight: "bold" },
     cell: { flex: 1, padding: 4, textAlign: "center", fontSize: 10 },
-});
+})
 
 const PDFReport = ({ data, startDate, endDate }) => (
     <Document>
@@ -37,6 +37,6 @@ const PDFReport = ({ data, startDate, endDate }) => (
             </View>
         </Page>
     </Document>
-);
+)
 
-export default PDFReport;
+export default PDFReport

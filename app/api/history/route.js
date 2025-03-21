@@ -1,78 +1,72 @@
-import { dbConnect } from "@/lib/db";
-import { NextResponse } from "next/server";
-import moment from "moment-timezone";
+import { dbConnect } from "@/lib/db"
+import { NextResponse } from "next/server"
+import moment from "moment-timezone"
 
 export async function GET() {
     try {
-        const db = await dbConnect();
-        const [rows] = await db.execute("SELECT * FROM history");
+        const db = await dbConnect()
+        const [rows] = await db.execute("SELECT * FROM history")
 
         if (!rows.length) {
-            return NextResponse.json({ message: "Tidak ada history" }, { status: 404 });
+            return NextResponse.json({ message: "Tidak ada history" }, { status: 404 })
         }
 
-        // Ambil tanggal sekarang dalam zona waktu WIB
-        const userTimeZone = "Asia/Jakarta";
-        let now = moment().tz(userTimeZone);
+        const userTimeZone = "Asia/Jakarta"
+        let now = moment().tz(userTimeZone)
 
-        // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
-        if (now.hour() < 4) now.subtract(1, "day");
+        if (now.hour() < 4) now.subtract(1, "day")
 
         const groupedHistory = rows.reduce((acc, value) => {
-            const formattedDate = moment(value.tanggal).locale("id").format("dddd, DD MMMM YYYY");
+            const formattedDate = moment(value.tanggal).locale("id").format("dddd, DD MMMM YYYY")
 
-            if (!acc[formattedDate]) acc[formattedDate] = [];
-            acc[formattedDate].push(value);
-            return acc;
-        }, {});
+            if (!acc[formattedDate]) acc[formattedDate] = []
+            acc[formattedDate].push(value)
+            return acc
+        }, {})
 
-        return NextResponse.json(groupedHistory);
+        return NextResponse.json(groupedHistory)
     } catch (error) {
-        return NextResponse.json({ error: "Gagal mengambil data", details: error.message }, { status: 500 });
+        return NextResponse.json({ error: "Gagal mengambil data", details: error.message }, { status: 500 })
     }
 }
 
-
 export async function POST(req) {
     try {
-        const { totalHarga, item, keterangan, category, nama, icon } = await req.json();
+        const { totalHarga, item, keterangan, category, nama, icon } = await req.json()
 
-        const db = await dbConnect();
+        const db = await dbConnect()
 
-        // Ambil tanggal sekarang dalam zona waktu WIB
-        const userTimeZone = "Asia/Jakarta";
-        let now = moment().tz(userTimeZone);
+        const userTimeZone = "Asia/Jakarta"
+        let now = moment().tz(userTimeZone)
 
-        // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
-        if (now.hour() < 4) now.subtract(1, "day");
+        if (now.hour() < 4) now.subtract(1, "day")
 
-        const tanggal = now.format("YYYY-MM-DD");
+        const tanggal = now.format("YYYY-MM-DD")
 
-        // Simpan data dengan item bisa NULL, dan jumlah_pemasukan bisa NULL
         const [result] = await db.execute(
             "INSERT INTO history (tanggal, jumlah_pemasukan, item, keterangan, category, name, icon) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [tanggal, totalHarga ?? null, item ?? null, keterangan || "", category, nama, icon || ""]
-        );
+        )
 
-        return NextResponse.json({ message: "Data berhasil disimpan", result }, { status: 200 });
+        return NextResponse.json({ message: "Data berhasil disimpan", result }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ error: "Gagal menyimpan data", details: error.message }, { status: 500 });
+        return NextResponse.json({ error: "Gagal menyimpan data", details: error.message }, { status: 500 })
     }
 }
 
 export async function DELETE(req) {
     try {
-        const { id } = await req.json(); // Ambil ID dari body request
-        const db = await dbConnect();
+        const { id } = await req.json()
+        const db = await dbConnect()
 
-        const [result] = await db.execute("DELETE FROM history WHERE id = ?", [id]);
+        const [result] = await db.execute("DELETE FROM history WHERE id = ?", [id])
 
         if (result.affectedRows === 0) {
-            return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
+            return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 })
         }
 
-        return NextResponse.json({ message: "Data berhasil dihapus" }, { status: 200 });
+        return NextResponse.json({ message: "Data berhasil dihapus" }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ error: "Gagal menghapus data", details: error.message }, { status: 500 });
+        return NextResponse.json({ error: "Gagal menghapus data", details: error.message }, { status: 500 })
     }
 }

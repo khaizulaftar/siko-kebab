@@ -1,336 +1,39 @@
-// "use client"
+"use client"
 
-// import { useState, useRef } from "react"
-// import useSWR from "swr"
-// import axios from "axios"
-// import Swal from "sweetalert2"
-// import Loading from "../dashboard/loading"
-// import { useRouter } from "next/navigation"
-// import Cookies from "js-cookie"
-
-// export default function Stock() {
-//     const router = useRouter()
-//     const token = Cookies.get("token")
-
-//     const { data: menus = [], mutate: refreshMenus } = useSWR("/api/stockSet",
-//         () => axios.get("/api/stockSet").then(res => res.data),
-//         { refreshInterval: 5000 }
-//     )
-
-//     const { data: user } = useSWR("/api/auth/profile", () =>
-//         axios.get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
-//             .then(res => res.data.user)
-//     )
-
-//     const [searchQuery, setSearchQuery] = useState("")
-//     const inputRefs = useRef({})
-//     const [editingId, setEditingId] = useState(null)
-
-//     if (!token) {
-//         router.push("/login")
-//         return <Loading />
-//     }
-
-//     const formatNumber = (number) => new Intl.NumberFormat("id-ID").format(number)
-
-//     const handleStockChange = async (id, name, currentStock, action) => {
-//         const inputValue = inputRefs.current[id]?.value.replace(/\./g, "")
-//         const changeValue = parseInt(inputValue, 10)
-
-//         if (isNaN(changeValue) || changeValue <= 0) {
-//             return Swal.fire({
-//                 icon: "error",
-//                 title: "Nilai tidak valid",
-//                 text: "Harap masukkan nilai yang valid (angka positif).",
-//             })
-//         }
-
-//         const newStock = action === "increase" ? currentStock + changeValue : currentStock - changeValue
-
-//         if (newStock < 0) {
-//             return Swal.fire({
-//                 icon: "error",
-//                 title: "Jumlah tidak valid",
-//                 text: "Stok tidak boleh kurang dari 0.",
-//             })
-//         }
-
-//         if (user?.role === "staf" && action === "decrease") {
-//             return Swal.fire({
-//                 icon: "error",
-//                 title: "Akses Ditolak",
-//                 text: "Staff hanya bisa menambah stok, bukan mengurangi.",
-//             })
-//         }
-
-//         const result = await Swal.fire({
-//             title: "Apakah Anda yakin?",
-//             text: `Stok akan di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)}!`,
-//             icon: "warning",
-//             showCancelButton: true,
-//             confirmButtonText: `Ya, ${action === "increase" ? "tambah" : "kurang"}i stok`,
-//             cancelButtonText: "Batal",
-//             confirmButtonColor: "#3B82F6",
-//             cancelButtonColor: "#B12D67",
-//         })
-
-//         if (!result.isConfirmed) return
-
-//         try {
-//             await axios.put("/api/stockSet", { id, stock: newStock })
-//             await refreshMenus()
-//             inputRefs.current[id].value = ""
-//             setEditingId(null)
-
-//             // Simpan ke history
-//             await axios.post("/api/history", {
-//                 totalHarga: changeValue, // Tidak terkait pemasukan
-//                 item: null,
-//                 keterangan: `${action === "increase" ? "ditambah" : "dikurangi"}`,
-//                 category: "stok",
-//                 nama: name,
-//                 icon: action === "increase" ? "https://img.icons8.com/bubbles/50/plus.png" : "https://img.icons8.com/bubbles/50/minus.png"
-//             });
-
-//             Swal.fire({
-//                 icon: "success",
-//                 title: "Berhasil!",
-//                 text: `Stok telah di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)}`,
-//             })
-
-//         } catch (error) {
-//             Swal.fire({
-//                 icon: "error",
-//                 title: "Gagal memperbarui stok",
-//                 text: "Silakan coba lagi.",
-//             })
-//         }
-//     }
-
-//     const handleEditPrice = async (id, name, currentPrice) => {
-//         const { value: newPrice } = await Swal.fire({
-//             title: `Ubah harga untuk ${name}`,
-//             input: "text",
-//             inputValue: formatNumber(currentPrice),
-//             inputAttributes: {
-//                 autocapitalize: "off",
-//                 type: "tel",
-//                 inputmode: "numeric"
-//             },
-//             showCancelButton: true,
-//             confirmButtonText: "Simpan",
-//             cancelButtonText: "Batal",
-//             confirmButtonColor: "#3B82F6",
-//             cancelButtonColor: "#B12D67",
-//             didOpen: () => {
-//                 const input = Swal.getInput();
-//                 input.setAttribute("type", "tel");
-//                 input.setAttribute("inputmode", "numeric");
-//                 input.addEventListener("input", () => {
-//                     let rawValue = input.value.replace(/\D/g, ""); // Hanya angka
-//                     input.value = formatNumber(Number(rawValue)); // Format angka ke ribuan
-//                 });
-//             },
-//             preConfirm: (value) => value.replace(/\D/g, ""), // Hapus semua non-digit sebelum dikirim
-//         })
-
-//         if (!newPrice) return;
-
-//         try {
-//             await axios.put("/api/stockSet", { id, price: Number(newPrice) });
-//             await refreshMenus();
-
-//             // Simpan ke history
-//             await axios.post("/api/history", {
-//                 totalHarga: newPrice,
-//                 item: null,
-//                 keterangan: 'diubah',
-//                 category: "harga",
-//                 nama: name,
-//                 icon: "https://img.icons8.com/bubbles/50/summer-sales.png"
-//             });
-
-//             Swal.fire({
-//                 icon: "success",
-//                 title: "Berhasil!",
-//                 text: "Harga telah diperbarui.",
-//             });
-//         } catch (error) {
-//             Swal.fire({
-//                 icon: "error",
-//                 title: "Gagal memperbarui harga",
-//                 text: "Silakan coba lagi.",
-//             });
-//         }
-//     }
-
-//     const handleSearchChange = (e) => {
-//         setSearchQuery(e.target.value)
-//     }
-
-//     const filteredMenus = menus.filter(menu =>
-//         menu.name.toLowerCase().includes(searchQuery.toLowerCase())
-//     )
-
-//     if (!menus.length) {
-//         return <Loading />
-//     }
-
-//     return (
-//         <div className="max-w-4xl mx-auto min-h-screen">
-//             <div className="w-full pb-3 pt-6 bg-[#F4F5F7] sticky top-0 flex items-center">
-//                 <input
-//                     type="text"
-//                     placeholder="Cari berdasarkan nama"
-//                     className="mx-4 placeholder-gray-400/70 rounded-full border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 w-full"
-//                     value={searchQuery}
-//                     onChange={handleSearchChange}
-//                 />
-//             </div>
-//             <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
-//                 {filteredMenus.map(({ id, name, stock, dose, initial_stock, final_stock, out_stock, price }) => (
-//                     <div key={id} className="p-6 flex flex-col rounded-3xl shadow-sm bg-white">
-//                         <span className="font-semibold text-[#B12D67] text-md mb-3">{name}</span>
-//                         <div className="flex flex-col text-center items-center">
-//                             <div className="flex gap-1 items-center">
-//                                 <span className="font-semibold text-lg text-gray-600">{formatNumber(stock)}</span>
-//                                 <span className="text-lg font-semibold text-gray-600">|</span>
-//                                 <span className="text-lg font-semibold text-gray-600">{dose}</span>
-//                             </div>
-//                             <div className="mt-3 flex gap-4 w-full">
-//                                 <button
-//                                     onClick={() => handleStockChange(id, name, stock, "decrease")}
-//                                     className="flex items-center justify-center rounded-xl bg-red-100 px-4 text-sm border border-red-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden"
-//                                 >
-//                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 text-gray-600">
-//                                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-//                                     </svg>
-//                                 </button>
-//                                 <input
-//                                     type="tel"
-//                                     inputMode="numeric"
-//                                     className="block w-full px-6 py-2.5 text-md border rounded-xl focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
-//                                     placeholder="Masukkan nilai"
-//                                     ref={(el) => (inputRefs.current[id] = el)}
-//                                     onInput={(e) => {
-//                                         let value = e.target.value.replace(/\D/g, ""); // Hanya angka
-//                                         e.target.value = formatNumber(value); // Format angka ke ribuan
-//                                     }}
-//                                 />
-//                                 <button
-//                                     onClick={() => handleStockChange(id, name, stock, "increase")}
-//                                     className="flex items-center justify-center rounded-xl bg-green-100 px-4 text-sm border border-green-600 transition duration-300 hover:scale-105 focus:ring-3 focus:outline-hidden"
-//                                 >
-//                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 text-gray-600">
-//                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-//                                     </svg>
-//                                 </button>
-//                             </div>
-//                         </div>
-//                         <div className="flex flex-col gap-2 mt-6">
-//                             <div className="flex items-center justify-between">
-//                                 <span className="text-sm capitalize">stok awal</span>
-//                                 <div className="flex gap-1">
-//                                     <span className="text-sm">{formatNumber(initial_stock)}</span>
-//                                     <span className="text-sm">|</span>
-//                                     <span className="text-sm">{dose}</span>
-//                                 </div>
-//                             </div>
-//                             <div className="flex items-center justify-between">
-//                                 <span className="text-sm capitalize">jumlah masuk</span>
-//                                 <div className="flex gap-1">
-//                                     <span className="text-sm">{formatNumber(final_stock)}</span>
-//                                     <span className="text-sm">|</span>
-//                                     <span className="text-sm">{dose}</span>
-//                                 </div>
-//                             </div>
-//                             <div className="flex items-center justify-between">
-//                                 <span className="text-sm capitalize">jumlah habis</span>
-//                                 <div className="flex gap-1">
-//                                     <span className="text-sm">{formatNumber(out_stock)}</span>
-//                                     <span className="text-sm">|</span>
-//                                     <span className="text-sm">{dose}</span>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                         {user?.role === "admin" &&
-//                             <>
-//                                 <hr className="my-3 border-2 border-dashed" />
-//                                 <div className="flex flex-col text-center items-center">
-//                                     <div className="flex items-center w-full justify-between">
-//                                         <div className="flex items-center gap-1">
-//                                             <span className="text-md font-semibold text-gray-600">Rp{formatNumber(price)}</span>
-//                                             <span className="text-md font-semibold text-gray-600">|</span>
-//                                             <span className="text-md font-semibold text-gray-600">{dose}</span>
-//                                         </div>
-//                                         <button onClick={() => handleEditPrice(id, name, price)}>
-//                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 text-md font-semibold text-blue-400 hover:scale-110 transition">
-//                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-//                                             </svg>
-//                                         </button>
-//                                     </div>
-//                                 </div>
-//                                 <div className="flex flex-col gap-2 mt-6">
-//                                     <div className="flex items-center justify-between">
-//                                         <span className="text-sm capitalize">jumlah awal</span>
-//                                         <span className="text-green-500 text-sm">Rp{formatNumber(stock * price)}</span>
-//                                     </div>
-//                                     <div className="flex items-center justify-between">
-//                                         <span className="text-sm capitalize">jumlah habis</span>
-//                                         <span className="text-green-500 text-sm">Rp{formatNumber(out_stock * price)}</span>
-//                                     </div>
-//                                     <div className="flex items-center justify-between border-t-2 border-dashed pt-2">
-//                                         <span className="text-sm capitalize">selisih</span>
-//                                         <span className="text-gray-500 text-sm">Rp{formatNumber((stock - out_stock) * price)}</span>
-//                                     </div>
-//                                 </div>
-//                             </>
-//                         }
-//                     </div>
-//                 ))}
-//             </div>
-//         </div>
-//     )
-// }
-
-"use client";
-
-import { useState, useRef, useEffect } from "react";
-import useSWR from "swr";
-import axios from "axios";
-import Swal from "sweetalert2";
-import Loading from "../dashboard/loading";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-import moment from "moment-timezone";
+import { useState, useRef, useEffect } from "react"
+import useSWR from "swr"
+import axios from "axios"
+import Swal from "sweetalert2"
+import Loading from "../dashboard/loading"
+import { useRouter } from "next/navigation"
+import Cookies from "js-cookie"
+import moment from "moment-timezone"
 
 export default function Stock() {
-    const router = useRouter();
-    const token = Cookies.get("token");
+    const router = useRouter()
+    const token = Cookies.get("token")
 
     const { data: menus = [], mutate: refreshMenus } = useSWR(
         "/api/stockSet",
         () => axios.get("/api/stockSet").then((res) => res.data),
         { refreshInterval: 5000 }
-    );
+    )
 
     const { data: user } = useSWR("/api/auth/profile", () =>
         axios
             .get("/api/auth/profile", { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => res.data.user)
-    );
+    )
 
-    const notifiedItems = useRef(new Set()); // Simpan ID item yang sudah dinotifikasi
+    const notifiedItems = useRef(new Set())
 
     useEffect(() => {
         if (menus && Array.isArray(menus)) {
-            // Kumpulkan menu yang stoknya kurang dari 500 dan belum dinotifikasi
             const lowStockMenus = menus.filter(
                 (menu) => menu.stock < 100 && !notifiedItems.current.has(menu.id)
-            );
+            )
 
             if (lowStockMenus.length > 0) {
-                // Buat tabel HTML untuk notifikasi
                 const tableRows = lowStockMenus
                     .map(
                         (menu) => `
@@ -341,7 +44,7 @@ export default function Stock() {
                     </tr>
                 `
                     )
-                    .join("");
+                    .join("")
 
                 const table = `
                 <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
@@ -358,29 +61,27 @@ export default function Stock() {
                 </table>
             `;
 
-                // Tampilkan notifikasi dengan tabel
                 Swal.fire({
                     icon: "warning",
                     title: "Stok Menipis!",
                     html: `Beberapa menu memiliki stok kurang dari 100:<br><br>${table}<br>Segera lakukan pengisian ulang!`,
                     confirmButtonColor: "#3B82F6",
-                });
+                })
 
-                // Tandai menu-menu ini sudah dinotifikasi
-                lowStockMenus.forEach((menu) => notifiedItems.current.add(menu.id));
+                lowStockMenus.forEach((menu) => notifiedItems.current.add(menu.id))
             }
         }
-    }, [menus]);
+    }, [menus])
 
-    const [searchQuery, setSearchQuery] = useState("");
-    const inputRefs = useRef({});
+    const [searchQuery, setSearchQuery] = useState("")
+    const inputRefs = useRef({})
 
     if (!token) {
-        router.push("/login");
-        return <Loading />;
+        router.push("/login")
+        return <Loading />
     }
 
-    const formatNumber = (number) => new Intl.NumberFormat("id-ID").format(number);
+    const formatNumber = (number) => new Intl.NumberFormat("id-ID").format(number)
 
     const handleAddMenu = async () => {
         const { value: formValues } = await Swal.fire({
@@ -407,62 +108,60 @@ export default function Stock() {
                 return [
                     document.getElementById("swal-input1").value,
                     document.getElementById("swal-input2").value,
-                    document.getElementById("swal-input3").value.replace(/\./g, ""), // Hapus titik untuk format Rupiah
-                    document.getElementById("swal-input4").value.replace(/\./g, ""), // Hapus titik untuk format Rupiah
-                ];
+                    document.getElementById("swal-input3").value.replace(/\./g, ""),
+                    document.getElementById("swal-input4").value.replace(/\./g, ""),
+                ]
             },
             didOpen: () => {
-                const stokInput = document.getElementById("swal-input3");
-                const hargaInput = document.getElementById("swal-input4");
-
-                // Format Rupiah untuk Stok
+                const stokInput = document.getElementById("swal-input3")
+                const hargaInput = document.getElementById("swal-input4")
+k
                 stokInput.addEventListener("input", () => {
-                    let value = stokInput.value.replace(/\D/g, "");
-                    stokInput.value = formatNumber(value);
-                });
+                    let value = stokInput.value.replace(/\D/g, "")
+                    stokInput.value = formatNumber(value)
+                })
 
-                // Format Rupiah untuk Harga
                 hargaInput.addEventListener("input", () => {
-                    let value = hargaInput.value.replace(/\D/g, "");
-                    hargaInput.value = formatNumber(value);
-                });
+                    let value = hargaInput.value.replace(/\D/g, "")
+                    hargaInput.value = formatNumber(value)
+                })
             },
-        });
+        })
 
-        if (!formValues) return;
+        if (!formValues) return
 
-        const [name, dose, stock, price] = formValues;
+        const [name, dose, stock, price] = formValues
 
         if (!name || !dose || !stock || !price) {
             return Swal.fire({
                 icon: "error",
                 title: "Data tidak lengkap",
                 text: "Harap isi semua field.",
-            });
+            })
         }
 
         try {
             await axios.post("/api/stockSet", {
                 name,
                 dose,
-                stock: parseInt(stock, 10), // Konversi ke integer
-                price: parseInt(price, 10), // Konversi ke integer
-            });
-            await refreshMenus();
+                stock: parseInt(stock, 10),
+                price: parseInt(price, 10),
+            })
+            await refreshMenus()
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
                 text: `Menu ${name} telah ditambahkan.`,
-            });
+            })
         } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal menambahkan menu",
                 text: error.response?.data?.message || "Silakan coba lagi.",
-            });
+            })
         }
-    };
+    }
 
     const handleDeleteStock = async (id, name) => {
         const result = await Swal.fire({
@@ -474,49 +173,49 @@ export default function Stock() {
             cancelButtonText: "Batal",
             confirmButtonColor: "#EF4444",
             cancelButtonColor: "#3B82F6",
-        });
+        })
 
-        if (!result.isConfirmed) return;
+        if (!result.isConfirmed) return
 
         try {
-            await axios.delete(`/api/stockSet`, { data: { id } });
-            await refreshMenus();
+            await axios.delete(`/api/stockSet`, { data: { id } })
+            await refreshMenus()
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
                 text: `${name} telah dihapus dari daftar stok.`,
-            });
+            })
         } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal menghapus stok",
                 text: "Silakan coba lagi.",
-            });
+            })
         }
-    };
+    }
 
     const handleStockChange = async (id, name, currentStock, action) => {
-        const inputValue = inputRefs.current[id]?.value.replace(/\./g, "");
-        const changeValue = parseInt(inputValue, 10);
+        const inputValue = inputRefs.current[id]?.value.replace(/\./g, "")
+        const changeValue = parseInt(inputValue, 10)
 
         if (isNaN(changeValue)) {
             return Swal.fire({
                 icon: "error",
                 title: "Nilai tidak valid",
                 text: "Harap masukkan nilai yang valid.",
-            });
+            })
         }
 
         const newStock =
-            action === "increase" ? currentStock + changeValue : currentStock - changeValue;
+            action === "increase" ? currentStock + changeValue : currentStock - changeValue
 
         if (newStock < 0) {
             return Swal.fire({
                 icon: "error",
                 title: "Jumlah tidak valid",
                 text: "Stok tidak boleh kurang dari 0.",
-            });
+            })
         }
 
         if (user?.role === "staf" && action === "decrease") {
@@ -524,7 +223,7 @@ export default function Stock() {
                 icon: "error",
                 title: "Akses Ditolak",
                 text: "Staff hanya bisa menambah stok, bukan mengurangi.",
-            });
+            })
         }
 
         const result = await Swal.fire({
@@ -536,16 +235,15 @@ export default function Stock() {
             cancelButtonText: "Batal",
             confirmButtonColor: "#3B82F6",
             cancelButtonColor: "#B12D67",
-        });
+        })
 
-        if (!result.isConfirmed) return;
+        if (!result.isConfirmed) return
 
         try {
-            await axios.put("/api/stockSet", { id, stock: newStock });
-            await refreshMenus();
-            inputRefs.current[id].value = "";
+            await axios.put("/api/stockSet", { id, stock: newStock })
+            await refreshMenus()
+            inputRefs.current[id].value = ""
 
-            // Simpan ke history
             await axios.post("/api/history", {
                 totalHarga: changeValue,
                 item: null,
@@ -556,21 +254,21 @@ export default function Stock() {
                     action === "increase"
                         ? "https://img.icons8.com/bubbles/100/plus.png"
                         : "https://img.icons8.com/bubbles/100/minus.png",
-            });
+            })
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
                 text: `Stok telah di${action === "increase" ? "tambah" : "kurang"}i sebanyak ${formatNumber(changeValue)}`,
-            });
+            })
         } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal memperbarui stok",
                 text: "Silakan coba lagi.",
-            });
+            })
         }
-    };
+    }
 
     const handleEditPrice = async (id, name, currentPrice) => {
         const { value: newPrice } = await Swal.fire({
@@ -588,22 +286,22 @@ export default function Stock() {
             confirmButtonColor: "#3B82F6",
             cancelButtonColor: "#B12D67",
             didOpen: () => {
-                const input = Swal.getInput();
-                input.setAttribute("type", "tel");
-                input.setAttribute("inputmode", "numeric");
+                const input = Swal.getInput()
+                input.setAttribute("type", "tel")
+                input.setAttribute("inputmode", "numeric")
                 input.addEventListener("input", () => {
-                    let rawValue = input.value.replace(/\D/g, ""); // Hanya angka
-                    input.value = formatNumber(Number(rawValue)); // Format angka ke ribuan
-                });
+                    let rawValue = input.value.replace(/\D/g, "") 
+                    input.value = formatNumber(Number(rawValue))
+                })
             },
-            preConfirm: (value) => value.replace(/\D/g, ""), // Hapus semua non-digit sebelum dikirim
-        });
+            preConfirm: (value) => value.replace(/\D/g, ""),
+        })
 
-        if (!newPrice) return;
+        if (!newPrice) return
 
         try {
-            await axios.put("/api/stockSet", { id, price: Number(newPrice) });
-            await refreshMenus();
+            await axios.put("/api/stockSet", { id, price: Number(newPrice) })
+            await refreshMenus()
 
             // Simpan ke history
             await axios.post("/api/history", {
@@ -613,32 +311,32 @@ export default function Stock() {
                 category: "harga",
                 nama: name,
                 icon: "https://img.icons8.com/bubbles/100/summer-sales.png",
-            });
+            })
 
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
                 text: "Harga telah diperbarui.",
-            });
+            })
         } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Gagal memperbarui harga",
                 text: "Silakan coba lagi.",
-            });
+            })
         }
-    };
+    }
 
     const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value);
-    };
+        setSearchQuery(e.target.value)
+    }
 
     const filteredMenus = menus.filter((menu) =>
         menu.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    )
 
     if (!menus.length) {
-        return <Loading />;
+        return <Loading />
     }
 
     return (
@@ -666,7 +364,6 @@ export default function Stock() {
                     </button>
                 </div>
             )}
-
 
             <div className="grid sm:grid-cols-2 gap-4 mx-4 mt-3 mb-20 sm:mb-6">
                 {filteredMenus.map(
@@ -711,8 +408,8 @@ export default function Stock() {
                                         placeholder="Masukkan nilai"
                                         ref={(el) => (inputRefs.current[id] = el)}
                                         onInput={(e) => {
-                                            let value = e.target.value.replace(/\D/g, "");
-                                            e.target.value = formatNumber(value);
+                                            let value = e.target.value.replace(/\D/g, "")
+                                            e.target.value = formatNumber(value)
                                         }}
                                     />
                                     <button
@@ -827,5 +524,5 @@ export default function Stock() {
                 )}
             </div>
         </div>
-    );
+    )
 }

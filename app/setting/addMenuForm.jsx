@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
+import { useState, useEffect } from "react"
+import axios from "axios"
+import Swal from "sweetalert2"
 
 export default function AddMenuForm({ onMenuAdded }) {
-    const [ingredients, setIngredients] = useState([]);
+    const [ingredients, setIngredients] = useState([])
 
     useEffect(() => {
         axios.get("/api/stockSet")
             .then(res => setIngredients(res.data))
-            .catch(() => Swal.fire("Error", "Gagal mengambil data bahan", "error"));
-    }, []);
+            .catch(() => Swal.fire("Error", "Gagal mengambil data bahan", "error"))
+    }, [])
 
     const handleAddMenu = async () => {
         const { value, isConfirmed } = await Swal.fire({
@@ -47,44 +47,44 @@ export default function AddMenuForm({ onMenuAdded }) {
             confirmButtonColor: "#3B82F6",
             cancelButtonColor: "#B12D67",
             didOpen: () => {
-                const compList = document.getElementById("composition-list");
-                const selectedComps = {};
+                const compList = document.getElementById("composition-list")
+                const selectedComps = {}
 
                 document.getElementById("addIngredient").addEventListener("click", () => {
-                    const ing = document.getElementById("ingredient").value;
-                    const qty = parseFloat(document.getElementById("qty").value) || 0;
+                    const ing = document.getElementById("ingredient").value
+                    const qty = parseFloat(document.getElementById("qty").value) || 0
 
-                    if (!ing || qty <= 0) return;
-                    selectedComps[ing] = qty;
+                    if (!ing || qty <= 0) return
+                    selectedComps[ing] = qty
 
                     compList.innerHTML = Object.entries(selectedComps).map(([key, val]) => `
                         <div style="display: flex; justify-content: space-between; padding: 5px; background: #f3f3f3; border-radius: 5px; margin-bottom: 5px;">
                             <span>${key}</span>
                             <span>${val}</span>
                         </div>
-                    `).join("");
-                });
+                    `).join("")
+                })
             },
             preConfirm: () => {
-                const name = document.getElementById("name").value.trim();
-                const price = document.getElementById("price").value.replace(/\./g, "");
+                const name = document.getElementById("name").value.trim()
+                const price = document.getElementById("price").value.replace(/\./g, "")
 
                 // Validasi input
                 if (!name || !price) {
-                    Swal.showValidationMessage("Nama & harga harus diisi!");
-                    return false;
+                    Swal.showValidationMessage("Nama & harga harus diisi!")
+                    return false
                 }
 
-                const composition = {};
+                const composition = {}
                 document.querySelectorAll("#composition-list div").forEach(div => {
-                    const [key, val] = div.innerText.split("\n");
-                    composition[key] = parseFloat(val);
-                });
+                    const [key, val] = div.innerText.split("\n")
+                    composition[key] = parseFloat(val)
+                })
 
                 // Validasi bahan
                 if (Object.keys(composition).length === 0) {
-                    Swal.showValidationMessage("Bahan harus diisi!");
-                    return false;
+                    Swal.showValidationMessage("Bahan harus diisi!")
+                    return false
                 }
 
                 return {
@@ -93,24 +93,21 @@ export default function AddMenuForm({ onMenuAdded }) {
                     category: document.getElementById("category").value,
                     dose: document.getElementById("dose").value,
                     composition
-                };
+                }
             }
-        });
+        })
 
-        // Jika pengguna membatalkan, langsung return tanpa menampilkan notifikasi
-        if (!isConfirmed) return;
+        if (!isConfirmed) return
 
-        // Jika pengguna menyimpan, lanjutkan validasi
         if (!value || Object.keys(value.composition).length === 0) {
-            return Swal.fire("Error", "Minimal satu bahan harus diisi!", "error");
+            return Swal.fire("Error", "Minimal satu bahan harus diisi!", "error")
         }
 
         axios.post("/api/menuSet", value)
             .then(res => {
-                Swal.fire("Berhasil", "Menu berhasil ditambahkan", "success");
-                onMenuAdded(res.data);
+                Swal.fire("Berhasil", "Menu berhasil ditambahkan", "success")
+                onMenuAdded(res.data)
 
-                // Kirim data ke history (tanpa console.log atau console.error)
                 axios.post("/api/history", {
                     totalHarga: Number(value.price),
                     item: null,
@@ -118,10 +115,10 @@ export default function AddMenuForm({ onMenuAdded }) {
                     category: value.category,
                     nama: value.name,
                     icon: "https://img.icons8.com/bubbles/100/menu.png"
-                }).catch(() => { }); // Tidak menampilkan error di konsol
+                })
             })
-            .catch(() => Swal.fire("Error", "Gagal menambahkan menu", "error"));
-    };
+            .catch(() => Swal.fire("Error", "Gagal menambahkan menu", "error"))
+    }
 
     return (
         <div className="mx-4 flex justify-end mt-1">

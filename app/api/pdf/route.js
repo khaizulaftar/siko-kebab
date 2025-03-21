@@ -1,20 +1,19 @@
-import { dbConnect } from "@/lib/db";
-import { NextResponse } from "next/server";
-import moment from "moment-timezone";
+import { dbConnect } from "@/lib/db"
+import { NextResponse } from "next/server"
+import moment from "moment-timezone"
 
 export async function GET(req) {
     try {
-        const connection = await dbConnect();
-        const url = new URL(req.url);
+        const connection = await dbConnect()
+        const url = new URL(req.url)
 
-        const userTimeZone = "Asia/Jakarta";
-        const now = moment().tz(userTimeZone);
+        const userTimeZone = "Asia/Jakarta"
+        const now = moment().tz(userTimeZone)
         if (now.hour() < 4) {
-            now.subtract(1, "day");
+            now.subtract(1, "day")
         }
-        const tanggal = url.searchParams.get("tanggal") || now.format("YYYY-MM-DD");
+        const tanggal = url.searchParams.get("tanggal") || now.format("YYYY-MM-DD")
 
-        // Menambahkan kondisi untuk hanya mengambil history yang berhubungan dengan penjualan
         const [rows] = await connection.execute(
             `SELECT 
                 category, 
@@ -28,10 +27,10 @@ export async function GET(req) {
             GROUP BY category, name 
             ORDER BY category ASC, name ASC`,
             [tanggal]
-        );
+        )
         
-        return NextResponse.json(rows);
+        return NextResponse.json(rows)
     } catch (error) {
-        return NextResponse.json({ error: "Database connection failed", details: error.message }, { status: 500 });
+        return NextResponse.json({ error: "Database connection failed", details: error.message }, { status: 500 })
     }
 }
