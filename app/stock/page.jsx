@@ -91,12 +91,22 @@ export default function Stock() {
                 <input id="swal-input1" class="swal2-input" placeholder="Nama Menu">
                 <select id="swal-input2" class="swal2-select"">
                     <option value="g">g</option>
-                    <option value="kg">kg</option>
                     <option value="ml">ml</option>
                     <option value="pcs">pcs</option>
+                    <option value="bh">bh</option>
+                    <option value="sached">sached</option>
+                    <option value="potong">potong</option>
+                    <option value="helai">helai</option>
+                    <option value="bungkus">bungkus</option>
+                    <option value="botol">botol</option>
+                    <option value="gelas">gelas</option>
+                    <option value="lembar">lembar</option>
+                    <option value="sdm">sdm</option>
+                    <option value="sdt">sdt</option>
                 </select>
                 <input id="swal-input3" class="swal2-input" placeholder="Stok" type="text">
                 <input id="swal-input4" class="swal2-input" placeholder="Harga" type="text">
+                <p class="text-md text-gray-500 mt-2">Nama Menu Uppercase contoh "Nama Menu"</p>
                 </div>`,
             focusConfirm: false,
             showCancelButton: true,
@@ -115,7 +125,6 @@ export default function Stock() {
             didOpen: () => {
                 const stokInput = document.getElementById("swal-input3")
                 const hargaInput = document.getElementById("swal-input4")
-k
                 stokInput.addEventListener("input", () => {
                     let value = stokInput.value.replace(/\D/g, "")
                     stokInput.value = formatNumber(value)

@@ -25,11 +25,19 @@ export default function AddMenuForm({ onMenuAdded }) {
                         <option value="minuman">Minuman</option>
                     </select>
                     <select id="dose" class="swal2-select">
-                        <option value="pcs">Pcs</option>
-                        <option value="kg">kg</option>
-                        <option value="gr">gr</option>
+                        <option value="g">g</option>
                         <option value="ml">ml</option>
-                        <option value="ltr">ltr</option>
+                        <option value="pcs">pcs</option>
+                        <option value="bh">bh</option>
+                        <option value="sached">sached</option>
+                        <option value="potong">potong</option>
+                        <option value="helai">helai</option>
+                        <option value="bungkus">bungkus</option>
+                        <option value="botol">botol</option>
+                        <option value="gelas">gelas</option>
+                        <option value="lembar">lembar</option>
+                        <option value="sdm">sdm</option>
+                        <option value="sdt">sdt</option>
                     </select>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                         <select id="ingredient" class="swal2-select">
@@ -39,6 +47,7 @@ export default function AddMenuForm({ onMenuAdded }) {
                         <input id="qty" type="number" class="swal2-input" placeholder="Jumlah">
                         <button type="button" id="addIngredient" class="swal2-confirm swal2-styled">Tambah Bahan</button>
                     </div>
+                    <p class="text-md text-gray-500 mt-2">Nama Menu Uppercase contoh "Nama Menu"</p>
                     <div id="composition-list" style="max-height: 200px; overflow-y: auto;"></div>
                 </div>
             `,
