@@ -28,6 +28,7 @@ export default function AddMenuForm({ onMenuAdded }) {
                         <option value="g">g</option>
                         <option value="ml">ml</option>
                         <option value="pcs">pcs</option>
+                        <option value="slice">slice</option>
                         <option value="bh">bh</option>
                         <option value="sached">sached</option>
                         <option value="potong">potong</option>
