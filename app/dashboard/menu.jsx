@@ -18,8 +18,9 @@ export default function Menu() {
         kebab: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.kebab, diskon: 0 },
         burger: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.burger, diskon: 0 },
         minuman: { items: [], harga: 0, count: 1, nama: "", icon: categoryIcons.minuman, diskon: 0 },
-        paket: { items: [], harga: 0, count: 1, nama: "Menu paket", selectedItems: [], icon: categoryIcons.paket, diskon: 0 },
+        paket: { items: [], harga: 0, count: 1, nama: "Menu paket", selectedItems: [], icon: categoryIcons.paket, diskon: 0, biayaTambahan: 0 }, // Tambahkan biayaTambahan
     })
+
 
     const [loadingCategory, setLoadingCategory] = useState({
         kebab: false,
@@ -78,7 +79,8 @@ export default function Menu() {
 
     // Hitung total harga setelah diskon
     const calculateTotalPrice = () => {
-        return Object.values(selectedItems).reduce((total, item) => total + (item?.price || 0), 0)
+        const totalHarga = Object.values(selectedItems).reduce((total, item) => total + (item?.price || 0), 0)
+        return totalHarga // Biaya tambahan tidak perlu ditambahkan di sini
     }
 
     // Update total harga saat selectedItems berubah
@@ -86,7 +88,7 @@ export default function Menu() {
         const totalHarga = calculateTotalPrice()
         setMenuData((prev) => ({ ...prev, paket: { ...prev.paket, harga: totalHarga } }))
     }, [selectedItems])
-    
+
     const tambahPaket = async (newPackage) => {
         try {
             const { data } = await axios.post('/api/menuPaket', newPackage)
@@ -96,7 +98,7 @@ export default function Menu() {
             throw error
         }
     }
-    
+
     const hapusPaket = async (id) => {
         try {
             const { data } = await axios.delete('/api/menuPaket', { data: { id } })
@@ -109,7 +111,7 @@ export default function Menu() {
 
     const kirimKeIncome = async (category) => {
         const { harga, count, nama, diskon } = menuData[category]
-
+    
         if (category === "paket") {
             const totalHarga = calculateTotalPrice()
             const selectedItemsList = Object.entries(selectedItems)
@@ -121,24 +123,29 @@ export default function Menu() {
                     return null
                 })
                 .filter((item) => item !== null)
-
+    
             if (selectedItemsList.length === 0) {
                 Swal.fire({ title: "Peringatan", text: "Silakan pilih setidaknya satu item untuk paket!", icon: "warning" })
                 return
             }
-
+    
             if (count < 1) {
                 Swal.fire({ title: "Peringatan", text: "Jumlah harus lebih dari 0!", icon: "warning" })
                 return
             }
-
+    
             // Hitung diskon per item dengan pembulatan
             const diskonPerItem = Math.floor(diskon / selectedItemsList.length)
             const sisaDiskon = diskon % selectedItemsList.length
-
+    
+            // Hitung biaya tambahan per item dengan pembulatan
+            const biayaTambahan = menuData.paket.biayaTambahan || 0
+            const biayaTambahanPerItem = Math.floor(biayaTambahan / selectedItemsList.length)
+            const sisaBiayaTambahan = biayaTambahan % selectedItemsList.length
+    
             const confirmResult = await Swal.fire({
                 title: "Konfirmasi",
-                text: `Apakah Anda yakin ingin menambahkan paket sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(totalHarga * count - diskon)}?`,
+                text: `Apakah Anda yakin ingin menambahkan paket sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(totalHarga * count - diskon + biayaTambahan)}?`,
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "Ya, Simpan",
@@ -146,42 +153,44 @@ export default function Menu() {
                 confirmButtonColor: "#3B82F6",
                 cancelButtonColor: "#B12D67",
             })
-
+    
             if (!confirmResult.isConfirmed) return
             setLoadingCategory((prev) => ({ ...prev, [category]: true }))
-
+    
             try {
                 for (let i = 0; i < selectedItemsList.length; i++) {
                     const item = selectedItemsList[i]
                     const diskonItem = diskonPerItem + (i < sisaDiskon ? 1 : 0)
-                    const hargaPerItemSetelahDiskon = item.price * count - diskonItem
-
+                    const biayaTambahanItem = biayaTambahanPerItem + (i < sisaBiayaTambahan ? 1 : 0)
+                
+                    const hargaPerItemSetelahDiskonDanBiayaTambahan = (item.price * count) - diskonItem + biayaTambahanItem
+                
                     await axios.post("/api/income", {
-                        totalHarga: hargaPerItemSetelahDiskon,
+                        totalHarga: hargaPerItemSetelahDiskonDanBiayaTambahan,
                         item: count,
                         category: item.category,
                         nama: item.variant,
                     })
                 }
-
+    
                 await axios.post("/api/history", {
-                    totalHarga: totalHarga * count - diskon,
+                    totalHarga: (totalHarga * count) - diskon + menuData.paket.biayaTambahan, // Tambahkan biaya tambahan di sini
                     item: count,
-                    keterangan: "Terjual", // jangan hapus keterangan terjual
+                    keterangan: "Terjual",
                     category: "paket",
                     nama: selectedItems.kebab ? selectedItems.kebab.packageName : selectedItems.burger ? selectedItems.burger.packageName : "",
                     icon: menuData[category].icon,
                 })
-
+    
                 for (const item of selectedItemsList) {
                     await updateStock(item.variant, count)
                 }
-
+    
                 Swal.fire({ title: "Success", text: `Data ${category} berhasil disimpan!`, icon: "success" })
-
+    
                 setMenuData((prev) => ({
                     ...prev,
-                    [category]: { ...prev[category], harga: 0, count: 1, selectedItems: [], diskon: 0 },
+                    [category]: { ...prev[category], harga: 0, count: 1, selectedItems: [], diskon: 0, biayaTambahan: 0 }, // Reset diskon dan biaya tambahan
                 }))
                 setSelectedItems({
                     kebab: null,
@@ -201,9 +210,9 @@ export default function Menu() {
                 Swal.fire({ title: "Peringatan", text: "Silakan pilih menu dan jumlah harus lebih dari 0!", icon: "warning" })
                 return
             }
-
+    
             const totalHargaSetelahDiskon = harga * count - diskon
-
+    
             const confirmResult = await Swal.fire({
                 title: "Konfirmasi",
                 text: `Apakah Anda yakin ingin menambahkan ${category} ${nama} sebanyak ${count} dengan total harga Rp${new Intl.NumberFormat("id-ID").format(totalHargaSetelahDiskon)}?`,
@@ -214,10 +223,10 @@ export default function Menu() {
                 confirmButtonColor: "#3B82F6",
                 cancelButtonColor: "#B12D67",
             })
-
+    
             if (!confirmResult.isConfirmed) return
             setLoadingCategory((prev) => ({ ...prev, [category]: true }))
-
+    
             try {
                 await axios.post("/api/income", {
                     totalHarga: totalHargaSetelahDiskon,
@@ -234,9 +243,9 @@ export default function Menu() {
                     icon: menuData[category].icon,
                 })
                 await updateStock(nama, count)
-
+    
                 Swal.fire({ title: "Success", text: `Data ${category} berhasil disimpan!`, icon: "success" })
-
+    
                 setMenuData((prev) => ({
                     ...prev,
                     [category]: { ...prev[category], harga: 0, count: 1, nama: "", diskon: 0 },
@@ -273,7 +282,9 @@ export default function Menu() {
                                 <span className="text-sm font-semibold capitalize text-[#B13069]">{data.nama}</span>
                             </div>
                             <div className="flex items-center gap-1 mt-2">
-                                <span className="text-xl font-semibold text-green-500">Rp{new Intl.NumberFormat("id-ID").format((data.harga * data.count) - data.diskon)}</span>
+                                <span className="text-xl font-semibold text-green-500">
+                                    Rp{new Intl.NumberFormat("id-ID").format((data.harga * data.count) - data.diskon + (category === "paket" ? data.biayaTambahan : 0))}
+                                </span>
                                 <span className="text-gray-600">+ {data.count}</span>
                             </div>
                         </div>
@@ -500,6 +511,28 @@ export default function Menu() {
                                     className="border w-full h-10 text-center rounded-xl bg-gray-100 focus:outline-none focus:border-blue-500"
                                 />
                             </div>
+                            {category === "paket" && (
+                                <div className="flex items-center gap-2 justify-between gap-4">
+                                    <span className="text-sm text-gray-600 font-semibold">Biaya Tambahan:</span>
+                                    <input
+                                        type="tel"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        value={new Intl.NumberFormat("id-ID").format(menuData.paket.biayaTambahan || 0)}
+                                        onChange={(e) => {
+                                            const numericValue = parseInt(e.target.value.replace(/\D/g, ""), 10) || 0
+                                            setMenuData((prev) => ({
+                                                ...prev,
+                                                paket: {
+                                                    ...prev.paket,
+                                                    biayaTambahan: numericValue
+                                                }
+                                            }))
+                                        }}
+                                        className="border w-full h-10 text-center rounded-xl bg-gray-100 focus:outline-none focus:border-blue-500"
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}

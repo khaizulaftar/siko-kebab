@@ -24,8 +24,18 @@ export default function HistoryIncome() {
     const fetchIncomeData = async () => {
         try {
             const response = await axios.get("/api/incomeHistory")
+            console.log("Data dari API:", response.data.data) // Debug data
             if (response.data.success) {
-                setGroupedData(response.data.data)
+                // Urutkan grup berdasarkan tanggal (dari yang terbaru ke terlama)
+                const sortedData = response.data.data
+                    .map(group => ({
+                        ...group,
+                        // Urutkan items dalam setiap grup berdasarkan ID (dari yang terbaru ke terlama)
+                        items: group.items.sort((a, b) => b.id - a.id)
+                    }))
+                    .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal)) // Urutkan grup berdasarkan tanggal
+
+                setGroupedData(sortedData)
             } else {
                 Swal.fire("Info", response.data.message, "info")
             }
@@ -83,6 +93,7 @@ export default function HistoryIncome() {
             Swal.fire("Error!", "Gagal menghapus data income.", "error")
         }
     }
+
     useEffect(() => {
         fetchIncomeData()
     }, [])
@@ -119,7 +130,7 @@ export default function HistoryIncome() {
                         {formatDate(group.tanggal)}
                     </h2>
                     <div className="grid sm:grid-cols-2 gap-4 mb-12">
-                        {group.items.slice().reverse().map((item) => (
+                        {group.items.map((item) => (
                             <div key={item.id} className="p-6 rounded-3xl shadow-sm bg-white">
                                 <div className="flex justify-between items-center">
                                     <div>
