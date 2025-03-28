@@ -30,7 +30,7 @@ export async function GET(req) {
             success: true,
             data: {
                 tanggal: formattedTanggal,
-                total_pemasukan: pemasukanRows[0]?.total_pemasukan || 0,
+                total_pemasukan: (tunaiRows[0]?.total_tunai || 0) - (nonTunaiRows[0]?.total_non_tunai || 0),
                 total_non_tunai: nonTunaiRows[0]?.total_non_tunai || 0,
                 total_tunai: tunaiRows[0]?.total_tunai || 0,
                 total_kebab: kebabRows[0]?.total_kebab || 0,
