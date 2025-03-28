@@ -13,8 +13,12 @@ export async function GET() {
             ORDER BY tanggal ASC
         `)
 
+        // Modified query to get both tunai and non-tunai totals
         const [totalIncomeRows] = await connection.query(`
-            SELECT DATE_FORMAT(tanggal, '%Y-%m-%d') as tanggal, SUM(jumlah_pemasukan) as total_pemasukan
+            SELECT 
+                DATE_FORMAT(tanggal, '%Y-%m-%d') as tanggal, 
+                SUM(CASE WHEN category != 'Non Tunai' THEN jumlah_pemasukan ELSE 0 END) as total_tunai,
+                SUM(CASE WHEN category = 'Non Tunai' THEN jumlah_pemasukan ELSE 0 END) as total_non_tunai
             FROM income
             GROUP BY tanggal
             ORDER BY tanggal ASC
@@ -23,7 +27,7 @@ export async function GET() {
         const result = {
             tanggal: [],
             hari: {},
-            total_pemasukan: [],
+            total_pemasukan: [], // Now will be (tunai - non_tunai)
             total_kebab: [],
             total_burger: [],
             total_minuman: []
@@ -34,10 +38,7 @@ export async function GET() {
 
         const lastDays = Array.from({ length: 14 }, (_, i) => {
             let date = today.clone().subtract(i, "days")
-
-            // Jika masih antara 00:00 - 03:59 WIB, anggap masih hari sebelumnya
             if (date.hour() < 4) date.subtract(1, "day")
-
             return date
         }).reverse()
 
@@ -48,8 +49,11 @@ export async function GET() {
             result.tanggal.push(formattedDate)
             result.hari[formattedDate] = dayName
 
-            const pemasukanData = totalIncomeRows.find(row => row.tanggal === formattedDate)
-            result.total_pemasukan.push(pemasukanData ? pemasukanData.total_pemasukan : 0)
+            // Calculate tunai - non_tunai
+            const incomeData = totalIncomeRows.find(row => row.tanggal === formattedDate)
+            const tunai = incomeData?.total_tunai || 0
+            const nonTunai = incomeData?.total_non_tunai || 0
+            result.total_pemasukan.push(tunai - nonTunai)
 
             const kebabData = rows.find(row => row.tanggal === formattedDate && row.category.toLowerCase() === "kebab")
             const burgerData = rows.find(row => row.tanggal === formattedDate && row.category.toLowerCase() === "burger")
